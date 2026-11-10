@@ -239,7 +239,7 @@ button { font: inherit; color: inherit; }
   font-size: 0.8125rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2);
   padding: 0 4px 8px; border-bottom: 1px solid var(--line);
 }
-.week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
+.week h2 .range, .week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
 .week h2 .wcnt { margin-left: auto; }
 .week ol { list-style: none; margin: 0; padding: 0; }
 .day {
@@ -251,6 +251,9 @@ button { font: inherit; color: inherit; }
 .dates { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
 .dates .orig { font-size: 1.0625rem; white-space: nowrap; letter-spacing: .04em; }
 .dates .orig .dn { font: 400 1.125rem/1 var(--mono); letter-spacing: 0; margin: 0 3px; }
+.dates .sub { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: 0.8125rem; color: var(--muted-2); }
+.dates .sub:empty { display: none; }
+.tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
 .day.done .info { opacity: .5; }
 
 .checks { display: grid; grid-template-columns: repeat(4, var(--chipw)); gap: 6px; }
@@ -333,6 +336,28 @@ button { font: inherit; color: inherit; }
 .seal-cap { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6875rem; color: var(--muted-2); white-space: nowrap; }
 .seal-item.has-rw .seal-cap::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 
+.plan-note { margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
+
+/* 日期設定視窗 */
+.award.date-panel { align-items: stretch; text-align: left; gap: 18px; padding: 28px 22px 22px; }
+.award.date-panel .aw-title { text-align: center; }
+.opt { display: flex; align-items: flex-start; gap: 12px; cursor: pointer; }
+.opt input[type="checkbox"] { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--accent); }
+.opt-text, .opt-block { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.opt-block { border-top: 1px solid var(--line); padding-top: 16px; }
+.opt-name { font-size: 0.9375rem; font-weight: 500; color: var(--ink); }
+.opt-sub { font-size: 0.8125rem; line-height: 1.55; color: var(--muted-2); }
+.opt-row { display: flex; gap: 8px; margin-top: 8px; }
+.opt-row input[type="date"] {
+  flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 8px 10px;
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 12px;
+}
+.aw-alt.small { flex: none; min-height: 44px; padding: 0 14px; border-radius: 12px; font-size: 0.875rem; }
+.aw-alt:disabled { opacity: .45; cursor: default; }
+.opt-note { margin: 4px 0 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
+.opt-note:empty { display: none; }
+
 /* 新印章、獎勵設定的彈出視窗 */
 .award-bg {
   position: fixed; inset: 0; z-index: 30; background: rgba(6,16,21,.55);
@@ -410,6 +435,7 @@ button { font: inherit; color: inherit; }
         </div>
       </div>
       <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
+      <button type="button" class="menu-item" id="dateOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v3M16 3v3M4 10h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path></svg><span>日期</span><span class="menu-n" id="menuDateN"></span></button>
     </div>
   </div>
   <header class="head">
@@ -424,6 +450,7 @@ button { font: inherit; color: inherit; }
       <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
     </div>
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
+    <p class="plan-note" id="planNote" hidden></p>
   </section>
 
   <div class="bar">
@@ -450,6 +477,26 @@ button { font: inherit; color: inherit; }
     <div class="book"><div class="seals" id="seals"></div></div>
   </div>
 </section>
+
+<div class="award-bg" id="dateSheet" hidden>
+  <div class="award date-panel" role="dialog" aria-modal="true" aria-labelledby="dsTitle">
+    <h2 class="aw-title" id="dsTitle">日期</h2>
+    <label class="opt" for="showDates">
+      <input type="checkbox" id="showDates">
+      <span class="opt-text"><span class="opt-name">顯示共修日期</span><span class="opt-sub">每一天標出原本共修的日期，例如 7/1 週三。</span></span>
+    </label>
+    <div class="opt-block">
+      <label class="opt-name" for="start">重聽排程</label>
+      <span class="opt-sub">選一個開始日期，每天排一天份，清單會標出每天重聽的日期和「今天」。</span>
+      <div class="opt-row">
+        <input type="date" id="start">
+        <button type="button" class="aw-alt small" id="startClear">不排程</button>
+      </div>
+      <p class="opt-note" id="dsNote"></p>
+    </div>
+    <button type="button" class="aw-ok" id="dsClose">完成</button>
+  </div>
+</div>
 
 <div class="award-bg" id="sheet" hidden>
   <div class="award" role="dialog" aria-modal="true" aria-labelledby="shTitle" aria-describedby="shSub">
@@ -480,9 +527,19 @@ button { font: inherit; color: inherit; }
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
   var LS_STATE = "trust-relisten:state";
   var LS_HIDE = "trust-relisten:hide-done";
+  var LS_DATES = "trust-relisten:show-dates";
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function parseIso(s) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
+    if (!m) return null;
+    var d = new Date(+m[1], +m[2] - 1, +m[3]);
+    return isNaN(d.getTime()) ? null : d;
+  }
+  function dayDiff(a, b) {
+    return Math.round((Date.UTC(a.getFullYear(), a.getMonth(), a.getDate()) - Date.UTC(b.getFullYear(), b.getMonth(), b.getDate())) / 86400000);
+  }
   function md(d) { return (d.getMonth() + 1) + "/" + d.getDate(); }
 
   var days = [];
@@ -508,9 +565,10 @@ button { font: inherit; color: inherit; }
   var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
 
   /* ---------- State ---------- */
-  var state = { done: {}, rewards: {} };
+  var state = { done: {}, rewards: {}, start: null };   // start：重聽排程的開始日期，沒排程是 null
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
+  var showDates = false;           // 顯示原本共修的日期（只記在這台裝置）
 
   /* ---------- Build the list once ---------- */
   var $ = function (id) { return document.getElementById(id); };
@@ -550,6 +608,10 @@ button { font: inherit; color: inherit; }
       var sec = el("section", "week");
       var h = el("h2");
       h.appendChild(el("span", null, "第 " + (w + 1) + " 週"));
+      var a = list[0].date, b = list[list.length - 1].date;
+      var range = el("span", "range", md(a) + "–" + md(b));
+      range.hidden = true;
+      h.appendChild(range);
       var wcnt = el("span", "wcnt", "");
       h.appendChild(wcnt);
       sec.appendChild(h);
@@ -564,6 +626,8 @@ button { font: inherit; color: inherit; }
         orig.appendChild(el("span", "dn", pad(d.n)));
         orig.appendChild(document.createTextNode("天"));
         dates.appendChild(orig);
+        var sub = el("span", "sub");
+        dates.appendChild(sub);
         info.appendChild(dates);
         li.appendChild(info);
         var checks = el("div", "checks");
@@ -578,14 +642,14 @@ button { font: inherit; color: inherit; }
         }
         li.appendChild(checks);
         ol.appendChild(li);
-        rows[d.i] = { li: li, chks: chks };
+        rows[d.i] = { li: li, chks: chks, sub: sub };
       });
       sec.appendChild(ol);
       var all = el("p", "alldone", "這一週都聽完了。");
       all.hidden = true;
       sec.appendChild(all);
       weeksEl.appendChild(sec);
-      weekEls.push({ list: list, wcnt: wcnt, alldone: all });
+      weekEls.push({ list: list, wcnt: wcnt, alldone: all, range: range });
     });
   }
 
@@ -607,6 +671,8 @@ button { font: inherit; color: inherit; }
     var editable = mode === "cloud" || mode === "local";
     var nx = nextIndex();
     var cnt = { m: 0, n: 0, e: 0, x: 0 }, fullDays = 0;
+    var start = parseIso(state.start);
+    var todayIdx = start ? dayDiff(new Date(), start) : null;
 
     days.forEach(function (d) {
       var r = rows[d.i], main = 0;
@@ -621,6 +687,13 @@ button { font: inherit; color: inherit; }
       var done = main === 3;
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
+      r.sub.textContent = "";
+      if (showDates) r.sub.appendChild(el("span", "od", md(d.date) + " 週" + WD[d.dow]));
+      if (start) {
+        var pd = addDays(start, d.i);
+        r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
+        if (todayIdx === d.i) r.sub.appendChild(el("span", "tag", "今天"));
+      }
     });
 
     var mainDone = cnt.m + cnt.n + cnt.e;
@@ -637,6 +710,7 @@ button { font: inherit; color: inherit; }
       var whole = w.list.length * 3;
       w.wcnt.textContent = got + " / " + whole;
       w.alldone.hidden = !(hideDone && got === whole);
+      w.range.hidden = !showDates;
     });
     weeksEl.classList.toggle("hide-done", hideDone);
 
@@ -653,6 +727,24 @@ button { font: inherit; color: inherit; }
     });
     $("sealCount").textContent = nSeal + " / " + (WEEKS + 1);
     $("menuSealN").textContent = nSeal + " / " + (WEEKS + 1);
+
+    // 日期：重聽排程的說明、選單旁的狀態、設定視窗裡的欄位
+    var plan = "";
+    if (start) {
+      var end = addDays(start, TOTAL_DAYS - 1);
+      plan = "每天聽一天份，" + md(end) + "（週" + WD[end.getDay()] + "）聽完。";
+      if (todayIdx < 0) plan += md(start) + " 開始。";
+      else if (todayIdx < TOTAL_DAYS) plan += "今天排的是第 " + (todayIdx + 1) + " 天。";
+    }
+    $("planNote").textContent = plan;
+    $("planNote").hidden = !plan;
+    $("dsNote").textContent = plan;
+    $("menuDateN").textContent = start ? md(start) + " 起" : showDates ? "顯示中" : "";
+    var startInput = $("start");
+    if (document.activeElement !== startInput) startInput.value = state.start || "";
+    startInput.disabled = !editable;
+    $("startClear").disabled = !editable || !start;
+    $("showDates").checked = showDates;
 
     var nb = $("nextBtn");
     nb.disabled = !nx;
@@ -790,7 +882,7 @@ button { font: inherit; color: inherit; }
   var pending = newPatch(), inflight = null, writing = false, timer = null, failed = false;
 
   function newPatch() { return { done: {}, rewards: {} }; }
-  function hasPending() { return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0; }
+  function hasPending() { return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 || "start" in pending; }
 
   function applyRemote(data) {
     lastRemote = data || {};
@@ -799,6 +891,7 @@ button { font: inherit; color: inherit; }
     ALL_KEYS.forEach(function (k) { if (remote[k] === true) done[k] = true; });
     var rr = lastRemote.rewards && typeof lastRemote.rewards === "object" ? lastRemote.rewards : {};
     var rewards = {};
+    var start = typeof lastRemote.start === "string" && parseIso(lastRemote.start) ? lastRemote.start : null;
     Object.keys(rr).forEach(function (k) {
       if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
     });
@@ -806,9 +899,11 @@ button { font: inherit; color: inherit; }
       if (!p) return;
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
       Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
+      if ("start" in p) start = p.start;
     });
     state.done = done;
     state.rewards = rewards;
+    state.start = start;
     paint();
   }
 
@@ -828,8 +923,9 @@ button { font: inherit; color: inherit; }
     var body = {};
     if (Object.keys(patch.done).length) body.done = patch.done;
     if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
+    if ("start" in patch) body.start = patch.start;
     var whole = function () {
-      return ref.set({ done: fullDone(), rewards: fullRewards() }).then(function () { docExists = true; });
+      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start }).then(function () { docExists = true; });
     };
     if (!docExists) return whole();
     return ref.update(body).catch(function (e) {
@@ -861,6 +957,7 @@ button { font: inherit; color: inherit; }
       var mergedR = {}; Object.keys(back.rewards).forEach(function (k) { mergedR[k] = back.rewards[k]; });
       Object.keys(pending.rewards).forEach(function (k) { mergedR[k] = pending.rewards[k]; });
       pending.rewards = mergedR;
+      if ("start" in back && !("start" in pending)) pending.start = back.start;
       var code = e && e.code;
       if (code === "invalid_argument" || code === "transform_error") {
         pending = newPatch();
@@ -877,7 +974,7 @@ button { font: inherit; color: inherit; }
   }
 
   function saveLocal() {
-    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards() })); } catch (e) {}
+    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start })); } catch (e) {}
   }
 
   function onToggle(key, on) {
@@ -896,6 +993,31 @@ button { font: inherit; color: inherit; }
     pending.done[key] = on;
     setStatus("儲存中…");
     schedule();
+  }
+
+  function onStart(value) {
+    if (mode !== "cloud" && mode !== "local") return;
+    var v = parseIso(value) ? value : null;
+    if (v === state.start) return;
+    state.start = v;
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.start = v;
+    setStatus("儲存中…");
+    schedule();
+  }
+
+  // 日期設定視窗（右上角選單 → 日期）
+  var dateSheet = $("dateSheet");
+  function openDates() {
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    dateSheet.hidden = false;
+    try { $("showDates").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeDates() {
+    dateSheet.hidden = true;
+    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
   function onReward(k, text) {
@@ -963,6 +1085,7 @@ button { font: inherit; color: inherit; }
   build();
   buildSeals();
   try { hideDone = localStorage.getItem(LS_HIDE) === "1"; } catch (e) {}
+  try { showDates = localStorage.getItem(LS_DATES) === "1"; } catch (e) {}
   $("hideDone").checked = hideDone;
   paint();
 
@@ -981,6 +1104,16 @@ button { font: inherit; color: inherit; }
   });
   $("bookOpen").addEventListener("click", openBook);
   $("bookBack").addEventListener("click", closeBook);
+  $("dateOpen").addEventListener("click", openDates);
+  $("dsClose").addEventListener("click", closeDates);
+  dateSheet.addEventListener("click", function (ev) { if (ev.target === dateSheet) closeDates(); });
+  $("showDates").addEventListener("change", function (ev) {
+    showDates = ev.target.checked;
+    try { localStorage.setItem(LS_DATES, showDates ? "1" : "0"); } catch (e) {}
+    paint();
+  });
+  $("start").addEventListener("change", function (ev) { onStart(ev.target.value); });
+  $("startClear").addEventListener("click", function () { onStart(""); });
   $("shOk").addEventListener("click", nextAward);
   $("shClose").addEventListener("click", closeSheet);
   $("shForm").addEventListener("submit", function (ev) {
@@ -996,6 +1129,7 @@ button { font: inherit; color: inherit; }
   document.addEventListener("keydown", function (ev) {
     if (ev.key !== "Escape") return;
     if (!sheet.hidden) closeSheet();
+    else if (!dateSheet.hidden) closeDates();
     else if (!bookScreen.hidden) closeBook();
   });
   document.addEventListener("visibilitychange", function () {
