@@ -14,7 +14,7 @@
 <style>
 /* Theme carried over from 好好呼吸 (haohao-breath): the same six palettes, typefaces and background layers.
    Layout: one 480px column like that site. Title, a summary card, a sticky progress strip, then ten week
-   groups of day rows; each row has the day number and re-listen date on the left and a four-slot strip of session checks on the right. */
+   groups of day rows; each row has the day number on the left and a four-slot strip of session checks on the right. */
 :root {
   --ink: #15303a;
   --ink-2: #2f6475;
@@ -203,16 +203,6 @@ button { font: inherit; color: inherit; }
 .track > i { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--accent); transition: width .25s ease; }
 .extra-line { margin: 0; font-size: 0.8125rem; color: var(--muted-2); }
 .extra-line b { color: var(--ink); font-weight: 500; }
-.plan {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
-  border-top: 1px solid var(--line); padding-top: 12px;
-}
-.plan label { font-size: 0.8125rem; color: var(--muted-2); }
-.plan input[type="date"] {
-  font: inherit; font-size: 0.875rem; color: var(--ink); background: var(--card);
-  border: 1px solid var(--line-2); border-radius: 10px; padding: 6px 10px; min-height: 40px;
-}
-.plan p { margin: 0; flex: 1 1 14rem; min-width: 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
 
 /* 黏在上方的進度列 */
 .bar {
@@ -260,8 +250,6 @@ button { font: inherit; color: inherit; }
 .dates { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
 .dates .orig { font-size: 1.0625rem; white-space: nowrap; letter-spacing: .04em; }
 .dates .orig .dn { font: 400 1.125rem/1 var(--mono); letter-spacing: 0; margin: 0 3px; }
-.dates .re { font-size: 0.8125rem; color: var(--muted-2); display: flex; flex-wrap: wrap; align-items: center; gap: 0 6px; }
-.tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
 .day.done .info { opacity: .5; }
 .day.is-next .orig { color: var(--accent); }
 
@@ -335,11 +323,6 @@ button { font: inherit; color: inherit; }
     </div>
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
     <p class="extra-line">週末補充另計，已聽 <b id="cntX">0</b> 段。</p>
-    <div class="plan">
-      <label for="start">開始重聽</label>
-      <input type="date" id="start" disabled>
-      <p id="planNote">選一個開始日期，表格會排出每天重聽哪一天的內容。</p>
-    </div>
   </section>
 
   <div class="bar">
@@ -374,18 +357,6 @@ button { font: inherit; color: inherit; }
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
   function md(d) { return (d.getMonth() + 1) + "/" + d.getDate(); }
-  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
-  function parseIso(s) {
-    var m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || "");
-    if (!m) return null;
-    var d = new Date(+m[1], +m[2] - 1, +m[3]);
-    return isNaN(d.getTime()) ? null : d;
-  }
-  function dayDiff(a, b) {
-    var ua = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-    var ub = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-    return Math.round((ua - ub) / 86400000);
-  }
 
   var days = [];
   var ALL_KEYS = [];
@@ -402,7 +373,7 @@ button { font: inherit; color: inherit; }
   var MAIN_TOTAL = TOTAL_DAYS * 3;
 
   /* ---------- State ---------- */
-  var state = { start: null, done: {} };
+  var state = { done: {} };
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
 
@@ -460,8 +431,6 @@ button { font: inherit; color: inherit; }
         orig.appendChild(el("span", "dn", pad(d.n)));
         orig.appendChild(document.createTextNode("天"));
         dates.appendChild(orig);
-        var re = el("span", "re");
-        dates.appendChild(re);
         info.appendChild(dates);
         li.appendChild(info);
         var checks = el("div", "checks");
@@ -476,7 +445,7 @@ button { font: inherit; color: inherit; }
         }
         li.appendChild(checks);
         ol.appendChild(li);
-        rows[d.i] = { li: li, re: re, chks: chks };
+        rows[d.i] = { li: li, chks: chks };
       });
       sec.appendChild(ol);
       var all = el("p", "alldone", "這一週都聽完了。");
@@ -503,9 +472,6 @@ button { font: inherit; color: inherit; }
 
   function paint() {
     var editable = mode === "cloud" || mode === "local";
-    var start = parseIso(state.start);
-    var today = new Date();
-    var todayIdx = start ? dayDiff(today, start) : null;
     var nx = nextIndex();
     var cnt = { m: 0, n: 0, e: 0, x: 0 }, fullDays = 0;
 
@@ -523,12 +489,6 @@ button { font: inherit; color: inherit; }
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
       r.li.classList.toggle("is-next", !!nx && nx.i === d.i);
-      r.re.textContent = "";
-      if (start) {
-        var pd = addDays(start, d.i);
-        r.re.appendChild(document.createTextNode("重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
-        if (todayIdx === d.i) r.re.appendChild(el("span", "tag", "今天"));
-      }
     });
 
     var mainDone = cnt.m + cnt.n + cnt.e;
@@ -548,20 +508,6 @@ button { font: inherit; color: inherit; }
       w.alldone.hidden = !(hideDone && got === whole);
     });
     weeksEl.classList.toggle("hide-done", hideDone);
-
-    var startInput = $("start");
-    if (document.activeElement !== startInput) startInput.value = state.start || "";
-    startInput.disabled = !editable;
-    var note = $("planNote");
-    if (!start) {
-      note.textContent = "選一個開始日期，表格會排出每天重聽哪一天的內容。";
-    } else {
-      var end = addDays(start, TOTAL_DAYS - 1);
-      var t = "每天聽一天份，" + md(end) + "（週" + WD[end.getDay()] + "）聽完。";
-      if (todayIdx < 0) t += md(start) + " 開始。";
-      else if (todayIdx < TOTAL_DAYS) t += "今天排的是第 " + (todayIdx + 1) + " 天。";
-      note.textContent = t;
-    }
 
     var nb = $("nextBtn");
     nb.disabled = !nx;
@@ -588,21 +534,18 @@ button { font: inherit; color: inherit; }
   var ref = null, docExists = false, lastRemote = {};
   var pending = { done: {} }, inflight = null, writing = false, timer = null, failed = false;
 
-  function hasPending() { return Object.keys(pending.done).length > 0 || "start" in pending; }
+  function hasPending() { return Object.keys(pending.done).length > 0; }
 
   function applyRemote(data) {
     lastRemote = data || {};
     var remote = lastRemote.done && typeof lastRemote.done === "object" ? lastRemote.done : {};
     var done = {};
     ALL_KEYS.forEach(function (k) { if (remote[k] === true) done[k] = true; });
-    var start = typeof lastRemote.start === "string" && parseIso(lastRemote.start) ? lastRemote.start : null;
     [inflight, pending].forEach(function (p) {
       if (!p) return;
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
-      if ("start" in p) start = p.start;
     });
     state.done = done;
-    state.start = start;
     paint();
   }
 
@@ -613,11 +556,9 @@ button { font: inherit; color: inherit; }
   }
 
   function writePatch(patch) {
-    var body = {};
-    if (Object.keys(patch.done).length) body.done = patch.done;
-    if ("start" in patch) body.start = patch.start;
+    var body = { done: patch.done };
     var whole = function () {
-      return ref.set({ start: state.start, done: fullDone() }).then(function () { docExists = true; });
+      return ref.set({ done: fullDone() }).then(function () { docExists = true; });
     };
     if (!docExists) return whole();
     return ref.update(body).catch(function (e) {
@@ -646,7 +587,6 @@ button { font: inherit; color: inherit; }
       var merged = {}; Object.keys(back.done).forEach(function (k) { merged[k] = back.done[k]; });
       Object.keys(pending.done).forEach(function (k) { merged[k] = pending.done[k]; });
       pending.done = merged;
-      if ("start" in back && !("start" in pending)) pending.start = back.start;
       var code = e && e.code;
       if (code === "invalid_argument" || code === "transform_error") {
         pending = { done: {} };
@@ -663,7 +603,7 @@ button { font: inherit; color: inherit; }
   }
 
   function saveLocal() {
-    try { localStorage.setItem(LS_STATE, JSON.stringify({ start: state.start, done: fullDone() })); } catch (e) {}
+    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone() })); } catch (e) {}
   }
 
   function onToggle(key, on) {
@@ -672,16 +612,6 @@ button { font: inherit; color: inherit; }
     paint();
     if (mode === "local") { saveLocal(); return; }
     pending.done[key] = on;
-    setStatus("儲存中…");
-    schedule();
-  }
-
-  function onStart(value) {
-    if (mode !== "cloud" && mode !== "local") return;
-    state.start = parseIso(value) ? value : null;
-    paint();
-    if (mode === "local") { saveLocal(); return; }
-    pending.start = state.start;
     setStatus("儲存中…");
     schedule();
   }
@@ -746,7 +676,6 @@ button { font: inherit; color: inherit; }
     try { localStorage.setItem(LS_HIDE, hideDone ? "1" : "0"); } catch (e) {}
     paint();
   });
-  $("start").addEventListener("change", function (ev) { onStart(ev.target.value); });
   $("nextBtn").addEventListener("click", function () {
     var nx = nextIndex();
     if (!nx) return;
