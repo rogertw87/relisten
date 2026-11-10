@@ -11,6 +11,7 @@
 <style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>信任重聽進度表</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&text=%E4%BC%91%E6%81%AF%E6%94%BE%E9%AC%86%E5%AE%89%E9%9D%9C%E4%B8%AD%E5%BF%83%E6%9C%AC%E6%80%A7%E8%87%A3%E6%9C%8D%E7%9C%9F%E5%AF%A6%E4%BF%A1%E4%BB%B0%E4%BB%BB%E5%9C%93%E6%BB%BF&display=swap">
 <style>
 /* Theme carried over from 好好呼吸 (haohao-breath): the same six palettes, typefaces and background layers.
    Layout: one 480px column like that site. Title, a summary card, a sticky progress strip, then ten week
@@ -35,9 +36,11 @@
   --shadow: rgba(21,48,58,.15);
   --sel: var(--ink);
   --selfg: var(--screen);
-  --warn: #b4472e;
+  --warn: #b4472e; --seal: #c0432c;
   --sans: "Noto Sans TC", "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
+  --sealw: clamp(44px, 12.5vw, 54px);
   --chipw: clamp(40px, 11.5vw, 48px);
 }
 /* 深色：沒有另外選主題時，跟著裝置或 Claude 的深色設定 */
@@ -49,7 +52,7 @@
     --soft: #132a33; --soft-2: #16303a; --chip: #173039;
     --screen: #0d1b22; --page: #0d1b22; --card: #132a33;
     --track: #2a4a56; --shadow: rgba(0,0,0,.4);
-    --warn: #ffc08a;
+    --warn: #ffc08a; --seal: #ef7d62;
     color-scheme: dark;
   }
 }
@@ -61,7 +64,7 @@
   --soft: #132a33; --soft-2: #16303a; --chip: #173039;
   --screen: #0d1b22; --page: #0d1b22; --card: #132a33;
   --track: #2a4a56; --shadow: rgba(0,0,0,.4);
-  --warn: #ffc08a;
+  --warn: #ffc08a; --seal: #ef7d62;
   color-scheme: dark;
 }
 :root[data-skin="light"] { color-scheme: light; }
@@ -74,7 +77,7 @@
   --muted-2: #a9afd2; --muted: #c0c5e3;
   --track: #6a5d2f; --shadow: rgba(0,0,0,.5); --card: #10143a;
   --sel: #e6c36a; --selfg: #141a3a;
-  --warn: #ffc08a;
+  --warn: #ffc08a; --seal: #f08a6c;
   color-scheme: dark;
 }
 :root[data-skin="fire"] { /* 營火 */
@@ -86,7 +89,7 @@
   --muted-2: #c9a08c; --muted: #dcbfac;
   --track: #8a4a24; --shadow: rgba(0,0,0,.5); --card: #28140e;
   --sel: #ff8a4c; --selfg: #1a0f0c;
-  --warn: #ffd9a0;
+  --warn: #ffd9a0; --seal: #ff7350;
   color-scheme: dark;
 }
 :root[data-skin="fireflies"] { /* 螢火蟲 */
@@ -98,7 +101,7 @@
   --muted-2: #9db497; --muted: #b9ccb2;
   --track: #5f7a2c; --shadow: rgba(0,0,0,.5); --card: #0d1a14;
   --sel: #bfe36a; --selfg: #06100d;
-  --warn: #ffc08a;
+  --warn: #ffc08a; --seal: #ef7d62;
   color-scheme: dark;
 }
 :root[data-skin="sakura"] { /* 櫻花 */
@@ -110,7 +113,7 @@
   --muted-2: #8a6a74; --muted: #6f5560;
   --track: #e9a9bf; --shadow: rgba(59,42,48,.14); --card: #ffffff;
   --sel: #c4537a; --selfg: #ffffff;
-  --warn: #b4472e;
+  --warn: #b4472e; --seal: #b83a2b;
   color-scheme: light;
 }
 
@@ -280,12 +283,88 @@ button { font: inherit; color: inherit; }
 
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
 
+/* 印章冊：和好好呼吸的印章一樣，每聽完一週蓋一個 */
+.book {
+  padding: 18px 18px 20px; border-radius: 20px; background: var(--card); border: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 16px;
+}
+.book-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.book-head h2 { margin: 0; font-size: 0.875rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2); }
+.book-n { font: 400 0.8125rem var(--mono); color: var(--muted-2); }
+.seals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px 4px; }
+.seal-item {
+  min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 7px;
+  padding: 4px 0; border: 0; border-radius: 12px; background: none; cursor: pointer;
+}
+.seal {
+  width: var(--sealw); height: var(--sealw); border-radius: 50%;
+  border: 1.5px dashed var(--track); color: var(--track);
+  display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl;
+  font: 700 0.875rem/1 var(--serif); letter-spacing: .06em;
+  transition: border-color .15s ease;
+}
+.seal.square { border-radius: 12px; }
+.seal-item:hover .seal:not(.on) { border-color: var(--accent-2); }
+.seal.on { border: 2px solid var(--seal); color: var(--seal); box-shadow: inset 0 0 0 2.5px var(--card), inset 0 0 0 3.5px var(--seal); }
+.seal-cap { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6875rem; color: var(--muted-2); white-space: nowrap; }
+.seal-item.has-rw .seal-cap::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+
+/* 新印章、獎勵設定的彈出視窗 */
+.award-bg {
+  position: fixed; inset: 0; z-index: 30; background: rgba(6,16,21,.55);
+  display: flex; align-items: center; justify-content: center;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(24px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+}
+.award {
+  width: 100%; max-width: 360px; max-height: 100%; overflow-y: auto;
+  background: var(--page); color: var(--ink); border-radius: 28px;
+  padding: 32px 24px 24px; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center;
+}
+.aw-small { font-size: 0.8125rem; color: var(--muted-2); }
+.aw-stamp {
+  flex: none; width: 120px; height: 120px; border-radius: 50%; margin: 6px 0;
+  border: 3px solid var(--seal); color: var(--seal);
+  box-shadow: inset 0 0 0 4px var(--page), inset 0 0 0 6px var(--seal); transform: rotate(-7deg);
+  display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl;
+  font: 700 2rem/1 var(--serif); letter-spacing: .08em;
+}
+.aw-stamp.square { border-radius: 28px; }
+.aw-stamp.off { border: 2px dashed var(--track); color: var(--track); box-shadow: none; transform: none; }
+.aw-stamp.stamping { animation: stampIn .5s cubic-bezier(.2, .8, .3, 1.15) both; }
+@keyframes stampIn {
+  0% { opacity: 0; transform: scale(1.7) rotate(-7deg); }
+  55% { opacity: 1; transform: scale(.94) rotate(-7deg); }
+  100% { opacity: 1; transform: scale(1) rotate(-7deg); }
+}
+.aw-title { margin: 0; font-size: 1.375rem; font-weight: 500; line-height: 1.4; }
+.aw-sub { margin: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--muted); text-wrap: pretty; overflow-wrap: anywhere; }
+.rw { align-self: stretch; display: flex; flex-direction: column; gap: 8px; margin-top: 4px; text-align: left; }
+.rw label { font-size: 0.8125rem; color: var(--muted-2); }
+.rw input {
+  width: 100%; min-height: 46px; padding: 10px 12px;
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 12px;
+}
+.rw input::placeholder { color: var(--muted-2); opacity: .75; }
+.rw input:disabled { opacity: .6; }
+.aw-btns { display: flex; gap: 8px; margin-top: 8px; }
+.aw-btns > * { flex: 1 1 0; }
+.aw-ok {
+  align-self: stretch; min-height: 50px; border: none; border-radius: 16px;
+  background: var(--sel); color: var(--selfg); font-size: 1rem; font-weight: 500; cursor: pointer;
+}
+.aw-alt {
+  min-height: 50px; border: 1px solid var(--line); border-radius: 16px;
+  background: none; color: var(--ink); font-size: 1rem; cursor: pointer;
+}
+
 @media (max-width: 22.5rem) {
   .dates .orig { font-size: 1rem; }
   .checks { gap: 4px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .track > i, .chk { transition: none; }
+  .track > i, .chk, .seal { transition: none; }
+  .aw-stamp.stamping { animation: none; }
 }
 </style>
 <script>try{var t=localStorage.getItem('trust-relisten:theme');if(t)document.documentElement.setAttribute('data-skin',t)}catch(e){}</script>
@@ -322,6 +401,11 @@ button { font: inherit; color: inherit; }
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
   </section>
 
+  <section class="book" aria-labelledby="bookTitle">
+    <div class="book-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
+    <div class="seals" id="seals"></div>
+  </section>
+
   <div class="bar">
     <div class="row1">
       <span class="count"><span>已聽</span> <b id="barCount">0</b> <span>/ 186</span></span>
@@ -338,6 +422,24 @@ button { font: inherit; color: inherit; }
 
   <p class="foot" id="localNote" hidden>打勾的進度存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。</p>
 </main>
+
+<div class="award-bg" id="sheet" hidden>
+  <div class="award" role="dialog" aria-modal="true" aria-labelledby="shTitle" aria-describedby="shSub">
+    <span class="aw-small" id="shSmall"></span>
+    <div class="aw-stamp" id="shStamp" aria-hidden="true"></div>
+    <h2 class="aw-title" id="shTitle"></h2>
+    <p class="aw-sub" id="shSub"></p>
+    <form class="rw" id="shForm" hidden>
+      <label for="rwInput" id="rwLabel">聽完這一週，給自己的獎勵</label>
+      <input type="text" id="rwInput" maxlength="40" autocomplete="off" enterkeyhint="done" placeholder="例如：買一束花">
+      <div class="aw-btns">
+        <button type="button" class="aw-alt" id="shClose">關閉</button>
+        <button type="submit" class="aw-ok" id="shSave">儲存</button>
+      </div>
+    </form>
+    <button type="button" class="aw-ok" id="shOk" hidden>收下</button>
+  </div>
+</div>
 
 <script>
 (function () {
@@ -362,15 +464,23 @@ button { font: inherit; color: inherit; }
     var dow = date.getDay();
     var weekend = dow === 0 || dow === 6;
     var d = { i: i, n: i + 1, id: "d" + pad(i + 1), date: date, dow: dow, weekend: weekend,
-              week: Math.floor((i + ((FIRST.getDay() + 6) % 7)) / 7) };
+              week: Math.floor(i / 7) };
     days.push(d);
     SESS.forEach(function (s) { ALL_KEYS.push(d.id + s[0]); });
     if (weekend) ALL_KEYS.push(d.id + "x");
   }
   var MAIN_TOTAL = TOTAL_DAYS * 3;
+  var WEEKS = Math.ceil(TOTAL_DAYS / 7);            // 9 週：每 7 天一週，最後一週 6 天
+  var WEEK_DAYS = [];
+  days.forEach(function (d) { (WEEK_DAYS[d.week] = WEEK_DAYS[d.week] || []).push(d); });
+  var NUM = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
+  // 印章：每聽完一週蓋一個，全部聽完再蓋「圓滿」；樣式和好好呼吸的印章冊一樣
+  var STAMPS = ["休息", "放鬆", "安靜", "中心", "本性", "臣服", "真實", "信仰", "信任", "圓滿"];
+  var ST_ROT = [-6, 4, -3, 7, -5, 3, -4, 6, -5, -7];
+  var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
 
   /* ---------- State ---------- */
-  var state = { done: {} };
+  var state = { done: {}, rewards: {} };
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
 
@@ -505,12 +615,119 @@ button { font: inherit; color: inherit; }
     });
     weeksEl.classList.toggle("hide-done", hideDone);
 
+    var nSeal = 0;
+    sealEls.forEach(function (s, k) {
+      var on = sealOn(k), rw = state.rewards[rwKey(k)] || "";
+      if (on) nSeal++;
+      s.st.classList.toggle("on", on);
+      s.st.style.transform = on ? "rotate(" + ST_ROT[k] + "deg)" : "";
+      s.btn.classList.toggle("has-rw", !!rw);
+      var label = sealName(k) + "的印章「" + STAMPS[k] + "」：" + (on ? "已蓋章" : k === ALL ? "全部聽完後蓋章" : "已聽 " + weekGot(k) + " / " + weekWhole(k) + " 段");
+      if (rw) label += "。獎勵：" + rw;
+      s.btn.setAttribute("aria-label", label);
+    });
+    $("sealCount").textContent = nSeal + " / " + (WEEKS + 1);
+
     var nb = $("nextBtn");
     nb.disabled = !nx;
     nb.textContent = nx ? "下一段" : "全部聽完";
     nb.setAttribute("aria-label", nx
       ? "跳到下一段還沒聽的：第 " + days[nx.i].n + " 天" + SESS[nx.s][2]
       : "全部聽完");
+  }
+
+  /* ---------- 印章冊 ---------- */
+  function weekGot(w) {
+    var got = 0;
+    WEEK_DAYS[w].forEach(function (d) { SESS.forEach(function (s) { if (isDone(d.id + s[0])) got++; }); });
+    return got;
+  }
+  function weekWhole(w) { return WEEK_DAYS[w].length * 3; }
+  function sealOn(k) {
+    if (k === ALL) { for (var w = 0; w < WEEKS; w++) if (weekGot(w) < weekWhole(w)) return false; return true; }
+    return weekGot(k) === weekWhole(k);
+  }
+  function rwKey(k) { return k === ALL ? "all" : "w" + (k + 1); }
+  function sealName(k) { return k === ALL ? "全部" : "第" + NUM[k] + "週"; }
+  function sealRange(k) {
+    if (k === ALL) return "第 1–" + TOTAL_DAYS + " 天";
+    var l = WEEK_DAYS[k];
+    return "第 " + l[0].n + "–" + l[l.length - 1].n + " 天";
+  }
+  function reducedMo() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+
+  var sealEls = [];
+  function buildSeals() {
+    var box = $("seals");
+    for (var k = 0; k <= WEEKS; k++) {
+      (function (k) {
+        var b = el("button", "seal-item");
+        b.type = "button";
+        var st = el("span", "seal" + (k % 3 === 1 ? " square" : ""), STAMPS[k]);
+        st.setAttribute("aria-hidden", "true");
+        b.appendChild(st);
+        b.appendChild(el("span", "seal-cap", sealName(k)));
+        b.addEventListener("click", function () { openSeal(k); });
+        box.appendChild(b);
+        sealEls.push({ btn: b, st: st });
+      })(k);
+    }
+  }
+
+  var sheet = $("sheet"), sheetKey = null, sheetQueue = [], lastFocus = null;
+  function setStamp(k, on, animate) {
+    var s = $("shStamp");
+    s.textContent = STAMPS[k];
+    s.className = "aw-stamp" + (k % 3 === 1 ? " square" : "") + (on ? "" : " off");
+    if (on && animate && !reducedMo()) { void s.offsetWidth; s.classList.add("stamping"); }
+  }
+  function openSheet(focusEl) {
+    if (sheet.hidden) lastFocus = document.activeElement;
+    sheet.hidden = false;
+    try { focusEl.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeSheet() {
+    sheet.hidden = true;
+    sheetKey = null; sheetQueue = [];
+    if (lastFocus && document.contains(lastFocus)) { try { lastFocus.focus({ preventScroll: true }); } catch (e) {} }
+    lastFocus = null;
+  }
+  // 剛聽完一週：跳出新印章；同時全部聽完的話，接著再跳「圓滿」
+  function showAward() {
+    var k = sheetQueue[0];
+    if (k == null) { closeSheet(); return; }
+    sheetKey = null;
+    var rw = state.rewards[rwKey(k)] || "";
+    $("shSmall").textContent = "新的印章";
+    setStamp(k, true, true);
+    $("shTitle").textContent = k === ALL ? TOTAL_DAYS + " 天都聽完了" : sealName(k) + "聽完了";
+    $("shSub").textContent = rw ? "給自己的獎勵：" + rw : "已經蓋在你的印章冊裡。";
+    $("shForm").hidden = true;
+    $("shOk").hidden = false;
+    openSheet($("shOk"));
+  }
+  function nextAward() { sheetQueue.shift(); if (sheetQueue.length) showAward(); else closeSheet(); }
+  // 點印章冊裡的印章：看那一週的進度，寫下聽完後要給自己的獎勵
+  function openSeal(k) {
+    sheetQueue = [];
+    sheetKey = k;
+    var on = sealOn(k), editable = mode === "cloud" || mode === "local";
+    $("shSmall").textContent = sealRange(k);
+    setStamp(k, on, false);
+    $("shTitle").textContent = k === ALL ? "全部聽完" : sealName(k);
+    var sub;
+    if (on) sub = "已經蓋章了。";
+    else if (k === ALL) { var c = 0; for (var w = 0; w < WEEKS; w++) if (sealOn(w)) c++; sub = "已蓋 " + c + " / " + WEEKS + " 週的印章"; }
+    else sub = "已聽 " + weekGot(k) + " / " + weekWhole(k) + " 段";
+    $("shSub").textContent = sub;
+    $("rwLabel").textContent = k === ALL ? "全部聽完，給自己的獎勵" : "聽完這一週，給自己的獎勵";
+    var input = $("rwInput");
+    input.value = state.rewards[rwKey(k)] || "";
+    input.disabled = !editable;
+    $("shSave").hidden = !editable;
+    $("shForm").hidden = false;
+    $("shOk").hidden = true;
+    openSheet($("shClose"));
   }
 
   /* ---------- Status line ---------- */
@@ -528,21 +745,35 @@ button { font: inherit; color: inherit; }
 
   /* ---------- Saving: the db capability, with a this-device fallback ---------- */
   var ref = null, docExists = false, lastRemote = {};
-  var pending = { done: {} }, inflight = null, writing = false, timer = null, failed = false;
+  var pending = newPatch(), inflight = null, writing = false, timer = null, failed = false;
 
-  function hasPending() { return Object.keys(pending.done).length > 0; }
+  function newPatch() { return { done: {}, rewards: {} }; }
+  function hasPending() { return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0; }
 
   function applyRemote(data) {
     lastRemote = data || {};
     var remote = lastRemote.done && typeof lastRemote.done === "object" ? lastRemote.done : {};
     var done = {};
     ALL_KEYS.forEach(function (k) { if (remote[k] === true) done[k] = true; });
+    var rr = lastRemote.rewards && typeof lastRemote.rewards === "object" ? lastRemote.rewards : {};
+    var rewards = {};
+    Object.keys(rr).forEach(function (k) {
+      if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
+    });
     [inflight, pending].forEach(function (p) {
       if (!p) return;
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
+      Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
     });
     state.done = done;
+    state.rewards = rewards;
     paint();
+  }
+
+  function fullRewards() {
+    var out = {};
+    Object.keys(state.rewards).forEach(function (k) { if (state.rewards[k]) out[k] = state.rewards[k]; });
+    return out;
   }
 
   function fullDone() {
@@ -552,9 +783,11 @@ button { font: inherit; color: inherit; }
   }
 
   function writePatch(patch) {
-    var body = { done: patch.done };
+    var body = {};
+    if (Object.keys(patch.done).length) body.done = patch.done;
+    if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
     var whole = function () {
-      return ref.set({ done: fullDone() }).then(function () { docExists = true; });
+      return ref.set({ done: fullDone(), rewards: fullRewards() }).then(function () { docExists = true; });
     };
     if (!docExists) return whole();
     return ref.update(body).catch(function (e) {
@@ -573,7 +806,7 @@ button { font: inherit; color: inherit; }
     if (mode !== "cloud" || writing || !hasPending()) return;
     writing = true;
     inflight = pending;
-    pending = { done: {} };
+    pending = newPatch();
     setStatus("儲存中…");
     writePatch(inflight).then(function () {
       inflight = null; writing = false; failed = false;
@@ -583,9 +816,12 @@ button { font: inherit; color: inherit; }
       var merged = {}; Object.keys(back.done).forEach(function (k) { merged[k] = back.done[k]; });
       Object.keys(pending.done).forEach(function (k) { merged[k] = pending.done[k]; });
       pending.done = merged;
+      var mergedR = {}; Object.keys(back.rewards).forEach(function (k) { mergedR[k] = back.rewards[k]; });
+      Object.keys(pending.rewards).forEach(function (k) { mergedR[k] = pending.rewards[k]; });
+      pending.rewards = mergedR;
       var code = e && e.code;
       if (code === "invalid_argument" || code === "transform_error") {
-        pending = { done: {} };
+        pending = newPatch();
         mode = "readonly";
         applyRemote(lastRemote);
         setStatus("這個帳號只能檢視，不能打勾。", true);
@@ -599,15 +835,35 @@ button { font: inherit; color: inherit; }
   }
 
   function saveLocal() {
-    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone() })); } catch (e) {}
+    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards() })); } catch (e) {}
   }
 
   function onToggle(key, on) {
     if (mode !== "cloud" && mode !== "local") { paint(); return; }
+    var w = days[parseInt(key.slice(1, 3), 10) - 1].week;
+    var hadWeek = sealOn(w), hadAll = sealOn(ALL);
     if (on) state.done[key] = true; else delete state.done[key];
     paint();
+    if (on) {
+      var q = [];
+      if (!hadWeek && sealOn(w)) q.push(w);
+      if (!hadAll && sealOn(ALL)) q.push(ALL);
+      if (q.length) { sheetQueue = q; showAward(); }
+    }
     if (mode === "local") { saveLocal(); return; }
     pending.done[key] = on;
+    setStatus("儲存中…");
+    schedule();
+  }
+
+  function onReward(k, text) {
+    if (mode !== "cloud" && mode !== "local") return;
+    var key = rwKey(k);
+    if ((state.rewards[key] || "") === text) return;
+    if (text) state.rewards[key] = text; else delete state.rewards[key];
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.rewards[key] = text;
     setStatus("儲存中…");
     schedule();
   }
@@ -654,7 +910,7 @@ button { font: inherit; color: inherit; }
     }).then(function (can) {
       if (can === false && mode !== "local") {
         mode = "readonly";
-        pending = { done: {} };
+        pending = newPatch();
         applyRemote(lastRemote);
         setStatus("這個帳號只能檢視，不能打勾。", true);
       }
@@ -663,6 +919,7 @@ button { font: inherit; color: inherit; }
 
   /* ---------- Wire up ---------- */
   build();
+  buildSeals();
   try { hideDone = localStorage.getItem(LS_HIDE) === "1"; } catch (e) {}
   $("hideDone").checked = hideDone;
   paint();
@@ -679,6 +936,21 @@ button { font: inherit; color: inherit; }
     var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     try { r.chks[SESS[nx.s][0]].input.focus({ preventScroll: true }); } catch (e) {}
+  });
+  $("shOk").addEventListener("click", nextAward);
+  $("shClose").addEventListener("click", closeSheet);
+  $("shForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (sheetKey == null) return;
+    onReward(sheetKey, $("rwInput").value.trim().slice(0, 40));
+    closeSheet();
+  });
+  sheet.addEventListener("click", function (ev) {
+    if (ev.target !== sheet) return;
+    if (sheetQueue.length) nextAward(); else closeSheet();
+  });
+  document.addEventListener("keydown", function (ev) {
+    if (ev.key === "Escape" && !sheet.hidden) closeSheet();
   });
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(false);
