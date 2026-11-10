@@ -201,8 +201,6 @@ button { font: inherit; color: inherit; }
 .total .days b { color: var(--ink); font-weight: 500; }
 .track { height: 6px; border-radius: 99px; background: var(--track); overflow: hidden; }
 .track > i { display: block; height: 100%; width: 0; border-radius: 99px; background: var(--accent); transition: width .25s ease; }
-.extra-line { margin: 0; font-size: 0.8125rem; color: var(--muted-2); }
-.extra-line b { color: var(--ink); font-weight: 500; }
 
 /* 黏在上方的進度列 */
 .bar {
@@ -322,7 +320,6 @@ button { font: inherit; color: inherit; }
       <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
     </div>
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
-    <p class="extra-line">週末補充另計，已聽 <b id="cntX">0</b> 段。</p>
   </section>
 
   <div class="bar">
@@ -498,7 +495,6 @@ button { font: inherit; color: inherit; }
     $("totalTrack").setAttribute("aria-valuenow", mainDone);
     setWidth("totalFill", mainDone, MAIN_TOTAL);
     setWidth("barFill", mainDone, MAIN_TOTAL);
-    $("cntX").textContent = cnt.x;
 
     weekEls.forEach(function (w) {
       var got = 0;
