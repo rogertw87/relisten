@@ -5,7 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="description" content="2026「信任」共修的重聽進度表：62 天，每天早、午、晚三段。">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231f6f86'/%3E%3Cpath d='M9 16.5l5 5 9-10' fill='none' stroke='%23fff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ffffff">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="信任">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
@@ -144,7 +151,7 @@ button { font: inherit; color: inherit; }
   font-size: 0.8125rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2);
   padding: 0 4px 8px; border-bottom: 1px solid var(--line);
 }
-.week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
+.week h2 .range, .week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
 .week h2 .wcnt { margin-left: auto; }
 .week ol { list-style: none; margin: 0; padding: 0; }
 .day {
@@ -152,10 +159,15 @@ button { font: inherit; color: inherit; }
   padding: 12px 4px; border-bottom: 1px solid var(--line);
   scroll-margin-top: 7rem;
 }
-.info { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.info {
+  display: flex; align-items: center; gap: 12px; min-width: 0; width: 100%;
+  margin: 0; padding: 4px 0; border: 0; border-radius: 10px; background: none;
+  color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
 .dates { display: flex; flex-direction: column; min-width: 0; line-height: 1.4; }
 .dates .orig { font-size: 1.0625rem; white-space: nowrap; letter-spacing: .04em; }
 .dates .orig .dn { font: 400 1.125rem/1 var(--mono); letter-spacing: 0; margin: 0 3px; }
+.dates .orig .nd { display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
 .dates .sub { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: 0.8125rem; color: var(--muted-2); }
 .dates .sub:empty { display: none; }
 .tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
@@ -238,24 +250,79 @@ button { font: inherit; color: inherit; }
 .seal-cap { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6875rem; color: var(--muted-2); white-space: nowrap; }
 .seal-item.has-rw .seal-cap::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 
-.plan-note { margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
-
-/* 重聽排程設定視窗 */
-.award.date-panel { align-items: stretch; text-align: left; gap: 18px; padding: 28px 22px 22px; }
-.award.date-panel .aw-title { text-align: center; }
-.opt-block { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-.opt-name { font-size: 0.9375rem; font-weight: 500; color: var(--ink); }
-.opt-sub { font-size: 0.8125rem; line-height: 1.55; color: var(--muted-2); }
-.opt-row { display: flex; gap: 8px; margin-top: 8px; }
-.opt-row input[type="date"] {
-  flex: 1 1 auto; min-width: 0; min-height: 44px; padding: 8px 10px;
-  font: inherit; font-size: 1rem; color: var(--ink); background: var(--card);
-  border: 1px solid var(--line-2); border-radius: 12px;
+/* 重聽排程：在首頁的進度卡裡選開始日期 */
+.plan {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+  border-top: 1px solid var(--line); padding-top: 12px;
 }
-.aw-alt.small { flex: none; min-height: 44px; padding: 0 14px; border-radius: 12px; font-size: 0.875rem; }
-.aw-alt:disabled { opacity: .45; cursor: default; }
-.opt-note { margin: 4px 0 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
-.opt-note:empty { display: none; }
+.plan label { font-size: 0.8125rem; color: var(--muted-2); }
+.plan input[type="date"] {
+  min-width: 0; min-height: 40px; padding: 6px 10px;
+  font: inherit; font-size: 0.9375rem; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 10px;
+}
+.plan .mini-btn { min-height: 40px; }
+.plan-note { flex: 1 1 100%; margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
+.plan-check { flex: 1 1 100%; display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: 0.8125rem; color: var(--muted-2); cursor: pointer; }
+.plan-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+
+/* 心得本 */
+.notes-head .book-n { margin-left: auto; }
+.mini-btn {
+  min-height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card);
+  color: var(--ink); font-size: 0.8125rem; cursor: pointer; white-space: nowrap; align-self: center;
+}
+.mini-btn:disabled { opacity: .45; cursor: default; }
+.notes-empty { margin: 4px 4px 0; font-size: 0.875rem; line-height: 1.7; color: var(--muted-2); }
+.notes { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.note-card {
+  width: 100%; display: flex; flex-direction: column; gap: 8px; padding: 16px 18px;
+  border-radius: 20px; background: var(--card); border: 1px solid var(--line);
+  color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.note-card:hover { border-color: var(--accent-2); }
+.note-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.note-day { font-size: 1rem; letter-spacing: .04em; white-space: nowrap; }
+.note-day .dn { font: 400 1.0625rem/1 var(--mono); letter-spacing: 0; margin: 0 3px; }
+.note-at { font: 400 0.75rem var(--mono); color: var(--muted-2); white-space: nowrap; }
+.note-text { font-size: 0.9375rem; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* 每天的心得視窗 */
+.award.note-panel { max-width: 440px; align-items: stretch; text-align: left; gap: 12px; padding: 26px 20px 20px; }
+.award.note-panel .aw-title { text-align: center; }
+.note-panel textarea {
+  width: 100%; min-height: 10em; resize: vertical; padding: 12px 14px;
+  font: inherit; font-size: 1rem; line-height: 1.75; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 14px;
+}
+.note-panel textarea::placeholder { color: var(--muted-2); opacity: .75; }
+.note-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: -4px; font: 400 0.75rem var(--mono); color: var(--muted-2); }
+
+/* 加到手機桌面：從下方滑出的說明，和好好呼吸一樣 */
+.sheet-bg {
+  position: fixed; inset: 0; z-index: 30; background: rgba(21,48,58,.4);
+  display: flex; align-items: flex-end; justify-content: center;
+}
+.sheet.install {
+  width: 100%; max-width: 480px; max-height: 100%; overflow-y: auto;
+  padding: 28px max(24px, env(safe-area-inset-right, 0px)) calc(32px + env(safe-area-inset-bottom, 0px)) max(24px, env(safe-area-inset-left, 0px));
+  border-radius: 24px 24px 0 0; background: var(--page); color: var(--ink);
+  display: flex; flex-direction: column; gap: 20px;
+}
+.install-head { display: flex; align-items: center; gap: 14px; }
+.install-head img { flex: none; width: 52px; height: 52px; border-radius: 12px; box-shadow: 0 0 0 1px var(--line); }
+.install-head div { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.install-name { font-size: 1.125rem; font-weight: 500; }
+.install-sub { font-size: 0.875rem; color: var(--muted); }
+.install-title { font-size: 0.8125rem; font-weight: 500; color: var(--ink-2); }
+.install-steps { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px; }
+.install-steps li { display: flex; gap: 12px; align-items: flex-start; font-size: 1rem; line-height: 1.6; text-wrap: pretty; }
+.install-n {
+  flex: none; width: 26px; height: 26px; margin-top: 1px; border-radius: 50%; background: var(--screen);
+  color: var(--accent); font-size: 0.875rem; font-weight: 500; display: flex; align-items: center; justify-content: center;
+}
+.install-go { min-height: 52px; border: none; border-radius: 16px; background: var(--sel); color: var(--selfg); font-size: 1rem; font-weight: 500; cursor: pointer; }
+.install-ok { min-height: 48px; border: 1px solid var(--line); border-radius: 16px; background: none; color: var(--ink); font-size: 0.9375rem; cursor: pointer; }
 
 /* 新印章、獎勵設定的彈出視窗 */
 .award-bg {
@@ -321,8 +388,9 @@ button { font: inherit; color: inherit; }
   <div class="menu" id="menu">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="選單" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
     <div class="menu-pop" id="menuPop" hidden>
+      <button type="button" class="menu-item" id="notesOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg><span>心得本</span><span class="menu-n" id="menuNotesN"></span></button>
       <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
-      <button type="button" class="menu-item" id="dateOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v3M16 3v3M4 10h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path></svg><span>重聽排程</span><span class="menu-n" id="menuDateN"></span></button>
+      <button type="button" class="menu-item" id="installItem" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM12 8v7M8.8 11.8 12 15l3.2-3.2"></path></svg><span>加到手機桌面</span></button>
     </div>
   </div>
   <header class="head">
@@ -337,7 +405,13 @@ button { font: inherit; color: inherit; }
       <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
     </div>
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
-    <p class="plan-note" id="planNote" hidden></p>
+    <div class="plan">
+      <label for="start">開始重聽</label>
+      <input type="date" id="start">
+      <button type="button" class="mini-btn" id="startClear" hidden>不排程</button>
+      <p class="plan-note" id="planNote" hidden></p>
+      <label class="plan-check" for="showDates"><input type="checkbox" id="showDates"> 顯示共修日期</label>
+    </div>
   </section>
 
   <div class="bar">
@@ -354,8 +428,43 @@ button { font: inherit; color: inherit; }
 
   <div class="weeks" id="weeks"></div>
 
-  <p class="foot" id="localNote" hidden>打勾的進度存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。</p>
+  <p class="foot" id="localNote" hidden>打勾、印章和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。心得可以用心得本的「匯出」另外存一份。</p>
 </main>
+
+<div class="sheet-bg" id="installSheet" hidden>
+  <div class="sheet install" role="dialog" aria-modal="true" aria-labelledby="installHead">
+    <div class="install-head">
+      <img id="installIcon" alt="" width="52" height="52">
+      <div><span class="install-name" id="installHead">加到手機桌面</span><span class="install-sub">之後點桌面圖示就能直接打開，像 App 一樣。</span></div>
+    </div>
+    <span class="install-title" id="installTitle"></span>
+    <ol class="install-steps" id="installSteps"></ol>
+    <button type="button" class="install-go" id="installGo" hidden>立即加入</button>
+    <button type="button" class="install-ok" id="installOk">知道了</button>
+  </div>
+</div>
+
+<section class="screen" id="notesScreen" aria-labelledby="notesTitle" hidden>
+  <div class="screen-inner">
+    <button type="button" class="back" id="notesBack">← 返回</button>
+    <div class="book-head notes-head">
+      <h2 id="notesTitle">心得本</h2>
+      <span class="book-n" id="notesCount">0 則</span>
+      <button type="button" class="mini-btn" id="notesExport" hidden>匯出</button>
+    </div>
+    <p class="notes-empty" id="notesEmpty">還沒有心得。點清單裡的任何一天，就可以寫下聽完的感受。</p>
+    <ol class="notes" id="notesList"></ol>
+  </div>
+</section>
+
+<form class="award-bg" id="noteSheet" hidden>
+  <div class="award note-panel" role="dialog" aria-modal="true" aria-labelledby="nsTitle">
+    <h2 class="aw-title" id="nsTitle">第01天的心得</h2>
+    <textarea id="noteText" rows="7" maxlength="800" aria-labelledby="nsTitle" placeholder="聽完有什麼感受？哪一句話留在心裡？"></textarea>
+    <div class="note-meta"><span id="nsAt"></span><span id="nsCount">0 / 800</span></div>
+    <button type="submit" class="aw-ok" id="nsDone">完成</button>
+  </div>
+</form>
 
 <section class="screen" id="bookScreen" aria-labelledby="bookTitle" hidden>
   <div class="screen-inner">
@@ -364,22 +473,6 @@ button { font: inherit; color: inherit; }
     <div class="book"><div class="seals" id="seals"></div></div>
   </div>
 </section>
-
-<div class="award-bg" id="dateSheet" hidden>
-  <div class="award date-panel" role="dialog" aria-modal="true" aria-labelledby="dsTitle">
-    <h2 class="aw-title" id="dsTitle">重聽排程</h2>
-    <div class="opt-block">
-      <label class="opt-name" for="start">開始日期</label>
-      <span class="opt-sub">選一個開始日期，每天排一天份，清單會標出每天重聽的日期和「今天」。</span>
-      <div class="opt-row">
-        <input type="date" id="start">
-        <button type="button" class="aw-alt small" id="startClear">不排程</button>
-      </div>
-      <p class="opt-note" id="dsNote"></p>
-    </div>
-    <button type="button" class="aw-ok" id="dsClose">完成</button>
-  </div>
-</div>
 
 <div class="award-bg" id="sheet" hidden>
   <div class="award" role="dialog" aria-modal="true" aria-labelledby="shTitle" aria-describedby="shSub">
@@ -410,6 +503,7 @@ button { font: inherit; color: inherit; }
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
   var LS_STATE = "trust-relisten:state";
   var LS_HIDE = "trust-relisten:hide-done";
+  var LS_DATES = "trust-relisten:show-dates";
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
@@ -437,6 +531,7 @@ button { font: inherit; color: inherit; }
     if (weekend) ALL_KEYS.push(d.id + "x");
   }
   var MAIN_TOTAL = TOTAL_DAYS * 3;
+  var NOTE_MAX = 800;                                // 每天心得的字數上限
   var WEEKS = Math.ceil(TOTAL_DAYS / 7);            // 9 週：每 7 天一週，最後一週 6 天
   var WEEK_DAYS = [];
   days.forEach(function (d) { (WEEK_DAYS[d.week] = WEEK_DAYS[d.week] || []).push(d); });
@@ -447,9 +542,10 @@ button { font: inherit; color: inherit; }
   var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
 
   /* ---------- State ---------- */
-  var state = { done: {}, rewards: {}, start: null };   // start：重聽排程的開始日期，沒排程是 null
+  var state = { done: {}, rewards: {}, start: null, notes: {} };   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
+  var showDates = false;           // 顯示原本共修的日期（只記在這台裝置）
 
   /* ---------- Build the list once ---------- */
   var $ = function (id) { return document.getElementById(id); };
@@ -489,6 +585,10 @@ button { font: inherit; color: inherit; }
       var sec = el("section", "week");
       var h = el("h2");
       h.appendChild(el("span", null, "第 " + (w + 1) + " 週"));
+      var a = list[0].date, b = list[list.length - 1].date;
+      var range = el("span", "range", md(a) + "–" + md(b));
+      range.hidden = true;
+      h.appendChild(range);
       var wcnt = el("span", "wcnt", "");
       h.appendChild(wcnt);
       sec.appendChild(h);
@@ -496,12 +596,18 @@ button { font: inherit; color: inherit; }
       list.forEach(function (d) {
         var li = el("li", "day");
         li.id = "day-" + pad(d.n);
-        var info = el("div", "info");
-        var dates = el("div", "dates");
+        var info = el("button", "info");
+        info.type = "button";
+        info.addEventListener("click", function () { openNote(d.i); });
+        var dates = el("span", "dates");
         var orig = el("span", "orig");
         orig.appendChild(document.createTextNode("第"));
         orig.appendChild(el("span", "dn", pad(d.n)));
         orig.appendChild(document.createTextNode("天"));
+        var nd = el("span", "nd");
+        nd.hidden = true;
+        nd.setAttribute("aria-hidden", "true");
+        orig.appendChild(nd);
         dates.appendChild(orig);
         var sub = el("span", "sub");
         dates.appendChild(sub);
@@ -519,14 +625,14 @@ button { font: inherit; color: inherit; }
         }
         li.appendChild(checks);
         ol.appendChild(li);
-        rows[d.i] = { li: li, chks: chks, sub: sub };
+        rows[d.i] = { li: li, chks: chks, sub: sub, info: info, nd: nd };
       });
       sec.appendChild(ol);
       var all = el("p", "alldone", "這一週都聽完了。");
       all.hidden = true;
       sec.appendChild(all);
       weeksEl.appendChild(sec);
-      weekEls.push({ list: list, wcnt: wcnt, alldone: all });
+      weekEls.push({ list: list, wcnt: wcnt, alldone: all, range: range });
     });
   }
 
@@ -564,7 +670,11 @@ button { font: inherit; color: inherit; }
       var done = main === 3;
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
+      var note = state.notes[d.id];
+      r.nd.hidden = !note;
+      r.info.setAttribute("aria-label", "第 " + d.n + " 天：" + (note ? "看心得" : "寫心得"));
       r.sub.textContent = "";
+      if (showDates) r.sub.appendChild(el("span", "od", md(d.date) + " 週" + WD[d.dow]));
       if (start) {
         var pd = addDays(start, d.i);
         r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
@@ -586,6 +696,7 @@ button { font: inherit; color: inherit; }
       var whole = w.list.length * 3;
       w.wcnt.textContent = got + " / " + whole;
       w.alldone.hidden = !(hideDone && got === whole);
+      w.range.hidden = !showDates;
     });
     weeksEl.classList.toggle("hide-done", hideDone);
 
@@ -602,6 +713,9 @@ button { font: inherit; color: inherit; }
     });
     $("sealCount").textContent = nSeal + " / " + (WEEKS + 1);
     $("menuSealN").textContent = nSeal + " / " + (WEEKS + 1);
+    var nNotes = Object.keys(state.notes).length;
+    $("menuNotesN").textContent = nNotes ? nNotes + " 則" : "";
+    if (!notesScreen.hidden) renderNotes();
 
     // 重聽排程：說明、選單旁的狀態、設定視窗裡的欄位
     var plan = "";
@@ -613,12 +727,11 @@ button { font: inherit; color: inherit; }
     }
     $("planNote").textContent = plan;
     $("planNote").hidden = !plan;
-    $("dsNote").textContent = plan;
-    $("menuDateN").textContent = start ? md(start) + " 起" : "";
     var startInput = $("start");
     if (document.activeElement !== startInput) startInput.value = state.start || "";
     startInput.disabled = !editable;
-    $("startClear").disabled = !editable || !start;
+    $("startClear").hidden = !editable || !start;
+    $("showDates").checked = showDates;
 
     var nb = $("nextBtn");
     nb.disabled = !nx;
@@ -738,6 +851,149 @@ button { font: inherit; color: inherit; }
     try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
+  /* ---------- 心得 ---------- */
+  function nowStamp() {
+    var t = new Date();
+    return t.getFullYear() + "-" + pad(t.getMonth() + 1) + "-" + pad(t.getDate()) + "T" + pad(t.getHours()) + ":" + pad(t.getMinutes());
+  }
+  function atLabel(at) {
+    var m = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(at || "");
+    return m ? (+m[2]) + "/" + (+m[3]) + " " + m[4] + ":" + m[5] : "";
+  }
+  function dayLabel(d, box) {
+    box.appendChild(document.createTextNode("第"));
+    box.appendChild(el("span", "dn", pad(d.n)));
+    box.appendChild(document.createTextNode("天"));
+    return box;
+  }
+
+  var noteSheet = $("noteSheet"), noteText = $("noteText"), noteDay = null, noteLastFocus = null;
+  function noteCount() { $("nsCount").textContent = noteText.value.length + " / " + NOTE_MAX; }
+  function openNote(i) {
+    var d = days[i], note = state.notes[d.id], editable = mode === "cloud" || mode === "local";
+    noteDay = i;
+    noteLastFocus = document.activeElement;
+    $("nsTitle").textContent = "第" + pad(d.n) + "天的心得";
+    noteText.value = note ? note.t : "";
+    noteText.readOnly = !editable;
+    noteText.placeholder = editable ? "聽完有什麼感受？哪一句話留在心裡？" : "";
+    $("nsAt").textContent = note && note.at ? atLabel(note.at) + " 寫" : "";
+    noteCount();
+    noteSheet.hidden = false;
+    var target = editable && !note ? noteText : $("nsDone");
+    try { target.focus({ preventScroll: true }); } catch (e) {}
+  }
+  // 關掉視窗時就存起來（按完成、點外面、按 Esc 都一樣），不會因為忘了按儲存而不見
+  function closeNote() {
+    if (noteSheet.hidden) return;
+    if (noteDay != null && !noteText.readOnly) onNote(noteDay, noteText.value.replace(/\s+$/, "").slice(0, NOTE_MAX));
+    noteSheet.hidden = true;
+    noteDay = null;
+    if (noteLastFocus && document.contains(noteLastFocus)) { try { noteLastFocus.focus({ preventScroll: true }); } catch (e) {} }
+    noteLastFocus = null;
+  }
+
+  var notesScreen = $("notesScreen");
+  function renderNotes() {
+    var list = $("notesList"), n = 0;
+    list.textContent = "";
+    days.forEach(function (d) {
+      var note = state.notes[d.id];
+      if (!note) return;
+      n++;
+      var li = el("li");
+      var b = el("button", "note-card");
+      b.type = "button";
+      var head = el("span", "note-head");
+      head.appendChild(dayLabel(d, el("span", "note-day")));
+      if (note.at) head.appendChild(el("span", "note-at", atLabel(note.at)));
+      b.appendChild(head);
+      b.appendChild(el("span", "note-text", note.t));
+      b.addEventListener("click", function () { openNote(d.i); });
+      li.appendChild(b);
+      list.appendChild(li);
+    });
+    $("notesCount").textContent = n + " 則";
+    $("notesEmpty").hidden = n > 0;
+    $("notesExport").disabled = n === 0;
+  }
+  function openNotes() {
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    renderNotes();
+    notesScreen.hidden = false;
+    notesScreen.scrollTop = 0;
+    document.documentElement.classList.add("noscroll");
+    try { $("notesBack").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeNotes() {
+    notesScreen.hidden = true;
+    document.documentElement.classList.remove("noscroll");
+    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
+  }
+  // 網站版：把全部心得存成一個文字檔
+  function exportNotes() {
+    var t = new Date(), lines = ["信任・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
+    days.forEach(function (d) {
+      var note = state.notes[d.id];
+      if (!note) return;
+      lines.push("第" + pad(d.n) + "天" + (note.at ? "（" + atLabel(note.at) + " 寫）" : ""));
+      lines.push(note.t, "");
+    });
+    var blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "信任心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+  }
+
+  /* ---------- 加到手機桌面（只在網站版出現；做法和好好呼吸一樣） ---------- */
+  var installEvt = null;   // Android／電腦 Chrome 可以直接跳出安裝視窗
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); installEvt = e; });
+  window.addEventListener("appinstalled", function () { installEvt = null; if (!installSheet.hidden) closeInstall(); });
+  function platform() {
+    var u = navigator.userAgent || "";
+    if (/Line\//i.test(u) || /FBAN|FBAV|Instagram/i.test(u)) return "inapp";
+    if (/iPhone|iPad|iPod/i.test(u) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "ios";
+    if (/Android/i.test(u)) return "android";
+    return "desktop";
+  }
+  function isStandalone() {
+    try { return window.matchMedia("(display-mode: standalone)").matches || navigator.standalone === true; } catch (e) { return false; }
+  }
+  function installInfo() {
+    var p = platform();
+    if (p === "inapp") return ["目前在 LINE 或其他 App 裡開啟", ["點右上角或右下角的「⋯」或分享按鈕", "選「用預設瀏覽器開啟」或「在 Safari／Chrome 中開啟」", "在瀏覽器裡再點一次選單的「加到手機桌面」"]];
+    if (p === "ios") return ["iPhone／iPad（請用 Safari 開啟）", ["點畫面下方（或網址列旁）的分享按鈕：方框加向上箭頭", "往下滑，點「加入主畫面」", "點右上角「新增」，桌面就會出現「信任」的圖示"]];
+    if (p === "android") return ["Android（建議用 Chrome 開啟）", installEvt ? ["點下方「立即加入」", "在跳出的視窗點「安裝」或「新增」"] : ["點右上角的「⋮」選單", "點「加到主畫面」或「安裝應用程式」", "點「新增」，桌面就會出現「信任」的圖示"]];
+    return ["電腦瀏覽器", installEvt ? ["點下方「立即加入」"] : ["手機打開這個網址後，再點選單的「加到手機桌面」", "電腦版 Chrome／Edge 可點網址列右側的安裝圖示"]];
+  }
+  var installSheet = $("installSheet");
+  function openInstall() {
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    var info = installInfo(), ol = $("installSteps");
+    $("installTitle").textContent = info[0];
+    ol.textContent = "";
+    info[1].forEach(function (t, i) {
+      var li = el("li");
+      li.appendChild(el("span", "install-n", String(i + 1)));
+      li.appendChild(el("span", null, t));
+      ol.appendChild(li);
+    });
+    $("installGo").hidden = !installEvt;
+    var img = $("installIcon");
+    if (!img.getAttribute("src")) img.src = "icons/icon-180.png";
+    installSheet.hidden = false;
+    try { $(installEvt ? "installGo" : "installOk").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeInstall() {
+    installSheet.hidden = true;
+    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
+  }
+
   /* ---------- Status line ---------- */
   var statusEl = $("status");
   function setStatus(text, warn, action) {
@@ -755,8 +1011,11 @@ button { font: inherit; color: inherit; }
   var ref = null, docExists = false, lastRemote = {};
   var pending = newPatch(), inflight = null, writing = false, timer = null, failed = false;
 
-  function newPatch() { return { done: {}, rewards: {} }; }
-  function hasPending() { return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 || "start" in pending; }
+  function newPatch() { return { done: {}, rewards: {}, notes: {} }; }
+  function hasPending() {
+    return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 ||
+      Object.keys(pending.notes).length > 0 || "start" in pending;
+  }
 
   function applyRemote(data) {
     lastRemote = data || {};
@@ -766,6 +1025,12 @@ button { font: inherit; color: inherit; }
     var rr = lastRemote.rewards && typeof lastRemote.rewards === "object" ? lastRemote.rewards : {};
     var rewards = {};
     var start = typeof lastRemote.start === "string" && parseIso(lastRemote.start) ? lastRemote.start : null;
+    var rn = lastRemote.notes && typeof lastRemote.notes === "object" ? lastRemote.notes : {};
+    var notes = {};
+    Object.keys(rn).forEach(function (k) {
+      var v = rn[k];
+      if (/^d\d\d$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
+    });
     Object.keys(rr).forEach(function (k) {
       if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
     });
@@ -774,11 +1039,19 @@ button { font: inherit; color: inherit; }
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
       Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
       if ("start" in p) start = p.start;
+      Object.keys(p.notes).forEach(function (k) { if (p.notes[k]) notes[k] = p.notes[k]; else delete notes[k]; });
     });
     state.done = done;
     state.rewards = rewards;
     state.start = start;
+    state.notes = notes;
     paint();
+  }
+
+  function fullNotes() {
+    var out = {};
+    Object.keys(state.notes).forEach(function (k) { if (state.notes[k]) out[k] = state.notes[k]; });
+    return out;
   }
 
   function fullRewards() {
@@ -798,8 +1071,9 @@ button { font: inherit; color: inherit; }
     if (Object.keys(patch.done).length) body.done = patch.done;
     if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
     if ("start" in patch) body.start = patch.start;
+    if (Object.keys(patch.notes).length) body.notes = patch.notes;
     var whole = function () {
-      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start }).then(function () { docExists = true; });
+      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes() }).then(function () { docExists = true; });
     };
     if (!docExists) return whole();
     return ref.update(body).catch(function (e) {
@@ -832,6 +1106,9 @@ button { font: inherit; color: inherit; }
       Object.keys(pending.rewards).forEach(function (k) { mergedR[k] = pending.rewards[k]; });
       pending.rewards = mergedR;
       if ("start" in back && !("start" in pending)) pending.start = back.start;
+      var mergedN = {}; Object.keys(back.notes).forEach(function (k) { mergedN[k] = back.notes[k]; });
+      Object.keys(pending.notes).forEach(function (k) { mergedN[k] = pending.notes[k]; });
+      pending.notes = mergedN;
       var code = e && e.code;
       if (code === "invalid_argument" || code === "transform_error") {
         pending = newPatch();
@@ -848,7 +1125,7 @@ button { font: inherit; color: inherit; }
   }
 
   function saveLocal() {
-    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start })); } catch (e) {}
+    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes() })); } catch (e) {}
   }
 
   function onToggle(key, on) {
@@ -869,6 +1146,19 @@ button { font: inherit; color: inherit; }
     schedule();
   }
 
+  function onNote(i, text) {
+    if (mode !== "cloud" && mode !== "local") return;
+    var key = days[i].id, cur = state.notes[key];
+    if ((cur ? cur.t : "") === text) return;
+    var v = text ? { t: text, at: nowStamp() } : null;
+    if (v) state.notes[key] = v; else delete state.notes[key];
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.notes[key] = v;
+    setStatus("儲存中…");
+    schedule();
+  }
+
   function onStart(value) {
     if (mode !== "cloud" && mode !== "local") return;
     var v = parseIso(value) ? value : null;
@@ -879,19 +1169,6 @@ button { font: inherit; color: inherit; }
     pending.start = v;
     setStatus("儲存中…");
     schedule();
-  }
-
-  // 重聽排程設定視窗（右上角選單 → 重聽排程）
-  var dateSheet = $("dateSheet");
-  function openDates() {
-    $("menuPop").hidden = true;
-    $("menuBtn").setAttribute("aria-expanded", "false");
-    dateSheet.hidden = false;
-    try { $("dsClose").focus({ preventScroll: true }); } catch (e) {}
-  }
-  function closeDates() {
-    dateSheet.hidden = true;
-    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
   function onReward(k, text) {
@@ -959,6 +1236,7 @@ button { font: inherit; color: inherit; }
   build();
   buildSeals();
   try { hideDone = localStorage.getItem(LS_HIDE) === "1"; } catch (e) {}
+  try { showDates = localStorage.getItem(LS_DATES) === "1"; } catch (e) {}
   $("hideDone").checked = hideDone;
   paint();
 
@@ -975,12 +1253,32 @@ button { font: inherit; color: inherit; }
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     try { r.chks[SESS[nx.s][0]].input.focus({ preventScroll: true }); } catch (e) {}
   });
+  $("notesOpen").addEventListener("click", openNotes);
+  $("notesBack").addEventListener("click", closeNotes);
+  $("notesExport").hidden = !!window.claude;            // 匯出只放在網站版
+  $("notesExport").addEventListener("click", exportNotes);
+  noteText.addEventListener("input", noteCount);
+  noteSheet.addEventListener("submit", function (ev) { ev.preventDefault(); closeNote(); });
+  noteSheet.addEventListener("click", function (ev) { if (ev.target === noteSheet) closeNote(); });
   $("bookOpen").addEventListener("click", openBook);
+  $("installItem").hidden = !!window.claude || isStandalone();   // Claude 裡、或已經從桌面打開時不顯示
+  $("installItem").addEventListener("click", openInstall);
+  $("installOk").addEventListener("click", closeInstall);
+  installSheet.addEventListener("click", function (ev) { if (ev.target === installSheet) closeInstall(); });
+  $("installGo").addEventListener("click", function () {
+    if (!installEvt) return;
+    var ev = installEvt;
+    installEvt = null;
+    ev.prompt();
+    ev.userChoice.then(closeInstall, closeInstall);
+  });
   $("bookBack").addEventListener("click", closeBook);
-  $("dateOpen").addEventListener("click", openDates);
-  $("dsClose").addEventListener("click", closeDates);
-  dateSheet.addEventListener("click", function (ev) { if (ev.target === dateSheet) closeDates(); });
   $("start").addEventListener("change", function (ev) { onStart(ev.target.value); });
+  $("showDates").addEventListener("change", function (ev) {
+    showDates = ev.target.checked;
+    try { localStorage.setItem(LS_DATES, showDates ? "1" : "0"); } catch (e) {}
+    paint();
+  });
   $("startClear").addEventListener("click", function () { onStart(""); });
   $("shOk").addEventListener("click", nextAward);
   $("shClose").addEventListener("click", closeSheet);
@@ -997,13 +1295,15 @@ button { font: inherit; color: inherit; }
   document.addEventListener("keydown", function (ev) {
     if (ev.key !== "Escape") return;
     if (!sheet.hidden) closeSheet();
-    else if (!dateSheet.hidden) closeDates();
+    else if (!installSheet.hidden) closeInstall();
+    else if (!noteSheet.hidden) closeNote();
+    else if (!notesScreen.hidden) closeNotes();
     else if (!bookScreen.hidden) closeBook();
   });
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(false);
   });
-  window.addEventListener("pagehide", function () { flush(false); });
+  window.addEventListener("pagehide", function () { closeNote(); flush(false); });
 
   var use = window.claude && typeof window.claude.use === "function" ? window.claude.use("db") : Promise.resolve(null);
   Promise.resolve(use).then(function (db) {
