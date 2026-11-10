@@ -239,7 +239,7 @@ button { font: inherit; color: inherit; }
   font-size: 0.8125rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2);
   padding: 0 4px 8px; border-bottom: 1px solid var(--line);
 }
-.week h2 .range, .week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
+.week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
 .week h2 .wcnt { margin-left: auto; }
 .week ol { list-style: none; margin: 0; padding: 0; }
 .day {
@@ -522,8 +522,6 @@ button { font: inherit; color: inherit; }
       var sec = el("section", "week");
       var h = el("h2");
       h.appendChild(el("span", null, "第 " + (w + 1) + " 週"));
-      var a = list[0].date, b = list[list.length - 1].date;
-      h.appendChild(el("span", "range", list.length > 1 ? md(a) + "–" + md(b) : md(a)));
       var wcnt = el("span", "wcnt", "");
       h.appendChild(wcnt);
       sec.appendChild(h);
