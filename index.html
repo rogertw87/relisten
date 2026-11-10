@@ -40,7 +40,7 @@
   --sans: "Noto Sans TC", "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
-  --sealw: clamp(44px, 12.5vw, 54px);
+  --sealw: clamp(46px, 13vw, 58px);
   --chipw: clamp(40px, 11.5vw, 48px);
 }
 /* 深色：沒有另外選主題時，跟著裝置或 Claude 的深色設定 */
@@ -283,15 +283,40 @@ button { font: inherit; color: inherit; }
 
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
 
-/* 印章冊：和好好呼吸的印章一樣，每聽完一週蓋一個 */
-.book {
-  padding: 18px 18px 20px; border-radius: 20px; background: var(--card); border: 1px solid var(--line);
-  display: flex; flex-direction: column; gap: 16px;
+/* 選單裡的「印章冊」 */
+.menu-theme + .menu-item { border-top: 1px solid var(--line); margin-top: 4px; }
+.menu-item {
+  display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 14px;
+  border: none; background: none; font-size: 0.875rem; color: var(--ink); cursor: pointer; text-align: left;
 }
-.book-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
-.book-head h2 { margin: 0; font-size: 0.875rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2); }
-.book-n { font: 400 0.8125rem var(--mono); color: var(--muted-2); }
-.seals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px 4px; }
+.menu-item:hover { background: color-mix(in srgb, var(--screen) 50%, transparent); }
+.menu-item svg { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.menu-n { margin-left: auto; font: 400 0.75rem var(--mono); color: var(--muted-2); }
+
+/* 印章冊畫面：和好好呼吸的勳章頁一樣蓋住整個畫面；每聽完一週蓋一個印章 */
+.noscroll, .noscroll body { overflow: hidden; }
+.screen {
+  position: fixed; inset: 0; z-index: 20; overflow-y: auto; overscroll-behavior: contain;
+  background: var(--page) var(--sky, none) center bottom / cover;
+}
+:root[data-skin="night"] .screen { background-color: #000; background-position: center; }
+:root[data-skin="sakura"] .screen { background: var(--page) url('assets/sakura.jpg') center -18px / cover; }
+.screen-inner {
+  max-width: 480px; min-height: 100%; margin: 0 auto;
+  display: flex; flex-direction: column; gap: 18px;
+  padding-block: calc(24px + env(safe-area-inset-top, 0px)) calc(40px + env(safe-area-inset-bottom, 0px));
+  padding-left: max(20px, env(safe-area-inset-left, 0px));
+  padding-right: max(20px, env(safe-area-inset-right, 0px));
+}
+.back {
+  align-self: flex-start; min-height: 44px; padding: 8px 0;
+  border: none; background: none; color: var(--ink-2); font-size: 0.9375rem; cursor: pointer;
+}
+.book-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin: 0 4px; }
+.book-head h2 { margin: 0; font-size: 1.625rem; font-weight: 700; line-height: 1.3; }
+.book-n { font: 400 0.875rem var(--mono); color: var(--muted-2); }
+.book { padding: 26px 16px; border-radius: 24px; background: var(--card); border: 1px solid var(--line); }
+.seals { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 22px 4px; }
 .seal-item {
   min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 7px;
   padding: 4px 0; border: 0; border-radius: 12px; background: none; cursor: pointer;
@@ -372,7 +397,7 @@ button { font: inherit; color: inherit; }
 <body>
 <main class="page home">
   <div class="menu" id="menu">
-    <button type="button" class="menu-btn" id="menuBtn" aria-label="選單：主題" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
+    <button type="button" class="menu-btn" id="menuBtn" aria-label="選單" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
     <div class="menu-pop" id="menuPop" hidden>
       <div class="menu-theme">
         <span class="menu-theme-title">主題</span>
@@ -385,6 +410,7 @@ button { font: inherit; color: inherit; }
           <button type="button" class="menu-theme-opt" data-theme-pick="sakura">櫻花</button>
         </div>
       </div>
+      <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
     </div>
   </div>
   <header class="head">
@@ -399,11 +425,6 @@ button { font: inherit; color: inherit; }
       <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
     </div>
     <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
-  </section>
-
-  <section class="book" aria-labelledby="bookTitle">
-    <div class="book-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
-    <div class="seals" id="seals"></div>
   </section>
 
   <div class="bar">
@@ -422,6 +443,14 @@ button { font: inherit; color: inherit; }
 
   <p class="foot" id="localNote" hidden>打勾的進度存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。</p>
 </main>
+
+<section class="screen" id="bookScreen" aria-labelledby="bookTitle" hidden>
+  <div class="screen-inner">
+    <button type="button" class="back" id="bookBack">← 返回</button>
+    <div class="book-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
+    <div class="book"><div class="seals" id="seals"></div></div>
+  </div>
+</section>
 
 <div class="award-bg" id="sheet" hidden>
   <div class="award" role="dialog" aria-modal="true" aria-labelledby="shTitle" aria-describedby="shSub">
@@ -625,6 +654,7 @@ button { font: inherit; color: inherit; }
       s.btn.setAttribute("aria-label", label);
     });
     $("sealCount").textContent = nSeal + " / " + (WEEKS + 1);
+    $("menuSealN").textContent = nSeal + " / " + (WEEKS + 1);
 
     var nb = $("nextBtn");
     nb.disabled = !nx;
@@ -726,6 +756,22 @@ button { font: inherit; color: inherit; }
     $("shForm").hidden = false;
     $("shOk").hidden = true;
     openSheet($("shClose"));
+  }
+
+  // 印章冊放在右上角選單裡，打開時蓋住整個畫面
+  var bookScreen = $("bookScreen");
+  function openBook() {
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    bookScreen.hidden = false;
+    bookScreen.scrollTop = 0;
+    document.documentElement.classList.add("noscroll");
+    try { $("bookBack").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeBook() {
+    bookScreen.hidden = true;
+    document.documentElement.classList.remove("noscroll");
+    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
   /* ---------- Status line ---------- */
@@ -935,6 +981,8 @@ button { font: inherit; color: inherit; }
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     try { r.chks[SESS[nx.s][0]].input.focus({ preventScroll: true }); } catch (e) {}
   });
+  $("bookOpen").addEventListener("click", openBook);
+  $("bookBack").addEventListener("click", closeBook);
   $("shOk").addEventListener("click", nextAward);
   $("shClose").addEventListener("click", closeSheet);
   $("shForm").addEventListener("submit", function (ev) {
@@ -948,7 +996,9 @@ button { font: inherit; color: inherit; }
     if (sheetQueue.length) nextAward(); else closeSheet();
   });
   document.addEventListener("keydown", function (ev) {
-    if (ev.key === "Escape" && !sheet.hidden) closeSheet();
+    if (ev.key !== "Escape") return;
+    if (!sheet.hidden) closeSheet();
+    else if (!bookScreen.hidden) closeBook();
   });
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(false);
