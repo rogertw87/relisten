@@ -13,7 +13,8 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&text=%E4%BC%91%E6%81%AF%E6%94%BE%E9%AC%86%E5%AE%89%E9%9D%9C%E4%B8%AD%E5%BF%83%E6%9C%AC%E6%80%A7%E8%87%A3%E6%9C%8D%E7%9C%9F%E5%AF%A6%E4%BF%A1%E4%BB%B0%E4%BB%BB%E5%9C%93%E6%BB%BF&display=swap">
 <style>
-/* Theme carried over from 好好呼吸 (haohao-breath): the same six palettes, typefaces and background layers.
+/* Light theme from 好好呼吸 (haohao-breath): its palette and typefaces. Only the light theme for now;
+   the other five themes are kept in git history (parts/new.css) for later.
    Layout: one 480px column like that site. Title, a summary card, a sticky progress strip, then ten week
    groups of day rows; each row has the day number on the left and a four-slot strip of session checks on the right. */
 :root {
@@ -42,78 +43,6 @@
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
   --sealw: clamp(46px, 13vw, 58px);
   --chipw: clamp(40px, 11.5vw, 48px);
-}
-/* 深色：沒有另外選主題時，跟著裝置或 Claude 的深色設定 */
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]):not([data-skin]) {
-    --ink: #e6f1f4; --ink-2: #8fc3d3; --muted: #a3bfc8; --muted-2: #8aa9b3;
-    --accent: #7cc4da; --accent-2: #6bb6cc;
-    --line: #1f3943; --line-2: #23404b; --line-3: #1c3640;
-    --soft: #132a33; --soft-2: #16303a; --chip: #173039;
-    --screen: #0d1b22; --page: #0d1b22; --card: #132a33;
-    --track: #2a4a56; --shadow: rgba(0,0,0,.4);
-    --warn: #ffc08a; --seal: #ef7d62;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"]:not([data-skin]),
-:root[data-skin="dark"] {
-  --ink: #e6f1f4; --ink-2: #8fc3d3; --muted: #a3bfc8; --muted-2: #8aa9b3;
-  --accent: #7cc4da; --accent-2: #6bb6cc;
-  --line: #1f3943; --line-2: #23404b; --line-3: #1c3640;
-  --soft: #132a33; --soft-2: #16303a; --chip: #173039;
-  --screen: #0d1b22; --page: #0d1b22; --card: #132a33;
-  --track: #2a4a56; --shadow: rgba(0,0,0,.4);
-  --warn: #ffc08a; --seal: #ef7d62;
-  color-scheme: dark;
-}
-:root[data-skin="light"] { color-scheme: light; }
-:root[data-skin="night"] { /* 夜空 */
-  --page: #0a0d24; --screen: #000000;
-  --ink: #eef0fb; --ink-2: #c9cff5;
-  --accent: #e6c36a; --accent-2: #8fa2f0;
-  --line-2: #2a3266; --line: #232a58; --line-3: #141a3c;
-  --soft-2: #12173f; --chip: #141a3c; --soft: #0a0d24;
-  --muted-2: #a9afd2; --muted: #c0c5e3;
-  --track: #6a5d2f; --shadow: rgba(0,0,0,.5); --card: #10143a;
-  --sel: #e6c36a; --selfg: #141a3a;
-  --warn: #ffc08a; --seal: #f08a6c;
-  color-scheme: dark;
-}
-:root[data-skin="fire"] { /* 營火 */
-  --page: #1a0f0c; --screen: #160c09;
-  --ink: #fbe9dc; --ink-2: #ffb27a;
-  --accent: #ff8a4c; --accent-2: #ffa24c;
-  --line-2: #5a3324; --line: #3e241a; --line-3: #3a2015;
-  --soft-2: #2e1912; --chip: #3a2015; --soft: #1a0f0c;
-  --muted-2: #c9a08c; --muted: #dcbfac;
-  --track: #8a4a24; --shadow: rgba(0,0,0,.5); --card: #28140e;
-  --sel: #ff8a4c; --selfg: #1a0f0c;
-  --warn: #ffd9a0; --seal: #ff7350;
-  color-scheme: dark;
-}
-:root[data-skin="fireflies"] { /* 螢火蟲 */
-  --page: #06100d; --screen: #050d0b;
-  --ink: #eaf3dc; --ink-2: #d6ef7c;
-  --accent: #bfe36a; --accent-2: #dcf77a;
-  --line-2: #2a3d2e; --line: #1b2b21; --line-3: #1c2918;
-  --soft-2: #142019; --chip: #1c2918; --soft: #06100d;
-  --muted-2: #9db497; --muted: #b9ccb2;
-  --track: #5f7a2c; --shadow: rgba(0,0,0,.5); --card: #0d1a14;
-  --sel: #bfe36a; --selfg: #06100d;
-  --warn: #ffc08a; --seal: #ef7d62;
-  color-scheme: dark;
-}
-:root[data-skin="sakura"] { /* 櫻花 */
-  --page: #fff7f9; --screen: #fff5f7;
-  --ink: #3b2a30; --ink-2: #c4537a;
-  --accent: #d0688c; --accent-2: #e77fa3;
-  --line-2: #f0cfd9; --line: #f6e1e8; --line-3: #fde8ee;
-  --soft-2: #fbe3ea; --chip: #fde8ee; --soft: #fff7f9;
-  --muted-2: #8a6a74; --muted: #6f5560;
-  --track: #e9a9bf; --shadow: rgba(59,42,48,.14); --card: #ffffff;
-  --sel: #c4537a; --selfg: #ffffff;
-  --warn: #b4472e; --seal: #b83a2b;
   color-scheme: light;
 }
 
@@ -135,7 +64,7 @@ body::before {
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
-/* 一欄 480px，和好好呼吸的首頁一樣；主題背景鋪在這一欄底下 */
+/* 一欄 480px，和好好呼吸的首頁一樣 */
 .home {
   position: relative; isolation: isolate;
   max-width: 480px; margin: 0 auto;
@@ -145,24 +74,8 @@ button { font: inherit; color: inherit; }
   padding-right: max(20px, env(safe-area-inset-right, 0px));
   display: flex; flex-direction: column; gap: 20px;
 }
-.home::before {
-  content: ""; display: none; position: fixed; top: 0; bottom: 0; left: 50%; width: 100%; max-width: 480px;
-  transform: translateX(-50%); z-index: -1; pointer-events: none;
-  background: #000 var(--sky, none) center / cover;
-}
-:root[data-skin="night"] .home::before { display: block; }
-/* 營火：清單的字比較密，把下方火光壓暗一些 */
-:root[data-skin="fire"] .home::before {
-  display: block;
-  background: linear-gradient(to top, rgba(26,15,12,.55), rgba(26,15,12,0) 62%), var(--page) var(--sky, none) center bottom / cover;
-}
-:root[data-skin="fireflies"] .home::before { display: block; background: var(--page) var(--sky, none) center bottom / cover; }
-:root[data-skin="sakura"] .home::before { display: block; background: var(--page) url('assets/sakura.jpg') center -18px / cover; }
-/* 火星、螢火蟲、花瓣、流星：畫在背景之上、文字之下 */
-.sparks { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
-.home > .sparks { left: 50%; max-width: 480px; transform: translateX(-50%); }
 
-/* 右上角選單：主題 */
+/* 右上角選單 */
 .menu { position: absolute; top: 66px; right: max(14px, env(safe-area-inset-right, 0px)); z-index: 6; }
 .menu-btn {
   width: 40px; height: 40px; padding: 0; border: none; border-radius: 50%; background: none;
@@ -175,14 +88,6 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--line); background: var(--page); box-shadow: 0 8px 24px var(--shadow);
   display: flex; flex-direction: column;
 }
-.menu-theme { min-width: 210px; padding: 8px 14px 10px; display: flex; flex-direction: column; gap: 8px; }
-.menu-theme-title { font-size: 0.75rem; color: var(--muted); }
-.menu-theme-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
-.menu-theme-opt {
-  min-height: 36px; padding: 0 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--card);
-  color: var(--ink); font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
-}
-.menu-theme-opt.on { background: var(--sel); color: var(--selfg); border-color: var(--sel); }
 
 /* 標題 */
 .head { display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
@@ -286,7 +191,6 @@ button { font: inherit; color: inherit; }
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
 
 /* 選單裡的「印章冊」 */
-.menu-theme + .menu-item { border-top: 1px solid var(--line); margin-top: 4px; }
 .menu-item {
   display: flex; align-items: center; gap: 12px; width: 100%; min-height: 44px; padding: 0 14px;
   border: none; background: none; font-size: 0.875rem; color: var(--ink); cursor: pointer; text-align: left;
@@ -299,10 +203,8 @@ button { font: inherit; color: inherit; }
 .noscroll, .noscroll body { overflow: hidden; }
 .screen {
   position: fixed; inset: 0; z-index: 20; overflow-y: auto; overscroll-behavior: contain;
-  background: var(--page) var(--sky, none) center bottom / cover;
+  background: var(--page);
 }
-:root[data-skin="night"] .screen { background-color: #000; background-position: center; }
-:root[data-skin="sakura"] .screen { background: var(--page) url('assets/sakura.jpg') center -18px / cover; }
 .screen-inner {
   max-width: 480px; min-height: 100%; margin: 0 auto;
   display: flex; flex-direction: column; gap: 18px;
@@ -413,24 +315,12 @@ button { font: inherit; color: inherit; }
   .aw-stamp.stamping { animation: none; }
 }
 </style>
-<script>try{var t=localStorage.getItem('trust-relisten:theme');if(t)document.documentElement.setAttribute('data-skin',t)}catch(e){}</script>
 </head>
 <body>
 <main class="page home">
   <div class="menu" id="menu">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="選單" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
     <div class="menu-pop" id="menuPop" hidden>
-      <div class="menu-theme">
-        <span class="menu-theme-title">主題</span>
-        <div class="menu-theme-opts">
-          <button type="button" class="menu-theme-opt" data-theme-pick="light">淺色</button>
-          <button type="button" class="menu-theme-opt" data-theme-pick="dark">深色</button>
-          <button type="button" class="menu-theme-opt" data-theme-pick="night">夜空</button>
-          <button type="button" class="menu-theme-opt" data-theme-pick="fire">營火</button>
-          <button type="button" class="menu-theme-opt" data-theme-pick="fireflies">螢火蟲</button>
-          <button type="button" class="menu-theme-opt" data-theme-pick="sakura">櫻花</button>
-        </div>
-      </div>
       <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
       <button type="button" class="menu-item" id="dateOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3v3M16 3v3M4 10h16M6 5h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"></path></svg><span>重聽排程</span><span class="menu-n" id="menuDateN"></span></button>
     </div>
@@ -1121,328 +1011,15 @@ button { font: inherit; color: inherit; }
   }, function () { startLocal(); });
 })();
 </script>
-<script id="theme-js">
+<script id="menu-js">
 (function () {
   "use strict";
-  /* ---------- 主題：沿用好好呼吸的六個主題（淺色、深色、夜空、營火、螢火蟲、櫻花） ---------- */
-  const KEY = "trust-relisten:theme";
-  const THEMES = ['light', 'dark', 'night', 'fire', 'fireflies', 'sakura'];
-  const SKY = { fireflies: "url('assets/fireflies.jpg')" };
-  const root = document.documentElement;
-  const $ = id => document.getElementById(id);
-  let theme = null;   // null：還沒選過，跟著裝置或 Claude 的淺色／深色
-  try { const saved = localStorage.getItem(KEY); if (THEMES.includes(saved)) theme = saved; } catch (e) {}
-
-  // 夜空：一次畫成一張完整的星空圖（銀河、小星、少數亮星光暈），當作背景圖
-let _starUrl=null;let _starV=2;const starTex=()=>{if(_starUrl)return _starUrl;try{const W=480,H=1000,k=2,c=document.createElement('canvas');c.width=W*k;c.height=H*k;const x=c.getContext('2d');x.scale(k,k);let r=11;const R=()=>(r=(r*16807)%2147483647)/2147483647,G=()=>(R()+R()+R()+R()-2)/2;
-  const bg=x.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#000000');bg.addColorStop(1,'#000000');x.fillStyle=bg;x.fillRect(0,0,W,H);
-  const ax=-60,ay=H*.92,bx=W+60,by=H*.08,dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,band=t=>[ax+dx*t,ay+dy*t];
-  const blob=(px,py,rad,col)=>{const g=x.createRadialGradient(px,py,0,px,py,rad);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(px-rad,py-rad,rad*2,rad*2);};
-  const hs=(i,j,s)=>{let h=(Math.imul(i,374761393)+Math.imul(j,668265263)+Math.imul(s,982451653))|0;h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967295;};
-  const vn=(X,Y,s)=>{const i=Math.floor(X),j=Math.floor(Y),fx=X-i,fy=Y-j,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy),a=hs(i,j,s),b=hs(i+1,j,s),c2=hs(i,j+1,s),d=hs(i+1,j+1,s);return a+(b-a)*u+(c2-a)*v+(a-b-c2+d)*u*v;};
-  const fbm=(X,Y,s)=>{let t=0,am=.5,f=1;for(let o=0;o<5;o++){t+=am*vn(X*f,Y*f,s+o);f*=2.03;am*=.5;}return t;};
-  const GW=240,GH=Math.round(GW*H/W),gc=document.createElement('canvas');gc.width=GW;gc.height=GH;const gx=gc.getContext('2d'),im=gx.createImageData(GW,GH),MI=new Float32Array(GW*GH);
-  for(let gy=0;gy<GH;gy++)for(let gp=0;gp<GW;gp++){const px=gp/GW*W,py=gy/GH*H,rx=px-ax,ry=py-ay,t=(rx*dx+ry*dy)/(len*len),d0=rx*nx+ry*ny;
-    const d=d0-(fbm(t*3,7.3,40)-.5)*70,core=Math.exp(-Math.pow((t-.6)/.16,2)),wid=50+45*core;
-    const prof=Math.exp(-(d*d)/(2*wid*wid)),along=.4+.6*Math.exp(-Math.pow((t-.55)/.35,2)),n=fbm(px/70,py/70,1),n2=fbm(px/20,py/20,9);
-    let I=prof*along*Math.pow(n,2.2)*2.2*(.55+.9*n2)+core*Math.exp(-(d*d)/(2*30*30))*1.1*Math.pow(n,1.5)*1.6;
-    const dn=fbm(px/40+3,py/40,20),lane=Math.exp(-Math.pow((d-4-(dn-.5)*50)/(16+22*core),2)),dust=Math.min(1,Math.max(0,(dn-.3)*2.2))*lane*Math.min(1,.35+t*1.4);
-    I*=1-.95*dust;I*=1-Math.max(0,fbm(px/12,py/12,30)-.5)*prof*1.3;MI[gy*GW+gp]=I;
-    const w=core,o=(gy*GW+gp)*4,v=Math.min(1,I);im.data[o]=Math.min(255,(150+110*w)*v);im.data[o+1]=Math.min(255,(165+50*w)*v);im.data[o+2]=Math.min(255,(235-75*w)*v);im.data[o+3]=255;}
-  gx.putImageData(im,0,0);x.globalCompositeOperation='lighter';x.imageSmoothingEnabled=true;x.globalAlpha=.38;x.filter='blur(1.5px)';x.drawImage(gc,0,0,W,H);x.filter='none';x.globalAlpha=.2;x.drawImage(gc,0,0,W,H);x.globalAlpha=1;x.globalCompositeOperation='source-over';
-  const MIat=(px,py)=>MI[Math.min(GH-1,Math.max(0,Math.floor(py/H*GH)))*GW+Math.min(GW-1,Math.max(0,Math.floor(px/W*GW)))];
-  const star=(px,py,m)=>{const tc=R(),col=tc<.12?'170,195,255':tc<.25?'205,220,255':tc<.85?'255,255,255':tc<.95?'255,236,200':'255,205,160',rad=.22+m*1.05,a=Math.min(1,.18+m*.9);x.fillStyle='rgba('+col+','+a.toFixed(2)+')';x.beginPath();x.arc(px,py,rad,0,Math.PI*2);x.fill();
-    if(m>.8){blob(px,py,3+m*5,'rgba('+col+','+(0.25*m).toFixed(2)+')');if(m>.93){x.strokeStyle='rgba('+col+',.22)';x.lineWidth=.4;x.beginPath();x.moveTo(px-7,py);x.lineTo(px+7,py);x.moveTo(px,py-7);x.lineTo(px,py+7);x.stroke();}}};
-  for(let j=0;j<1700;j++)star(R()*W,R()*H,Math.pow(R(),3.2));
-  for(let j=0,m=0;j<400000&&m<26000;j++){const px=R()*W,py=R()*H;if(R()<Math.min(1,MIat(px,py)*1.6)){const a=.12+R()*.3,cc=R();x.fillStyle=cc<.3?'rgba(200,212,255,'+a.toFixed(2)+')':cc<.85?'rgba(255,255,255,'+a.toFixed(2)+')':'rgba(255,225,190,'+a.toFixed(2)+')';const z=R()<.8?.5:.8;x.fillRect(px,py,z,z);m++;}}
-  for(let j=0,m=0;j<80000&&m<4000;j++){const px=R()*W,py=R()*H;if(R()<Math.min(1,MIat(px,py)*1.4)){star(px,py,Math.pow(R(),5)*.6);m++;}}
-  for(let j=0;j<22;j++)star(R()*W,R()*H*.9,.85+R()*.15);
-  _starUrl='url('+c.toDataURL('image/jpeg',.9)+')';}catch(e){_starUrl='none';}return _starUrl;};
-
-  function reducedMotion() { return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }
-  function systemDark() {
-    const a = root.getAttribute('data-theme');
-    if (a === 'dark') return true;
-    if (a === 'light') return false;
-    return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  }
-  function applyTheme() {
-    const t = theme;
-    if (t) root.setAttribute('data-skin', t); else root.removeAttribute('data-skin');
-    if (t === 'night') root.style.setProperty('--sky', starTex());
-    else if (t === 'fire') root.style.setProperty('--sky', reducedMotion() ? "url('assets/ember.jpg')" : "url('assets/ember-plain.jpg')");
-    else if (SKY[t]) root.style.setProperty('--sky', SKY[t]);
-    else root.style.removeProperty('--sky');
-    syncSparks();
-    const shown = t || (systemDark() ? 'dark' : 'light');
-    document.querySelectorAll('[data-theme-pick]').forEach(b => {
-      const on = b.dataset.themePick === shown;
-      b.classList.toggle('on', on);
-      b.setAttribute('aria-pressed', on ? 'true' : 'false');
-    });
-  }
-  document.querySelectorAll('[data-theme-pick]').forEach(b => b.addEventListener('click', () => {
-    theme = b.dataset.themePick;
-    try { localStorage.setItem(KEY, theme); } catch (e) {}
-    applyTheme();
-  }));
-
-  // ---------- 會動的主題背景：營火的火星、螢火蟲、櫻花瓣、夜空的流星 ----------
-  // 手機開了「減少動態效果」：營火改用畫好火星的靜態背景；螢火蟲、櫻花只畫一張靜止的。
-  const FX_OF = { fire: 'sparks', fireflies: 'fireflies', sakura: 'sakura', night: 'meteors' };
-  const fx = { c: null, raf: 0, last: null, kind: null, st: null, w: 0, h: 0, drawn: null };
-  // 光點、花瓣先畫好，之後每格直接貼上
-// 光點、花瓣先畫好，之後每格直接貼上
-const fxImgs = {};
-function glowImg(key, n, stops) {
-  if (fxImgs[key]) return fxImgs[key];
-  const c = document.createElement('canvas'); c.width = c.height = n;
-  const g = c.getContext('2d'), r = g.createRadialGradient(n / 2, n / 2, 0, n / 2, n / 2, n / 2);
-  stops.forEach(([p, col]) => r.addColorStop(p, col)); g.fillStyle = r; g.fillRect(0, 0, n, n); return fxImgs[key] = c;
-}
-const sparkImg = () => glowImg('spark', 32, [[0, 'rgba(255,236,190,1)'], [.18, 'rgba(255,190,100,.95)'], [.42, 'rgba(255,120,40,.35)'], [1, 'rgba(255,90,20,0)']]);
-const fireflyImg = () => glowImg('firefly', 64, [[0, 'rgba(255,255,220,1)'], [.12, 'rgba(226,250,140,.95)'], [.35, 'rgba(170,230,70,.35)'], [1, 'rgba(170,230,70,0)']]);
-// 櫻花瓣：前端有個小缺口，靠花心那頭比較白
-function petalImgs() {
-  if (fxImgs.petals) return fxImgs.petals;
-  const mk = (c0, c1) => {
-    const c = document.createElement('canvas'); c.width = c.height = 40; const g = c.getContext('2d');
-    g.beginPath(); g.moveTo(20, 37); g.bezierCurveTo(8, 30, 3, 16, 12, 5); g.quadraticCurveTo(16, 4, 20, 10); g.quadraticCurveTo(24, 4, 28, 5); g.bezierCurveTo(37, 16, 32, 30, 20, 37); g.closePath();
-    const r = g.createLinearGradient(20, 37, 20, 4); r.addColorStop(0, c0); r.addColorStop(1, c1); g.fillStyle = r; g.fill();
-    g.strokeStyle = 'rgba(214,110,145,.35)'; g.lineWidth = .8; g.stroke(); return c;
-  };
-  return fxImgs.petals = [mk('#fff1f5', '#f7b3c8'), mk('#ffe9f0', '#f39cb8'), mk('#fff6f8', '#f8c4d4')];
-}
-const metImg = () => glowImg('meteor', 64, [[0, 'rgba(255,255,255,1)'], [.18, 'rgba(226,238,255,.85)'], [.45, 'rgba(150,185,255,.28)'], [1, 'rgba(120,160,255,0)']]);
-// 流星：從右上往左下，尾巴隨飛行距離拉開
-const newMet = (W, H) => {
-  const R = Math.random, a = (152 + R() * 7) * Math.PI / 180, dx = Math.cos(a), dy = Math.sin(a),
-    x = W * (.45 + R() * .75), y = H * (-.1 + R() * .28), v = 430 + R() * 220,
-    tx = dx < 0 ? (-60 - x) / (dx * v) : 99, ty = dy > 0 ? (H + 60 - y) / (dy * v) : 99;
-  return { x, y, dx, dy, v, len: 80 + R() * 70, w: 1.1 + R() * .9, age: 0, trav: 0, life: Math.max(.5, Math.min(tx, ty)) + .25 };
-};
-// 會閃爍的星星：亮起來、停一下、暗下去，然後換個地方重來
-const newTw = (W, H) => {
-  const R = Math.random;
-  return { x: R() * W, y: R() * H * .92, r: 1.5 + R() * 2.4, t: -R() * 10, up: .9 + R() * 1.3, hold: .25 + R() * .7, dn: 1 + R() * 1.6, gap: 5 + R() * 9 };
-};
-const twA = w => {
-  if (w.t < 0) return 0;
-  if (w.t < w.up) return w.t / w.up;
-  const b = w.t - w.up; if (b < w.hold) return 1;
-  const c = b - w.hold; return c < w.dn ? 1 - c / w.dn : 0;
-};
-// 飛碟：慢慢橫越，幾秒後突然加速竄走，後面拖一道彩虹
-const newUfo = (W, H) => {
-  const R = Math.random, dir = R() < .5 ? 1 : -1;
-  return { dir, x: dir > 0 ? -50 : W + 50, y0: H * (.08 + R() * .17), y: 0, v: 16 + R() * 14, s: 11 + R() * 5, t: 0, cruise: 5 + R() * 7, out: false, outT: 0, a: 0, sp: 0 };
-};
-const RB = ['rgba(255,95,109,', 'rgba(255,163,108,', 'rgba(255,224,102,', 'rgba(125,223,143,', 'rgba(111,200,255,', 'rgba(176,139,255,'];
-function drawUfo(g, u, t) {
-  const s = u.s, d = u.dir; g.save(); g.translate(u.x, u.y);
-  const L = Math.min(250, s * 2 + (u.sp || 0) * .34);
-  if (L > s * 2.2) {
-    g.globalCompositeOperation = 'lighter';
-    for (let i = 0; i < 6; i++) {
-      const o = (i - 2.5) * s * .15, x0 = -d * s * .85, x1 = -d * L, gr = g.createLinearGradient(x0, 0, x1, 0);
-      gr.addColorStop(0, RB[i] + (.55 * u.a).toFixed(3) + ')'); gr.addColorStop(.45, RB[i] + (.3 * u.a).toFixed(3) + ')'); gr.addColorStop(1, RB[i] + '0)');
-      g.strokeStyle = gr; g.lineWidth = s * .14; g.lineCap = 'round';
-      g.beginPath(); g.moveTo(x0, o); g.bezierCurveTo(x0 + (x1 - x0) * .4, o * 1.25, x0 + (x1 - x0) * .7, o * 1.6, x1, o * 2); g.stroke();
-    }
-    g.globalCompositeOperation = 'source-over';
-  }
-  g.globalCompositeOperation = 'lighter';
-  const gl = g.createRadialGradient(0, 0, 0, 0, 0, s * 2.4);
-  gl.addColorStop(0, 'rgba(150,220,255,' + (.2 * u.a).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(120,180,255,0)');
-  g.fillStyle = gl; g.beginPath(); g.arc(0, 0, s * 2.4, 0, 6.2832); g.fill();
-  g.globalCompositeOperation = 'source-over';
-  g.globalAlpha = u.a; g.fillStyle = '#101d28'; g.strokeStyle = 'rgba(175,218,255,.8)'; g.lineWidth = 1;
-  g.beginPath(); g.ellipse(0, 0, s, s * .28, 0, 0, 6.2832); g.fill(); g.stroke();
-  g.beginPath(); g.ellipse(0, -s * .04, s * .46, s * .34, 0, Math.PI, 0); g.fill(); g.stroke();
-  for (let i = -1; i <= 1; i++) {
-    const bl = .3 + .7 * Math.pow(Math.sin(t * 3.2 + i * 2.1), 2);
-    g.fillStyle = 'rgba(255,' + Math.round(198 + 45 * bl) + ',140,' + (bl * u.a).toFixed(3) + ')';
-    g.beginPath(); g.arc(i * s * .52, s * .2, s * .1, 0, 6.2832); g.fill();
-  }
-  g.globalAlpha = 1; g.restore();
-}
-const wrapA = a => Math.atan2(Math.sin(a), Math.cos(a));
-// 每一種有 init（一打開就鋪滿）、move（移動）、draw（畫出來）；br 是練習時吸飽的程度，不在練習時是 null
-const FXS = {
-  // 營火：火星從下方火光冒出，一直往上飄、一邊閃一邊淡掉，速度和數量固定
-  sparks: {
-    init(st, W, H) { st.p = []; st.acc = 0; for (let i = 0; i < 200; i++) this.move(st, .05, W, H); },
-    move(st, dt, W, H) {
-      st.acc += Math.min(110, 32 * W / 360) * dt;
-      while (st.acc >= 1) {
-        st.acc -= 1;
-        st.p.push({ x: W / 2 + (Math.random() + Math.random() - 1) * W * .55, y: H - 10 - Math.random() * Math.min(180, H * .2),
-          vx: (Math.random() - .5) * 8, vy: -(16 + Math.random() * 30), r: 3 + Math.random() ** 3 * 7,
-          age: 0, life: 5 + Math.random() * 6, ph: Math.random() * 6.28, fl: 2 + Math.random() * 5 });
-      }
-      st.p = st.p.filter(s => {
-        s.age += dt; if (s.age > s.life || s.y < -20) return false;
-        s.ph += dt * s.fl; s.x += (s.vx + Math.sin(s.ph * .7) * 6) * dt; s.y += s.vy * dt; return true;
-      });
-    },
-    draw(st, g) {
-      const img = sparkImg(); g.globalCompositeOperation = 'lighter';
-      for (const s of st.p) {
-        const u = s.age / s.life, a = Math.max(0, (1 - u) * (u < .08 ? u / .08 : 1) * (.6 + .4 * Math.sin(s.ph)));
-        const len = 1 + Math.min(2.2, Math.abs(s.vy) / 30);   // 往上飄時拉成一小條光
-        g.globalAlpha = a; g.drawImage(img, s.x - s.r, s.y - s.r * len, s.r * 2, s.r * 2 * len);
-      }
-      g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
-    }
-  },
-  // 螢火蟲：慢慢飛、各自一閃一閃；練習時一起跟著呼吸亮暗（吸飽最亮、吐完最暗）
-  fireflies: {
-    init(st, W, H) {
-      st.p = []; st.lv = 1; const n = Math.min(60, Math.round(30 * W * H / 259200));
-      for (let i = 0; i < n; i++) st.p.push({ x: Math.random() * W, y: H * (.2 + .76 * Math.pow(Math.random(), .7)), a: Math.random() * 6.28, turn: 0,
-        v: 5 + Math.random() * 9, P: 2.6 + Math.random() * 3.2, ph: Math.random(), G: 12 + Math.random() * 10 });
-    },
-    move(st, dt, W, H, t, br) {
-      st.lv += ((br == null ? 1 : .1 + .9 * br) - st.lv) * Math.min(1, dt * 3);
-      for (const f of st.p) {
-        f.turn += (Math.random() - .5) * dt * 3; f.turn *= Math.pow(.3, dt); f.a = wrapA(f.a + f.turn * dt);
-        if (f.y < H * .18) f.a += wrapA(Math.PI / 2 - f.a) * dt; if (f.y > H - 30) f.a += wrapA(-Math.PI / 2 - f.a) * dt;
-        f.x += Math.cos(f.a) * f.v * dt; f.y += Math.sin(f.a) * f.v * dt * .7 + Math.sin(t * 1.3 + f.ph * 6) * 3 * dt;
-        if (f.x < -30) f.x = W + 30; else if (f.x > W + 30) f.x = -30;
-      }
-    },
-    draw(st, g, W, H, t, br) {
-      const img = fireflyImg(); g.globalCompositeOperation = 'lighter';
-      for (const f of st.p) {
-        const u = (t / f.P + f.ph) % 1, blink = u < .4 ? Math.pow(Math.sin(Math.PI * u / .4), 2) : 0;
-        const b = br == null ? (.06 + .94 * blink) * st.lv : st.lv * (.5 + .5 * blink); if (b < .02) continue;
-        const G = f.G * (.6 + .4 * b); g.globalAlpha = Math.min(1, b); g.drawImage(img, f.x - G, f.y - G, G * 2, G * 2);
-      }
-      g.globalAlpha = 1; g.globalCompositeOperation = 'source-over';
-    }
-  },
-  // 櫻花：花瓣一邊翻轉、一邊左右擺著往下飄
-  sakura: {
-    init(st, W, H) { st.p = []; const n = Math.min(50, Math.round(22 * W * H / 259200)); for (let i = 0; i < n; i++) st.p.push(this.petal(W, Math.random() * H)); },
-    petal(W, y) {
-      const R = Math.random, im = petalImgs();
-      return { x: R() * (W + 80) - 80, y, vy: 24 + R() * 20, vx: 6 + R() * 10, rot: R() * 6.28, vr: (R() - .5) * 2.4, fl: R() * 6.28, vf: 1.5 + R() * 2.5,
-        sw: R() * 6.28, fs: .6 + R() * .8, amp: 8 + R() * 16, sz: 12 + R() * 9, img: im[(R() * 3) | 0], a: .8 + R() * .2 };
-    },
-    move(st, dt, W, H) {
-      for (const p of st.p) {
-        p.y += p.vy * dt; p.x += p.vx * dt; p.rot += p.vr * dt; p.fl += p.vf * dt; p.sw += p.fs * dt;
-        if (p.y > H + 24 || p.x > W + 40) Object.assign(p, this.petal(W, -24 - Math.random() * 40));
-      }
-    },
-    draw(st, g) {
-      for (const p of st.p) {
-        g.save(); g.translate(p.x + Math.sin(p.sw) * p.amp, p.y); g.rotate(p.rot); g.scale(1, .2 + .8 * Math.abs(Math.cos(p.fl)));
-        g.globalAlpha = p.a; g.drawImage(p.img, -p.sz / 2, -p.sz / 2, p.sz, p.sz); g.restore();
-      }
-      g.globalAlpha = 1;
-    }
-  },
-  // 夜空：流星雨。平常什麼都沒有，每隔 15～26 秒來一陣，一次三到六顆；另外有幾顆星星輪流閃，偶爾飛過一台飛碟
-  meteors: {
-    init(st) { st.p = []; st.q = []; st.next = 4 + Math.random() * 8; st.u = null; st.uNext = 25 + Math.random() * 30; st.tw = null; },
-    move(st, dt, W, H) {
-      st.next -= dt;
-      if (st.next <= 0) {
-        const n = 3 + ((Math.random() * 4) | 0);
-        for (let i = 0; i < n; i++) st.q.push(i * (.12 + Math.random() * .35));
-        st.next = 15 + Math.random() * 11;
-      }
-      st.q = st.q.map(v => v - dt).filter(v => { if (v <= 0) { st.p.push(newMet(W, H)); return false; } return true; });
-      const keep = [];
-      for (const m of st.p) { m.age += dt; const d = m.v * dt; m.trav += d; m.x += m.dx * d; m.y += m.dy * d; if (m.age < m.life) keep.push(m); }
-      st.p = keep;
-      if (!st.tw) { st.tw = []; for (let i = 0; i < 11; i++) st.tw.push(newTw(W, H)); }
-      for (const w of st.tw) { w.t += dt; if (w.t > w.up + w.hold + w.dn) { const n = newTw(W, H); n.t = -Math.random() * w.gap; Object.assign(w, n); } }
-      if (!st.u) { st.uNext -= dt; if (st.uNext <= 0) { st.u = newUfo(W, H); st.uNext = 70 + Math.random() * 70; } }
-      else {
-        const u = st.u; u.t += dt;
-        if (!u.out && u.t > u.cruise) { u.out = true; u.outT = u.t; }
-        const k = u.out ? u.t - u.outT : 0, sp = u.v * (1 + k * k * 34); u.sp = sp;
-        u.x += u.dir * sp * dt; if (u.out) u.y0 -= sp * .35 * dt;
-        u.y = u.y0 + Math.sin(u.t * 1.1) * 3.5;
-        u.a = Math.min(1, u.t / 1.2) * (u.out ? Math.max(0, 1 - k / 1.1) : 1);
-        if (u.a <= 0 || u.x < -120 || u.x > W + 120 || u.y < -120) st.u = null;
-      }
-    },
-    draw(st, g, W, H, t) {
-      const img = metImg();
-      if (st.u) drawUfo(g, st.u, t);
-      g.globalCompositeOperation = 'lighter';
-      if (st.tw) for (const w of st.tw) {
-        const a = twA(w); if (a <= .02) continue;
-        const r = w.r * 3.2; g.globalAlpha = a * .95; g.drawImage(img, w.x - r, w.y - r, r * 2, r * 2);
-        if (w.r > 2.4) {
-          const L = w.r * 3.4; g.strokeStyle = 'rgba(255,255,255,' + (a * .45).toFixed(3) + ')'; g.lineWidth = .8;
-          g.beginPath(); g.moveTo(w.x - L, w.y); g.lineTo(w.x + L, w.y); g.moveTo(w.x, w.y - L); g.lineTo(w.x, w.y + L); g.stroke();
-        }
-        g.globalAlpha = 1;
-      }
-      for (const m of st.p) {
-        const u = m.age / m.life, a = (u < .08 ? u / .08 : 1) * (u > .62 ? Math.max(0, (1 - u) / .38) : 1) * .9;
-        if (a <= .01) continue;
-        const L = Math.min(m.len, m.trav), tx = m.x - m.dx * L, ty = m.y - m.dy * L, gr = g.createLinearGradient(m.x, m.y, tx, ty);
-        gr.addColorStop(0, 'rgba(255,255,255,' + a.toFixed(3) + ')'); gr.addColorStop(.18, 'rgba(214,232,255,' + (a * .55).toFixed(3) + ')');
-        gr.addColorStop(.55, 'rgba(150,190,255,' + (a * .18).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(120,160,255,0)');
-        g.strokeStyle = gr; g.lineWidth = m.w; g.lineCap = 'round';
-        g.beginPath(); g.moveTo(m.x, m.y); g.lineTo(tx, ty); g.stroke();
-        const r = m.w * 3.4; g.globalAlpha = a; g.drawImage(img, m.x - r, m.y - r, r * 2, r * 2); g.globalAlpha = 1;
-      }
-      g.globalCompositeOperation = 'source-over';
-    }
-  }
-};
-
-  function drawFx(now) {
-    fx.raf = requestAnimationFrame(drawFx);
-    const host = document.querySelector('.home'), c = fx.c;
-    if (!host) return;
-    if (c.parentNode !== host) host.prepend(c);
-    const W = c.clientWidth, H = c.clientHeight; if (!W || !H) return;
-    const still = reducedMotion();
-    if (!fx.st || Math.abs(W - fx.w) > 40) { fx.st = {}; FXS[fx.kind].init(fx.st, W, H); fx.drawn = null; }
-    if (still && fx.drawn === host && W === fx.w && H === fx.h) return;   // 減少動態效果：畫面沒換就不重畫
-    fx.w = W; fx.h = H;
-    const k = Math.min(2, window.devicePixelRatio || 1), cw = Math.round(W * k), ch = Math.round(H * k);
-    if (c.width !== cw || c.height !== ch) { c.width = cw; c.height = ch; }
-    const dt = still || fx.last == null ? 0 : Math.min(.05, Math.max(0, now - fx.last) / 1000); fx.last = now;
-    const t = now / 1000, F = FXS[fx.kind];
-    F.move(fx.st, dt, W, H, t, null);
-    const g = c.getContext('2d'); g.setTransform(k, 0, 0, k, 0, 0); g.clearRect(0, 0, W, H); F.draw(fx.st, g, W, H, t, null);
-    fx.drawn = host;
-  }
-  function syncSparks() {
-    const kind = FX_OF[theme], on = !!kind && !((kind === 'sparks' || kind === 'meteors') && reducedMotion());
-    if (on) {
-      if (!fx.c) { fx.c = document.createElement('canvas'); fx.c.className = 'sparks'; fx.c.setAttribute('aria-hidden', 'true'); }
-      if (fx.kind !== kind) { fx.kind = kind; fx.st = null; fx.last = null; }
-      if (!fx.raf) { fx.last = null; fx.raf = requestAnimationFrame(drawFx); }
-    } else {
-      if (fx.raf) cancelAnimationFrame(fx.raf);
-      fx.raf = 0; fx.st = null; fx.kind = null;
-      if (fx.c) fx.c.remove();
-    }
-  }
-
-  // ---------- 右上角選單 ----------
-  function setMenu(open) {
-    $('menuPop').hidden = !open;
-    $('menuBtn').setAttribute('aria-expanded', open ? 'true' : 'false');
-  }
-  $('menuBtn').addEventListener('click', () => setMenu($('menuPop').hidden));
-  document.addEventListener('click', e => { if (!e.target.closest('#menu')) setMenu(false); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
-  if (window.matchMedia) {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    if (mq.addEventListener) mq.addEventListener('change', applyTheme);
-  }
-
-  applyTheme();
+  // 右上角選單：打開、點外面或按 Esc 關閉
+  var pop = document.getElementById("menuPop"), btn = document.getElementById("menuBtn");
+  function setMenu(open) { pop.hidden = !open; btn.setAttribute("aria-expanded", open ? "true" : "false"); }
+  btn.addEventListener("click", function () { setMenu(pop.hidden); });
+  document.addEventListener("click", function (e) { if (!e.target.closest("#menu")) setMenu(false); });
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") setMenu(false); });
 })();
 </script>
 </body>
