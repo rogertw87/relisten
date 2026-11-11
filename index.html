@@ -384,6 +384,97 @@ button { font: inherit; color: inherit; }
 .tg-empty { margin: 0; font-size: 0.875rem; color: var(--muted-2); }
 .tgadd { display: flex; gap: 8px; }
 
+/* 使用說明：每個功能一張卡，上面是用頁面元件畫的小圖，下面是說明 */
+.guide { display: flex; flex-direction: column; gap: 14px; }
+.gcard {
+  padding: 16px; border-radius: 20px; background: var(--card); border: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.gcard h3 { margin: 4px 2px 0; font-size: 1rem; font-weight: 500; }
+.gcard p { margin: 0 2px; font-size: 0.875rem; line-height: 1.75; color: var(--muted); text-wrap: pretty; }
+.gpic {
+  position: relative; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 12px;
+  min-height: 104px; padding: 20px 12px; border-radius: 14px; background: var(--soft); overflow: hidden;
+}
+.gpic.g-col { flex-direction: column; gap: 8px; }
+.g-row { display: flex; align-items: center; gap: 14px; }
+.g-day { position: relative; font-size: 0.9375rem; letter-spacing: .04em; white-space: nowrap; color: var(--ink); }
+.g-day b { font: 400 1rem var(--mono); letter-spacing: 0; margin: 0 2px; }
+.g-nd { display: inline-block; width: 5px; height: 5px; margin-left: 5px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
+.g-chips { display: flex; gap: 5px; }
+.g-chip {
+  position: relative; width: 38px; height: 42px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--card);
+  color: var(--muted); font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
+}
+.g-chip .o { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--track); }
+.g-chip.on { background: var(--sel); border-color: var(--sel); color: var(--selfg); }
+.g-chip.on .o { width: 10px; height: 6px; border: 0; border-radius: 0; border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(-45deg); }
+.g-chip.ring { border-color: var(--tc); box-shadow: 0 0 0 1.5px var(--tc); background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
+.g-chip .dt { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--tc); }
+.g-tap {
+  position: absolute; left: 62%; top: 66%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
+  background: color-mix(in srgb, var(--accent) 26%, transparent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
+  pointer-events: none;
+}
+.g-tap::after { content: ""; position: absolute; inset: 9px; border-radius: 50%; background: var(--accent); }
+.g-day .g-tap { left: 104%; top: 92%; }
+/* 第一張卡：早午晚圈起來，用線連到標題 */
+.gcard.g-call { position: relative; }
+.g-call .g-row { gap: 28px; }
+.g-ring { position: relative; }
+.g-ring::before { content: ""; position: absolute; inset: -9px -11px; border: 2px solid var(--accent); border-radius: 999px; pointer-events: none; }
+.g-lead { position: absolute; left: 0; top: 0; overflow: visible; pointer-events: none; fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.g-lead circle { fill: var(--accent); stroke: none; }
+.g-arrow { flex: none; width: 24px; height: 12px; fill: none; stroke: var(--muted-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.g-arrow.down { transform: rotate(90deg); margin: 2px 0; }
+.g-pop {
+  width: 140px; padding: 10px 12px; border-radius: 14px; background: var(--page);
+  box-shadow: 0 6px 18px var(--shadow); display: flex; flex-direction: column; gap: 7px;
+}
+.g-pop-t { font-size: 0.6875rem; font-weight: 500; text-align: center; color: var(--ink); }
+.g-lines { display: flex; flex-direction: column; gap: 5px; padding: 8px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--card); }
+.g-lines i { height: 4px; border-radius: 2px; background: var(--track); }
+.g-lines i.short { width: 60%; }
+.g-btn { padding: 4px 0; border-radius: 8px; background: var(--sel); color: var(--selfg); font-size: 0.625rem; text-align: center; }
+.g-pills { display: flex; gap: 6px; }
+.g-pill {
+  position: relative; display: inline-flex; align-items: center; gap: 5px; padding: 6px 10px; border-radius: 14px;
+  border: 1px solid var(--line-2); background: var(--card); color: var(--ink); font-size: 0.75rem; line-height: 1;
+}
+.g-pill::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--tc); }
+.g-pill.sel { background: var(--tc); border-color: var(--tc); color: var(--page); }
+.g-pill.sel::before { background: var(--page); }
+.g-pill .g-tap { left: 94%; top: 96%; }
+.g-week { display: flex; gap: 4px; }
+.g-week > span { display: flex; flex-direction: column; gap: 3px; }
+.g-week i { width: 10px; height: 10px; border-radius: 3px; background: var(--sel); }
+.g-stamp {
+  width: 66px; height: 66px; border-radius: 50%; border: 2px solid var(--seal); color: var(--seal);
+  box-shadow: inset 0 0 0 2.5px var(--soft), inset 0 0 0 3.5px var(--seal); transform: rotate(-7deg);
+  display: flex; align-items: center; justify-content: center; writing-mode: vertical-rl;
+  font: 700 1rem/1 var(--serif); letter-spacing: .06em;
+}
+.g-field { display: inline-flex; align-items: center; gap: 8px; font-size: 0.75rem; color: var(--muted-2); }
+.g-input { padding: 6px 10px; border: 1px solid var(--line-2); border-radius: 8px; background: var(--card); color: var(--ink); font: 400 0.75rem var(--mono); }
+.g-daybox { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; }
+.g-sub { display: inline-flex; align-items: center; gap: 6px; font-size: 0.6875rem; color: var(--muted-2); }
+.g-today { padding: 1px 6px; border-radius: 10px; background: var(--soft-2); color: var(--ink-2); font-size: 0.625rem; }
+.g-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+.g-list li { display: flex; align-items: center; gap: 12px; font-size: 0.875rem; line-height: 1.6; color: var(--muted); }
+.g-mini { flex: none; width: 104px; display: flex; justify-content: flex-start; }
+.g-btnline { padding: 6px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); color: var(--ink); font-size: 0.75rem; }
+.g-box { display: inline-flex; align-items: center; gap: 6px; font-size: 0.75rem; color: var(--muted-2); white-space: nowrap; }
+.g-box::before { content: ""; width: 12px; height: 12px; border: 1.5px solid var(--line-2); border-radius: 3px; background: var(--card); }
+.g-phone {
+  width: 78px; height: 124px; padding: 14px 9px; border-radius: 16px; border: 2px solid var(--ink-2);
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 7px; align-content: start;
+}
+.g-phone i { aspect-ratio: 1; border-radius: 5px; background: var(--line-2); }
+.g-phone i.me {
+  display: flex; align-items: center; justify-content: center; background: var(--card);
+  box-shadow: 0 0 0 1.5px var(--ink-2); color: var(--ink-2); font: 700 0.625rem/1 var(--serif); font-style: normal;
+}
+
 /* 新印章、獎勵設定的彈出視窗 */
 .award-bg {
   position: fixed; inset: 0; z-index: 30; background: rgba(6,16,21,.55);
@@ -450,6 +541,7 @@ button { font: inherit; color: inherit; }
     <div class="menu-pop" id="menuPop" hidden>
       <button type="button" class="menu-item" id="notesOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg><span>心得本</span><span class="menu-n" id="menuNotesN"></span></button>
       <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
+      <button type="button" class="menu-item" id="guideOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18ZM9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.6v.5M12 16.9h.01"></path></svg><span>使用說明</span></button>
       <button type="button" class="menu-item" id="installItem" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM12 8v7M8.8 11.8 12 15l3.2-3.2"></path></svg><span>加到手機桌面</span></button>
     </div>
   </div>
@@ -536,6 +628,81 @@ button { font: inherit; color: inherit; }
     <button type="submit" class="aw-ok" id="nsDone">完成</button>
   </div>
 </form>
+
+<section class="screen" id="guideScreen" aria-labelledby="guideTitle" hidden>
+  <div class="screen-inner">
+    <button type="button" class="back" id="guideBack">← 返回</button>
+    <div class="book-head"><h2 id="guideTitle">使用說明</h2></div>
+    <div class="guide">
+
+      <section class="gcard g-call">
+        <div class="gpic" aria-hidden="true">
+          <div class="g-row"><span class="g-day">第<b>01</b>天</span><span class="g-chips g-ring"><span class="g-chip on">早<i class="o"></i></span><span class="g-chip">午<i class="o"></i><span class="g-tap"></span></span><span class="g-chip">晚<i class="o"></i></span></span></div>
+        </div>
+        <h3><span class="g-lab">聽完就打勾</span></h3>
+        <svg class="g-lead" aria-hidden="true" width="0" height="0"><path d=""></path><circle r="2.5"></circle></svg>
+      </section>
+
+      <section class="gcard">
+        <div class="gpic" aria-hidden="true">
+          <span class="g-day">第<b>01</b>天<i class="g-nd"></i><span class="g-tap"></span></span>
+          <svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
+          <span class="g-pop"><span class="g-pop-t">第01天的心得</span><span class="g-lines"><i></i><i></i><i class="short"></i></span><span class="g-btn">完成</span></span>
+        </div>
+        <h3>寫心得</h3>
+        <p>點「第01天」寫下那天的心得，關掉視窗就會存起來。寫過的天旁邊有一個小點；全部的心得都在「⋯」選單的「心得本」。</p>
+      </section>
+
+      <section class="gcard">
+        <div class="gpic g-col" aria-hidden="true">
+          <span class="g-pills"><span class="g-pill tc0 sel">呼吸<span class="g-tap"></span></span><span class="g-pill tc1">靜坐</span><span class="g-pill tc2">臣服</span></span>
+          <svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
+          <div class="g-row"><span class="g-day">第<b>03</b>天</span><span class="g-chips"><span class="g-chip ring tc0">早<i class="o"></i><i class="dt tc0"></i><span class="g-tap"></span></span><span class="g-chip">午<i class="o"></i></span><span class="g-chip">晚<i class="o"></i></span></span></div>
+        </div>
+        <h3>加標籤</h3>
+        <p>在「標籤」卡先點一個標籤，再點早、午、晚，就能標上或取消，這時不會改到打勾。標了的格子右上角有小色點；勾「只看已標的」只看這個標籤，按「完成」回到打勾。標籤可以用「編輯標籤」新增、改名、刪除。</p>
+      </section>
+
+      <section class="gcard">
+        <div class="gpic" aria-hidden="true">
+          <span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span>
+          <svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
+          <span class="g-stamp">休息</span>
+        </div>
+        <h3>蓋印章</h3>
+        <p>一週（7 天）的早、午、晚都聽完，就會蓋一個印章；62 天全部聽完，再蓋一個「圓滿」。在「⋯」選單的「印章冊」點印章，可以寫下聽完後要給自己的獎勵。</p>
+      </section>
+
+      <section class="gcard">
+        <div class="gpic g-col" aria-hidden="true">
+          <span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span>
+          <svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
+          <span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span>
+        </div>
+        <h3>重聽排程（可以不設）</h3>
+        <p>想照進度聽的話，在進度卡選一個開始日期，每天排一天份，清單會標出每天的重聽日期和「今天」。不想有壓力就不用設，或按「不排程」取消。</p>
+      </section>
+
+      <section class="gcard">
+        <h3>其他小功能</h3>
+        <ul class="g-list">
+          <li><span class="g-mini" aria-hidden="true"><span class="g-btnline">下一段</span></span><span>跳到第一段還沒聽的地方。</span></li>
+          <li><span class="g-mini" aria-hidden="true"><span class="g-box">隱藏聽完的天</span></span><span>清單只留還沒聽完的天。</span></li>
+          <li><span class="g-mini" aria-hidden="true"><span class="g-box">顯示共修日期</span></span><span>每天標出原本共修的日期，例如 7/1 週三。</span></li>
+        </ul>
+      </section>
+
+      <section class="gcard" id="guideInstall" hidden>
+        <div class="gpic" aria-hidden="true">
+          <span class="g-phone"><i></i><i></i><i></i><i></i><i class="me">信</i><i></i><i></i><i></i><i></i></span>
+        </div>
+        <h3>加到手機桌面</h3>
+        <p>在「⋯」選單點「加到手機桌面」，照著步驟做，之後點桌面上的「信任」圖示就能直接打開。</p>
+      </section>
+
+    </div>
+  </div>
+</section>
 
 <section class="screen" id="bookScreen" aria-labelledby="bookTitle" hidden>
   <div class="screen-inner">
@@ -955,6 +1122,49 @@ button { font: inherit; color: inherit; }
 
   // 印章冊放在右上角選單裡，打開時蓋住整個畫面
   var bookScreen = $("bookScreen");
+  // 使用說明（右上角選單 → 使用說明）
+  var guideScreen = $("guideScreen");
+  function openGuide() {
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    $("guideInstall").hidden = !!window.claude || isStandalone();   // 加到手機桌面只在網站版說明
+    guideScreen.hidden = false;
+    guideScreen.scrollTop = 0;
+    document.documentElement.classList.add("noscroll");
+    try { $("guideBack").focus({ preventScroll: true }); } catch (e) {}
+    drawLead();
+  }
+  // 第一張說明卡：圈住早、午、晚的框，用一條線連到標題「聽完就打勾」
+  var callCard = document.querySelector(".g-call");
+  function drawLead() {
+    if (!callCard || guideScreen.hidden) return;
+    var c = callCard.getBoundingClientRect();
+    if (!c.width) return;
+    var svg = callCard.querySelector(".g-lead");
+    var ring = callCard.querySelector(".g-ring").getBoundingClientRect();
+    var lab = callCard.querySelector(".g-lab").getBoundingClientRect();
+    var x = Math.round(ring.left + ring.width / 2 - c.left) + 0.5;
+    var y1 = Math.round(ring.bottom - c.top) + 8;                 // 圈的下緣（框比早午晚多出 9px）
+    var y2 = Math.round(lab.top + lab.height / 2 - c.top) + 0.5;   // 標題文字的中線
+    var xe = Math.round(lab.right - c.left) + 10;                  // 標題文字右邊一點點
+    var r = Math.max(0, Math.min(8, x - xe, y2 - y1));
+    svg.setAttribute("width", Math.round(c.width));
+    svg.setAttribute("height", Math.round(c.height));
+    svg.querySelector("path").setAttribute("d", "M" + x + " " + y1 + "V" + (y2 - r) + "Q" + x + " " + y2 + " " + (x - r) + " " + y2 + "H" + xe);
+    var dot = svg.querySelector("circle");
+    dot.setAttribute("cx", xe); dot.setAttribute("cy", y2);
+  }
+  if (callCard) {
+    window.addEventListener("resize", drawLead);
+    if (window.ResizeObserver) new ResizeObserver(drawLead).observe(callCard.querySelector(".g-row"));
+    try { document.fonts.ready.then(drawLead); } catch (e) {}
+  }
+  function closeGuide() {
+    guideScreen.hidden = true;
+    document.documentElement.classList.remove("noscroll");
+    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
+  }
+
   function openBook() {
     $("menuPop").hidden = true;
     $("menuBtn").setAttribute("aria-expanded", "false");
@@ -1568,6 +1778,8 @@ button { font: inherit; color: inherit; }
     if (addTag(inp.value)) { inp.value = ""; renderTagEdit(); }
   });
   $("bookOpen").addEventListener("click", openBook);
+  $("guideOpen").addEventListener("click", openGuide);
+  $("guideBack").addEventListener("click", closeGuide);
   $("installItem").hidden = !!window.claude || isStandalone();   // Claude 裡、或已經從桌面打開時不顯示
   $("installItem").addEventListener("click", openInstall);
   $("installOk").addEventListener("click", closeInstall);
@@ -1607,6 +1819,7 @@ button { font: inherit; color: inherit; }
     else if (!noteSheet.hidden) closeNote();
     else if (!notesScreen.hidden) closeNotes();
     else if (!bookScreen.hidden) closeBook();
+    else if (!guideScreen.hidden) closeGuide();
     else if (markTag) setMarkTag(null);
   });
   document.addEventListener("visibilitychange", function () {
