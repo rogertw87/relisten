@@ -51,7 +51,7 @@
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
   --sealw: clamp(46px, 13vw, 58px);
-  --chipw: clamp(42px, calc(25vw - 48px), 60px);   /* 早午晚的寬度：留給左邊「重聽 11/26 週四」一行的空間，其餘都給打勾格 */
+  --chipw: clamp(36px, calc(25vw - 54px), 56px);   /* 早午晚的寬度：留給左邊「重聽 11/26 週四」一行的空間，其餘都給打勾格 */
   color-scheme: light;
 }
 
@@ -129,10 +129,11 @@ button { font: inherit; color: inherit; }
   border-bottom: 1px solid var(--line);
   display: flex; flex-direction: column; gap: 6px;
 }
-.bar .row1 { display: flex; align-items: center; gap: 12px; }
-.bar .count { white-space: nowrap; font-size: 0.875rem; color: var(--muted); }
+.bar .row1 { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 10px; }
+.bar .row1 .hide { margin-left: auto; }
+.bar .count { display: none; }   /* 進度列不寫段數：左邊版型切換，右邊「下一段」 */
 .bar .count b { font: 500 0.9375rem var(--mono); color: var(--ink); }
-.bar .track { flex: 1 1 auto; min-width: 2rem; height: 4px; }
+.bar .track { display: none; }   /* 進度列不放進度條，只留段數 */
 .btn {
   min-height: 36px; padding: 0 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--card);
   color: var(--ink); font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
@@ -147,7 +148,8 @@ button { font: inherit; color: inherit; }
 .hide input { width: 16px; height: 16px; margin: 0; accent-color: var(--accent); }
 
 /* 每週的清單 */
-.weeks { display: flex; flex-direction: column; gap: 28px; }
+.weeks { display: flex; flex-direction: column; gap: 0; }
+.week h2 { display: none !important; }   /* 不分週顯示，清單一路排下去 */
 .week h2 {
   margin: 0; display: flex; align-items: baseline; gap: 10px;
   font-size: 0.8125rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2);
@@ -187,6 +189,7 @@ button { font: inherit; color: inherit; }
 .chk input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .chk .k { font-size: 0.875rem; line-height: 1; }
 .chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--muted-2); }
+.chk:not(.on) .mark { display: none; }   /* 簡化：沒聽完的格子不畫圈，只寫早、午、晚；聽完才出現勾 */
 .chk.on { background: var(--sel); border-color: var(--sel); border-style: solid; color: var(--selfg); }
 .chk.on .k { font-weight: 500; }
 .chk.on .mark {
@@ -198,10 +201,185 @@ button { font: inherit; color: inherit; }
 .chk input:focus-visible + .k { text-decoration: underline; }
 .chk.off { opacity: .5; cursor: default; }
 .chk.off input { cursor: default; }
-.weeks.hide-done .day.done { display: none; }
+.weeks.hide-done .day.every { display: none; }   /* 隱藏聽完的練習：每一段都聽完的天整天藏起來 */
+.weeks.hide-done .chk.on, .weeks.hide-done .checks .tn.on { visibility: hidden; }   /* 簡化：聽完的那一格留空位，格子才對得齊 */
 .week .alldone { margin: 0; padding: 12px 4px; color: var(--muted-2); font-size: 0.8125rem; border-bottom: 1px solid var(--line); }
 
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
+
+/* ---------- 三列版型：日期一行，下面早、午、晚（週末加補充）各一列 ---------- */
+.day.rows { display: block; padding: 14px 0 4px; border-bottom: 0; }
+li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-height: 0; }
+.day.rows .dates { flex: 1 1 auto; flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; }
+.npill {
+  flex: none; display: inline-flex; align-items: center; gap: 4px; padding: 3px 10px;
+  border-radius: 999px; border: 1px solid var(--line-2); font-size: 0.75rem; line-height: 1.4; color: var(--accent);
+}
+.npill svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.npill.has { background: var(--soft-2); border-color: var(--soft-2); color: var(--ink-2); }
+.day.rows .checks { display: flex; flex-direction: column; gap: 0; }
+.srow { display: flex; align-items: stretch; min-height: 46px; }
+.srow + .srow { border-top: 1px solid var(--line-3); }
+.srow.x { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--soft) 8px 9px); }
+.srow.off { opacity: .5; }
+.ck { position: relative; flex: none; width: 48px; display: flex; justify-content: center; padding-top: 12px; cursor: pointer; }
+.ck input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.ck .mark, .ss-done .mark {
+  box-sizing: border-box; width: 22px; height: 22px; border-radius: 50%; border: 1.8px solid var(--muted-2);
+  display: flex; align-items: center; justify-content: center;
+}
+.srow.on .ck .mark, .ss-done input:checked + .mark { background: var(--sel); border-color: var(--sel); }
+.srow.on .ck .mark::after, .ss-done input:checked + .mark::after {
+  content: ""; width: 10px; height: 5px; border-left: 2px solid var(--selfg); border-bottom: 2px solid var(--selfg);
+  transform: translateY(-1px) rotate(-45deg);
+}
+.ck:has(input:focus-visible) .mark, .ss-done:has(input:focus-visible) .mark { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sbody {
+  flex: 1 1 auto; min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 8px; align-items: start;
+  padding: 11px 12px 11px 0;
+}
+.sbody .k { font-size: 0.9375rem; line-height: 24px; white-space: nowrap; color: var(--ink); }
+.srow.on .sbody .k { font-weight: 600; }
+.day.rows .sbody .tn { grid-row: auto; justify-self: end; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; gap: 4px; padding-top: 2px; min-width: 0; }
+.sbody .tname { padding: 1px 7px; font-size: 0.71875rem; line-height: 1.6; }
+.sbody .msg {
+  grid-column: 1 / -1; margin-top: 3px; font-size: 0.84375rem; line-height: 1.55; color: var(--muted);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere;
+}
+.weeks.marking .srow.tagged { box-shadow: inset 0 0 0 2px var(--tc); background: color-mix(in srgb, var(--tc) 10%, var(--card)); }
+.award-bg#sheet { z-index: 31; }
+/* 寫心得、選標籤的視窗 */
+.award.sess-panel { max-width: 440px; align-items: stretch; text-align: left; gap: 12px; padding: 26px 20px 20px; }
+.award.sess-panel .aw-title { text-align: center; }
+.ss-done {
+  position: relative; display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px;
+  border: 1.5px solid var(--line-2); border-radius: 12px; font-size: 0.9375rem; cursor: pointer;
+}
+.ss-done input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+.ss-lab { margin-bottom: -6px; font-size: 0.8125rem; color: var(--muted); }
+.sess-panel textarea {
+  width: 100%; min-height: 84px; padding: 10px 12px; border: 1.5px solid var(--line-2); border-radius: 12px;
+  background: var(--card); color: var(--ink); font: inherit; font-size: 0.9375rem; line-height: 1.6; resize: vertical;
+}
+.sess-panel textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sess-panel textarea::placeholder { color: var(--muted-2); opacity: .75; }
+.ss-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.sbody .k { grid-column: 1; grid-row: 1; }
+.day.rows .sbody .tn { grid-column: 2; grid-row: 1; }
+.sbody .npill { grid-column: 3; grid-row: 1; justify-self: end; margin-top: 1px; position: relative; background: none; font: inherit; font-size: 0.75rem; cursor: pointer; }
+.sbody .npill::after { content: ""; position: absolute; inset: -9px -8px; }   /* 手指好按：點的範圍比看起來大一點 */
+.sbody .npill.has { background: var(--soft-2); }
+.sbody .npill:disabled { cursor: default; opacity: .6; }
+.sbody .npill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.sbody .msg { grid-row: 2; }
+/* 心得本：一天一張卡，裡面每一段的心得都可以點開 */
+div.note-card { cursor: default; gap: 0; padding: 14px 18px 6px; }
+div.note-card:hover { border-color: var(--line); }
+.note-entry {
+  display: flex; flex-direction: column; gap: 4px; width: 100%; padding: 10px 0; margin: 0;
+  border: 0; border-top: 1px solid var(--line-3); background: none; color: inherit; font: inherit; text-align: left; cursor: pointer;
+}
+.note-head + .note-entry { border-top: 0; padding-top: 6px; }
+.note-entry:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.note-etop { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.note-etop b { font-weight: 500; font-size: 0.8125rem; color: var(--muted); }
+/* 進度列上的版型切換：橫排／三列 */
+.lay-wrap { display: flex; align-items: center; gap: 6px; min-width: 0; }
+.lay-lab { font-size: 0.8125rem; color: var(--muted); white-space: nowrap; }
+.lay-toggle { flex: none; display: inline-flex; gap: 2px; padding: 2px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); }
+.lay-btn {
+  height: 32px; padding: 0 10px; display: flex; align-items: center; justify-content: center;
+  border: 0; border-radius: 9px; background: none; color: var(--muted); font: inherit; font-size: 0.8125rem; white-space: nowrap; cursor: pointer;
+}
+.lay-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.lay-btn[aria-pressed="true"] { background: var(--sel); color: var(--selfg); }
+.lay-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+/* ---------- 下方分頁：清單、標籤、心得、進度 ---------- */
+.tabbar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; background: var(--page); border-top: 1px solid var(--line);
+  padding: 4px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
+}
+.tabbar-in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tab {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; padding: 4px 0;
+  border: 0; background: none; color: var(--muted-2); font: inherit; font-size: 0.75rem; cursor: pointer;
+}
+.tab svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tab.on { color: var(--ink); font-weight: 600; }
+.tab.on svg { stroke: var(--accent); }
+.tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; border-radius: 12px; }
+main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+.tab-screen .screen-inner { padding-bottom: calc(100px + env(safe-area-inset-bottom, 0px)); }
+.tab-screen .back { display: none; }
+#guideScreen { z-index: 26; }
+.book-head.sub-head { margin-top: 10px; }
+.book-head.sub-head h2 { font-size: 1.0625rem; font-weight: 600; }
+.bar .row2 { justify-content: flex-start; }
+.bar .row2:not(:has(.status.warn)) { display: none; }
+.bar .status:not(.warn) { display: none; }      /* 平常不顯示存檔狀態，出問題才出現 */
+/* 隱藏聽完的練習：三列版型藏起聽完的那一列，全部聽完的天整天藏起來 */
+.weeks.hide-done .day.rows .srow.on { display: none; }
+.weeks.hide-done .day.rows .srow.on + .srow { border-top-color: transparent; }
+/* 標籤分頁：每個標籤標在哪幾段 */
+.tix-all { display: flex; flex-direction: column; gap: 18px; }
+.tix { display: flex; flex-direction: column; gap: 8px; }
+.tix-h { margin: 0 4px; display: flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 600; }
+.tix-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--tc); }
+.tix-n { margin-left: auto; font: 400 0.75rem var(--mono); color: var(--muted-2); }
+.tix-list { display: flex; flex-wrap: wrap; gap: 6px; }
+.tix-item {
+  min-height: 34px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line-2); background: var(--card);
+  color: var(--ink); font: inherit; font-size: 0.8125rem; cursor: pointer;
+}
+.tix-item:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- 使用說明（以圖為主）的小圖零件 ---------- */
+.gx-rel{position:relative}
+.gx-tog{display:inline-flex;padding:2px;border:1px solid var(--line);border-radius:10px;background:var(--card);font-size:12px}
+.gx-tog span{padding:4px 10px;border-radius:8px;color:var(--muted)}
+.gx-tog span.on{background:var(--sel);color:var(--selfg)}
+.gx-two{display:flex;gap:14px;align-items:flex-start}
+.gx-mini{display:flex;flex-direction:column;gap:5px;padding:8px 9px;border:1px solid var(--line-2);border-radius:10px;background:var(--card);width:118px}
+.gx-mini .h{font-size:10px;color:var(--muted)}
+.gx-chips{display:flex;gap:4px;align-items:center}
+.gx-chips .d{font-size:10px;margin-right:4px;white-space:nowrap}
+.gx-np .g-tap,.gx-btn .g-tap,.gx-p .g-tap{left:88%;top:100%}
+.gx-pop{position:relative}
+.gx-c{width:22px;height:26px;border:1px solid var(--line-2);border-radius:6px;font-size:10px;display:flex;align-items:center;justify-content:center;background:var(--card)}
+.gx-c.on{background:var(--sel);color:var(--selfg);border-color:var(--sel)}
+.gx-c.gone{visibility:hidden}
+.gx-r{display:flex;align-items:center;gap:6px;font-size:10px;padding:3px 0}
+.gx-r + .gx-r{border-top:1px solid var(--line-3)}
+.gx-r i{width:10px;height:10px;border-radius:50%;border:1.3px solid var(--muted-2)}
+.gx-r i.on{background:var(--sel);border-color:var(--sel)}
+.gx-r b{margin-left:auto;font-weight:400;font-size:9px;border:1px solid var(--line-2);border-radius:99px;padding:0 5px;color:var(--accent)}
+.gx-pop{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:14px;background:var(--card);box-shadow:0 6px 18px var(--shadow);width:150px;font-size:11px}
+.gx-pop .t{text-align:center;font-weight:600;font-size:12px}
+.gx-pop .l{display:flex;flex-direction:column;gap:3px}
+.gx-pop .l span{font-size:10px;color:var(--ink-2)}
+.gx-pop .l i{display:block;height:14px;border:1px solid var(--line-2);border-radius:6px}
+.gx-pills{display:flex;gap:3px;flex-wrap:wrap}
+.gx-p{font-size:9px;padding:1px 6px;border-radius:99px;border:1px solid var(--line-2);background:var(--card)}
+.gx-p.sel{background:var(--tc);border-color:var(--tc);color:var(--page)}
+.gx-dayp{display:flex;flex-direction:column;gap:4px;align-items:flex-start;font-size:15px}
+.gx-dayp b{font:400 16px var(--mono)}
+.gx-np{position:relative;font-size:11px;padding:2px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--accent)}
+.gx-box{display:inline-flex;align-items:center;gap:6px;font-size:12px;position:relative}
+.gx-box i{width:15px;height:15px;border-radius:3px;background:var(--sel);display:inline-flex;align-items:center;justify-content:center}
+.gx-box i::after{content:"";width:7px;height:4px;border-left:1.6px solid var(--selfg);border-bottom:1.6px solid var(--selfg);transform:translateY(-1px) rotate(-45deg)}
+.gx-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;padding:8px 6px;border-top:1px solid var(--line);background:var(--page);border-radius:0 0 10px 10px}
+.gx-tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink)}
+.gx-tab svg{width:20px;height:20px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.gx-tab small{font-size:10px;color:var(--muted);text-align:center;line-height:1.35}
+.gx-file{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:44px;height:54px;border:1.5px solid var(--line-2);border-radius:6px;font:500 10px var(--mono);color:var(--ink-2);background:var(--card)}
+.gx-btn{position:relative;font-size:12px;padding:4px 12px;border-radius:99px;border:1px solid var(--line-2);background:var(--card)}
+.gx-sw{display:flex;gap:10px}
+.gx-sw span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px}
+.gx-sw i{width:24px;height:24px;border-radius:50%;box-shadow:0 0 0 1.5px var(--line-2)}
+.gx-dots{position:relative;display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center}
+.gx-dots svg{width:24px;height:24px;fill:var(--ink-2)}
+.gcard .cap{margin:0;font-size:.8125rem;color:var(--muted)}
 
 /* 選單裡的「主題」：淺色、夜間、黑白 */
 .menu-theme { min-width: 210px; padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
@@ -308,11 +486,28 @@ button { font: inherit; color: inherit; }
 .award.note-panel { max-width: 440px; align-items: stretch; text-align: left; gap: 12px; padding: 26px 20px 20px; }
 .award.note-panel .aw-title { text-align: center; }
 .note-panel textarea {
-  width: 100%; min-height: 10em; resize: vertical; padding: 12px 14px;
+  width: 100%; min-height: 5.5em; resize: vertical; padding: 12px 14px;
   font: inherit; font-size: 1rem; line-height: 1.75; color: var(--ink); background: var(--card);
   border: 1px solid var(--line-2); border-radius: 14px;
 }
 .note-panel textarea::placeholder { color: var(--muted-2); opacity: .75; }
+/* 一天的心得視窗：每一段一格 */
+.award.note-panel { max-height: calc(100dvh - 48px); overflow-y: auto; }
+.ns-list { display: flex; flex-direction: column; gap: 14px; width: 100%; text-align: left; }
+.ns-part { display: flex; flex-direction: column; gap: 6px; }
+.ns-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.ns-lab { font-size: 0.875rem; font-weight: 500; color: var(--ink-2); }
+.ns-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.ns-tags .tpill { min-height: 30px; padding: 0 10px; font-size: 0.78125rem; }
+/* 簡化：每一天最右邊的「✎ 心得」 */
+.day:not(.rows) { grid-template-columns: minmax(0, 1fr) auto auto; }
+.day:not(.rows) > .npill { position: relative; background: none; font: inherit; font-size: 0.75rem; padding: 3px 8px 3px 7px; gap: 3px; cursor: pointer; }
+.day:not(.rows) > .npill svg { width: 11px; height: 11px; }
+.day:not(.rows) > .npill::after { content: ""; position: absolute; inset: -10px -6px; }   /* 手指好按 */
+.day:not(.rows) > .npill.has { background: var(--soft-2); }
+.day:not(.rows) > .npill:disabled { cursor: default; opacity: .6; }
+.day:not(.rows) > .npill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.day:not(.rows) .orig .nd { display: none; }
 .note-meta { display: flex; justify-content: space-between; gap: 12px; margin-top: -4px; font: 400 0.75rem var(--mono); color: var(--muted-2); }
 
 /* 加到手機桌面：從下方滑出的說明，和好好呼吸一樣 */
@@ -431,6 +626,7 @@ button { font: inherit; color: inherit; }
   color: var(--muted); font-size: 0.75rem; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
 }
 .g-chip .o { width: 9px; height: 9px; border-radius: 50%; border: 1.5px solid var(--track); }
+.g-chip:not(.on) .o { display: none; }
 .g-chip.on { background: var(--sel); border-color: var(--sel); color: var(--selfg); }
 .g-chip.on .o { width: 10px; height: 6px; border: 0; border-radius: 0; border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(-45deg); }
 .g-chip.ring { border-color: var(--tc); box-shadow: 0 0 0 1.5px var(--tc); background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
@@ -554,7 +750,7 @@ button { font: inherit; color: inherit; }
 }
 
 @media (max-width: 22.5rem) {
-  :root { --chipw: clamp(40px, calc(25vw - 46px), 44px); }
+  :root { --chipw: clamp(34px, calc(25vw - 54px), 37px); }
   .dates .orig { font-size: 1rem; }
   .checks { gap: 4px; }
 }
@@ -587,7 +783,8 @@ button { font: inherit; color: inherit; }
   --tg0: #004f73; --tg1: #843600; --tg2: #8a0c42; --tg3: #17552a; --tg4: #3a258a; --tg5: #574200;
 }
 :root[data-look="bw"] .chk { border-width: 2px; }
-:root[data-look="bw"] .chk .mark { border-width: 2px; border-color: var(--ink); }
+:root[data-look="bw"] .srow:not(.on) .ck .mark, :root[data-look="bw"] .ss-done input:not(:checked) + .mark { border-width: 2px; border-color: var(--ink); }
+:root[data-look="bw"] .srow + .srow { border-top-color: var(--line); }
 :root[data-look="bw"] .summary, :root[data-look="bw"] .tagcard { border-color: var(--ink); }
 :root[data-look="bw"] .day.done .info { opacity: 1; }
 :root[data-look="bw"] .day.done .orig { text-decoration: line-through; text-decoration-thickness: 1.5px; }
@@ -599,8 +796,8 @@ button { font: inherit; color: inherit; }
   <div class="menu" id="menu">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="選單" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
     <div class="menu-pop" id="menuPop" hidden>
-      <button type="button" class="menu-item" id="notesOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg><span>心得本</span><span class="menu-n" id="menuNotesN"></span></button>
-      <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
+      <button type="button" class="menu-item" id="notesOpen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg><span>心得本</span><span class="menu-n" id="menuNotesN"></span></button>
+      <button type="button" class="menu-item" id="bookOpen" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
       <button type="button" class="menu-item" id="guideOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18ZM9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.6v.5M12 16.9h.01"></path></svg><span>使用說明</span></button>
       <button type="button" class="menu-item" id="installItem" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM12 8v7M8.8 11.8 12 15l3.2-3.2"></path></svg><span>加到手機桌面</span></button>
       <div class="menu-theme" role="group" aria-labelledby="lookTitle">
@@ -618,37 +815,23 @@ button { font: inherit; color: inherit; }
     <p class="sub">2026 全球線上共修・重聽進度表</p>
   </header>
 
-  <section class="summary" aria-label="整體進度">
-    <div class="total">
-      <span class="num" id="doneCount">0</span>
-      <span class="of">/ 186 段</span>
-      <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
-    </div>
-    <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
-    <div class="plan">
-      <label for="start">開始重聽</label>
-      <input type="date" id="start">
-      <button type="button" class="mini-btn" id="startClear" hidden>不排程</button>
-      <p class="plan-note" id="planNote" hidden></p>
-      <label class="plan-check" for="showDates"><input type="checkbox" id="showDates"> 顯示共修日期</label>
-    </div>
-  </section>
 
-  <section class="tagcard" aria-labelledby="tagCardTitle">
-    <div class="tagcard-head"><h2 id="tagCardTitle">標籤</h2><button type="button" class="linkbtn" id="tagCardEdit">編輯標籤</button></div>
-    <div class="tagbar" id="tagBar" role="group" aria-label="選一個標籤來標註"></div>
-    <p class="tag-hint" id="tagHint">選一個標籤，再點清單裡的早、午、晚，就能標上或取消。</p>
-  </section>
 
   <div class="bar">
     <div class="row1">
       <span class="count"><span>已聽</span> <b id="barCount">0</b> <span>/ 186</span></span>
       <div class="track" aria-hidden="true"><i id="barFill"></i></div>
-      <button type="button" class="btn" id="nextBtn" disabled>下一段</button>
+      <div class="lay-wrap">
+      <div class="lay-toggle" role="group" aria-label="顯示方式">
+        <button type="button" class="lay-btn" data-layout-pick="chips" aria-pressed="true" aria-label="簡化：早、午、晚並排">簡化</button>
+        <button type="button" class="lay-btn" data-layout-pick="rows" aria-pressed="false" aria-label="詳細：每段一列，可以寫心得、選標籤">詳細</button>
+      </div>
+      </div>
+      <label class="hide" for="hideDone"><input type="checkbox" id="hideDone"> 隱藏完成的練習</label>
+      <button type="button" class="btn" id="nextBtn" disabled hidden>下一段</button>
     </div>
     <div class="row2">
       <span class="status" id="status" role="status" aria-live="polite">讀取進度中…</span>
-      <label class="hide" for="hideDone"><input type="checkbox" id="hideDone"> 隱藏聽完的天</label>
     </div>
     <div class="markbar" id="markBar" hidden>
       <span class="markbar-txt" id="markTxt" aria-live="polite"></span>
@@ -675,7 +858,27 @@ button { font: inherit; color: inherit; }
   </div>
 </div>
 
-<section class="screen" id="notesScreen" aria-labelledby="notesTitle" hidden>
+<section class="screen tab-screen" id="tagScreen" aria-labelledby="tagCardTitle" hidden>
+  <div class="screen-inner">
+    <div class="book-head"><h2 id="tagCardTitle">標籤</h2><button type="button" class="linkbtn" id="tagCardEdit">編輯標籤</button></div>
+    <div class="tagbar" id="tagBar" role="group" aria-label="選一個標籤來標註"></div>
+    <p class="tag-hint" id="tagHint">要替某一段加標籤：在清單點「心得」，在跳出的視窗裡選。點上面的標籤，下面只列出它標過的段落。</p>
+    <div class="book-head sub-head"><h2>標過的段落</h2></div>
+    <div class="tix-all" id="tagIndex"></div>
+    <p class="notes-empty" id="tagIndexEmpty">還沒有標過任何段落。</p>
+  </div>
+</section>
+
+<nav class="tabbar" id="tabbar" aria-label="分頁">
+  <div class="tabbar-in">
+    <button type="button" class="tab on" data-tab="list" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單</button>
+    <button type="button" class="tab" data-tab="tags"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤</button>
+    <button type="button" class="tab" data-tab="notes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得</button>
+    <button type="button" class="tab" data-tab="prog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度</button>
+  </div>
+</nav>
+
+<section class="screen tab-screen" id="notesScreen" aria-labelledby="notesTitle" hidden>
   <div class="screen-inner">
     <button type="button" class="back" id="notesBack">← 返回</button>
     <div class="book-head notes-head">
@@ -683,7 +886,7 @@ button { font: inherit; color: inherit; }
       <span class="book-n" id="notesCount">0 則</span>
       <button type="button" class="mini-btn" id="notesExport" hidden>匯出</button>
     </div>
-    <p class="notes-empty" id="notesEmpty">還沒有心得。點清單裡的任何一天，就可以寫下聽完的感受。</p>
+    <p class="notes-empty" id="notesEmpty">還沒有心得。在清單裡點「第01天」，或在「詳細」顯示方式點某一段右邊的「心得」，就可以寫下聽完的感受。</p>
     <ol class="notes" id="notesList"></ol>
   </div>
 </section>
@@ -691,9 +894,21 @@ button { font: inherit; color: inherit; }
 <form class="award-bg" id="noteSheet" hidden>
   <div class="award note-panel" role="dialog" aria-modal="true" aria-labelledby="nsTitle">
     <h2 class="aw-title" id="nsTitle">第01天的心得</h2>
-    <textarea id="noteText" rows="7" maxlength="800" aria-labelledby="nsTitle" placeholder="聽完有什麼感受？哪一句話留在心裡？"></textarea>
-    <div class="note-meta"><span id="nsAt"></span><span id="nsCount">0 / 800</span></div>
+    <div class="ns-list" id="nsList"></div>
     <button type="submit" class="aw-ok" id="nsDone">完成</button>
+  </div>
+</form>
+
+<form class="award-bg" id="sessSheet" hidden>
+  <div class="award sess-panel" role="dialog" aria-modal="true" aria-labelledby="ssTitle">
+    <h2 class="aw-title" id="ssTitle">第01天・早上</h2>
+    <label class="ss-done"><input type="checkbox" id="ssDone"><span class="mark" aria-hidden="true"></span><span>聽完了</span></label>
+    <label class="ss-lab" for="ssMsg">心得</label>
+    <textarea id="ssMsg" rows="4" maxlength="800" placeholder="這一段聽完有什麼感受？哪一句話留在心裡？"></textarea>
+    <div class="note-meta"><span id="ssAt"></span><span id="ssCount">0 / 800</span></div>
+    <div class="ss-lab" id="ssTagLab">標籤（可以選好幾個）</div>
+    <div class="ss-tags" id="ssTags" role="group" aria-labelledby="ssTagLab"></div>
+    <button type="submit" class="aw-ok" id="ssOk">完成</button>
   </div>
 </form>
 
@@ -703,80 +918,50 @@ button { font: inherit; color: inherit; }
     <div class="book-head"><h2 id="guideTitle">使用說明</h2></div>
     <div class="guide">
 
-      <section class="gcard g-call">
-        <div class="gpic" aria-hidden="true">
-          <div class="g-row"><span class="g-day">第<b>01</b>天</span><span class="g-chips g-ring"><span class="g-chip on">早<i class="o"></i></span><span class="g-chip">午<i class="o"></i><span class="g-tap"></span></span><span class="g-chip">晚<i class="o"></i></span></span></div>
-        </div>
-        <h3><span class="g-lab">聽完就打勾</span></h3>
-        <svg class="g-lead" aria-hidden="true" width="0" height="0"><path d=""></path><circle r="2.5"></circle></svg>
-      </section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-chip gx-rel">早<i class="o"></i><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-chip on">早<i class="o"></i></span></div><h3>打勾</h3><p class="cap">聽完點一下，再點取消</p></section>
 
-      <section class="gcard">
-        <div class="gpic" aria-hidden="true">
-          <span class="g-day">第<b>01</b>天<i class="g-nd"></i><span class="g-tap"></span></span>
-          <svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
-          <span class="g-pop"><span class="g-pop-t">第01天的心得</span><span class="g-lines"><i></i><i></i><i class="short"></i></span><span class="g-btn">完成</span></span>
-        </div>
-        <h3>寫心得</h3>
-        <p>點「第01天」寫下那天的心得，關掉視窗就會存起來。寫過的天旁邊有一個小點；全部的心得都在「⋯」選單的「心得本」。</p>
-      </section>
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-tog"><span class="on">簡化</span><span>詳細</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-two"><span class="gx-mini"><span class="h">簡化</span><span class="gx-chips"><span class="d">第01天</span><span class="gx-c on">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></span><span class="gx-mini"><span class="h">詳細</span><span class="gx-r"><i class="on"></i>早上<b>心得</b></span><span class="gx-r"><i></i>中午<b>心得</b></span><span class="gx-r"><i></i>晚上<b>心得</b></span></span></span></div><h3>兩種看法</h3></section>
 
-      <section class="gcard">
-        <div class="gpic g-col" aria-hidden="true">
-          <span class="g-pills"><span class="g-pill tc0 sel">呼吸<span class="g-tap"></span></span><span class="g-pill tc1">靜坐</span><span class="g-pill tc2">臣服</span></span>
-          <svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
-          <div class="g-row g-top"><span class="g-day">第<b>03</b>天</span><span class="g-chips"><span class="g-cell"><span class="g-chip ring tc0">早<i class="o"></i><span class="g-tap"></span></span><span class="g-tn tc0">呼吸</span></span><span class="g-chip">午<i class="o"></i></span><span class="g-chip">晚<i class="o"></i></span></span></div>
-        </div>
-        <h3>加標籤</h3>
-        <p>在「標籤」卡先點一個標籤，再點早、午、晚，就能標上或取消，這時不會改到打勾。標了的格子下面會寫出標籤名稱；勾「只看已標的」只看這個標籤，按「完成」回到打勾。標籤可以用「編輯標籤」新增、改名、刪除。</p>
-      </section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np">心得<span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
-      <section class="gcard">
-        <div class="gpic" aria-hidden="true">
-          <span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span>
-          <svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
-          <span class="g-stamp">休息</span>
-        </div>
-        <h3>蓋印章</h3>
-        <p>一週（7 天）的早、午、晚都聽完，就會蓋一個印章；62 天全部聽完，再蓋一個「圓滿」。在「⋯」選單的「印章冊」點印章，可以寫下聽完後要給自己的獎勵。</p>
-      </section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-pop"><span class="l"><span>早上</span><i></i></span><span class="gx-pills"><span class="gx-p tc0 sel gx-rel">呼吸<span class="g-tap"></span></span><span class="gx-p tc1">靜坐</span><span class="gx-p tc2">臣服</span></span></span></div><h3>選標籤</h3><p class="cap">在心得視窗裡點一下</p></section>
 
-      <section class="gcard">
-        <div class="gpic g-col" aria-hidden="true">
-          <span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span>
-          <svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
-          <span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span>
-        </div>
-        <h3>重聽排程（可以不設）</h3>
-        <p>想照進度聽的話，在進度卡選一個開始日期，每天排一天份，清單會標出每天的重聽日期和「今天」。不想有壓力就不用設，或按「不排程」取消。</p>
-      </section>
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-box"><i></i>隱藏完成的練習</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-chips"><span class="d">第01天</span><span class="gx-c gone">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></div><h3>隱藏完成的練習</h3><p class="cap">聽完的先藏起來</p></section>
 
-      <section class="gcard">
-        <h3>其他小功能</h3>
-        <ul class="g-list">
-          <li><span class="g-mini" aria-hidden="true"><span class="g-btnline">下一段</span></span><span>跳到第一段還沒聽的地方。</span></li>
-          <li><span class="g-mini" aria-hidden="true"><span class="g-box">隱藏聽完的天</span></span><span>清單只留還沒聽完的天。</span></li>
-          <li><span class="g-mini" aria-hidden="true"><span class="g-box">顯示共修日期</span></span><span>每天標出原本共修的日期，例如 7/1 週三。</span></li>
-          <li><span class="g-mini" aria-hidden="true"><span class="g-btnline">主題</span></span><span>在「…」選單換主題：淺色、夜間（黑底）、黑白。</span></li>
-        </ul>
-      </section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-tabs"><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單<small>打勾</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤<small>看標過的</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得<small>全部心得<br>匯出</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度<small>重聽排程<br>印章冊</small></span></span></div><h3>下方分頁</h3></section>
 
-      <section class="gcard" id="guideInstall" hidden>
-        <div class="gpic" aria-hidden="true">
-          <span class="g-phone"><i></i><i></i><i></i><i></i><i class="me">信</i><i></i><i></i><i></i><i></i></span>
-        </div>
-        <h3>加到手機桌面</h3>
-        <p>在「⋯」選單點「加到手機桌面」，照著步驟做，之後點桌面上的「信任」圖示就能直接打開。</p>
-      </section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-stamp">休息</span></div><h3>蓋印章</h3><p class="cap">聽完 7 天蓋一個</p></section>
+
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設</p></section>
+
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span></span></div><h3>換主題</h3></section>
+
+      <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me">信</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
 
     </div>
   </div>
 </section>
 
-<section class="screen" id="bookScreen" aria-labelledby="bookTitle" hidden>
+<section class="screen tab-screen" id="bookScreen" aria-labelledby="progTitle" hidden>
   <div class="screen-inner">
     <button type="button" class="back" id="bookBack">← 返回</button>
-    <div class="book-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
+    <div class="book-head"><h2 id="progTitle">進度</h2></div>
+    <section class="summary" aria-label="整體進度">
+      <div class="total">
+        <span class="num" id="doneCount">0</span>
+        <span class="of">/ 186 段</span>
+        <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
+      </div>
+      <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
+      <div class="plan">
+        <label for="start">開始重聽</label>
+        <input type="date" id="start">
+        <button type="button" class="mini-btn" id="startClear" hidden>不排程</button>
+        <p class="plan-note" id="planNote" hidden></p>
+        <label class="plan-check" for="showDates"><input type="checkbox" id="showDates"> 顯示共修日期</label>
+      </div>
+    </section>
+    <div class="book-head sub-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
     <div class="book"><div class="seals" id="seals"></div></div>
   </div>
 </section>
@@ -829,6 +1014,10 @@ button { font: inherit; color: inherit; }
   var LS_STATE = "trust-relisten:state";
   var LS_HIDE = "trust-relisten:hide-done";
   var LS_DATES = "trust-relisten:show-dates";
+  var LS_LAYOUT = "trust-relisten:layout";
+  var DEFAULT_LAYOUT = "chips";     // 版型：chips 橫排、rows 三列（選擇只記在這台裝置）
+  var layout = DEFAULT_LAYOUT;
+  try { var savedLayout = localStorage.getItem(LS_LAYOUT); if (savedLayout === "chips" || savedLayout === "rows") layout = savedLayout; } catch (e) {}
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
@@ -887,7 +1076,47 @@ button { font: inherit; color: inherit; }
     return e;
   }
 
+  function makeRow(day, code, long) {
+    var key = day.id + code;
+    var row = el("div", "srow " + code + " off");
+    var ck = el("label", "ck");
+    var input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = key;
+    input.disabled = true;
+    input.addEventListener("change", function () { onToggle(key, input.checked); });
+    input.addEventListener("click", function (ev) {
+      if (!markTag) return;
+      ev.preventDefault();             // 標註中：不改打勾，改成標上／取消標籤
+      toggleTag(key, markTag);
+    });
+    ck.appendChild(input);
+    var mark = el("span", "mark");
+    mark.setAttribute("aria-hidden", "true");
+    ck.appendChild(mark);
+    row.appendChild(ck);
+    var body = el("div", "sbody");          // 早上、標籤、心得內容只是文字；要寫心得、選標籤點右邊的「心得」
+    body.appendChild(el("span", "k", code === "x" ? "補充" : long));
+    var names = el("span", "tn");          // 標籤名稱，排在這一列的右邊
+    names.setAttribute("aria-hidden", "true");
+    names.hidden = true;
+    body.appendChild(names);
+    var np = el("button", "npill");        // 這一段的「心得」：點了打開寫心得、選標籤的視窗
+    np.type = "button";
+    np.innerHTML = '<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg>心得';
+    body.appendChild(np);
+    var msg = el("span", "msg");           // 這一段的心得，排在下一行
+    msg.hidden = true;
+    body.appendChild(msg);
+    np.addEventListener("click", function () {
+      if (markTag) toggleTag(key, markTag); else openSess(day.i, code);
+    });
+    row.appendChild(body);
+    return { key: key, label: row, input: input, names: names, msg: msg, np: np, body: body, long: long };
+  }
+
   function makeChk(day, code, short, long) {
+    if (layout === "rows") return makeRow(day, code, long);
     var key = day.id + code;
     var label = el("label", "chk " + code + " off");
     var input = document.createElement("input");
@@ -913,6 +1142,9 @@ button { font: inherit; color: inherit; }
   }
 
   function build() {
+    weeksEl.textContent = "";
+    rows = [];
+    weekEls = [];
     var byWeek = {};
     days.forEach(function (d) { (byWeek[d.week] = byWeek[d.week] || []).push(d); });
     Object.keys(byWeek).map(Number).sort(function (a, b) { return a - b; }).forEach(function (w) {
@@ -927,7 +1159,7 @@ button { font: inherit; color: inherit; }
       sec.appendChild(h);
       var ol = el("ol");
       list.forEach(function (d) {
-        var li = el("li", "day");
+        var li = el("li", layout === "rows" ? "day rows" : "day");
         li.id = "day-" + pad(d.n);
         var info = el("button", "info");
         info.type = "button";
@@ -956,16 +1188,20 @@ button { font: inherit; color: inherit; }
           var x = makeChk(d, "x", "補", "週末補充");
           chks.x = x; checks.appendChild(x.label);
         }
-        Object.keys(chks).forEach(function (code, i) {
-          chks[code].names.style.gridColumn = String(i + 1);
-          checks.appendChild(chks[code].names);
-        });
         li.appendChild(checks);
+        var np = null;
+        if (layout !== "rows") {           // 簡化：每一天最右邊一個「✎ 心得」，點了寫早、午、晚的心得和標籤
+          np = el("button", "npill");
+          np.type = "button";
+          np.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg>心得';
+          np.addEventListener("click", function () { openNote(d.i); });
+          li.appendChild(np);
+        }
         ol.appendChild(li);
-        rows[d.i] = { li: li, chks: chks, sub: sub, info: info, nd: nd };
+        rows[d.i] = { li: li, chks: chks, sub: sub, info: info, nd: nd, np: np };
       });
       sec.appendChild(ol);
-      var all = el("p", "alldone", "這一週都聽完了。");
+      var all = el("p", "alldone", "第" + pad(list[0].n) + "–" + pad(list[list.length - 1].n) + "天都聽完了。");
       all.hidden = true;
       sec.appendChild(all);
       weeksEl.appendChild(sec);
@@ -1003,6 +1239,7 @@ button { font: inherit; color: inherit; }
         if (c.input.checked !== on) c.input.checked = on;
         c.input.disabled = !editable;
         c.label.classList.toggle("on", on);
+        c.names.classList.toggle("on", on);
         c.label.classList.toggle("off", !editable);
         if (on) { cnt[code]++; if (code !== "x") main++; }
         var tg = markTags(c.key), names = tg.map(function (id) { return tagById(id).n; });
@@ -1010,21 +1247,36 @@ button { font: inherit; color: inherit; }
         tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
         c.names.hidden = !tg.length;
         if (tg.length) named = true;
+        var sn = state.notes[c.key], st = sn ? sn.t : "";
+        if (c.msg) {
+          if (c.msg.textContent !== st) c.msg.textContent = st;
+          c.msg.hidden = !st;
+          c.np.classList.toggle("has", !!sn);
+          c.np.disabled = !editable;
+        }
         var has = !!mt && tg.indexOf(mt.id) >= 0;
         if (has) hits++;
         c.label.classList.toggle("tagged", has);
         var label = "第 " + d.n + " 天" + c.long + (names.length ? "，標籤：" + names.join("、") : "");
         if (mt) label += "。點一下" + (has ? "取消" : "標上") + "「" + mt.n + "」";
-        c.input.setAttribute("aria-label", label);
+        if (c.body) {
+          c.input.setAttribute("aria-label", label + (mt ? "" : "：聽完打勾"));
+          c.np.setAttribute("aria-label", mt ? label
+            : "第 " + d.n + " 天" + c.long + "：" + (sn ? "看心得" : "寫心得") + "、選標籤" + (names.length ? "（標籤：" + names.join("、") + "）" : ""));
+        } else c.input.setAttribute("aria-label", label + (sn ? "。這一段有心得" : ""));
       });
-      r.li.classList.toggle("has-tn", named);   // 有標籤名稱的天：日期對齊格子那一排，不跟著名稱往下掉
+      r.li.classList.toggle("has-tn", named && layout === "rows");   // 簡化不顯示標籤   // 有標籤名稱的天：日期對齊格子那一排，不跟著名稱往下掉
       r.li.hidden = !!mt && markOnly && !hits;
       var done = main === 3;
+      r.li.classList.toggle("every", Object.keys(r.chks).every(function (code) { return isDone(r.chks[code].key); }));
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
       var note = state.notes[d.id];
       r.nd.hidden = !note;
-      r.info.setAttribute("aria-label", "第 " + d.n + " 天：" + (note ? "看心得" : "寫心得"));
+      var anyNote = !!note || CODES.some(function (cd) { return !!state.notes[d.id + cd[0]]; });
+      if (r.np) r.np.classList.toggle("has", anyNote);
+      r.info.setAttribute("aria-label", "第 " + d.n + " 天：" + (anyNote ? "看心得" : "寫心得"));
+      if (r.np && r.np.tagName === "BUTTON") { r.np.setAttribute("aria-label", "第 " + d.n + " 天：" + (anyNote ? "看心得" : "寫心得")); r.np.disabled = !editable; }
       r.sub.textContent = "";
       if (showDates) r.sub.appendChild(el("span", "od", md(d.date) + " 週" + WD[d.dow]));
       if (start) {
@@ -1046,7 +1298,7 @@ button { font: inherit; color: inherit; }
       var got = 0;
       w.list.forEach(function (d) { SESS.forEach(function (s) { if (isDone(d.id + s[0])) got++; }); });
       var whole = w.list.length * 3;
-      w.alldone.hidden = !(hideDone && got === whole) || !!(mt && markOnly);
+      w.alldone.hidden = !(hideDone && w.list.every(function (d) { return rows[d.i].li.classList.contains("every"); })) || !!(mt && markOnly);
       w.range.hidden = !showDates;
       w.sec.hidden = !!mt && markOnly && w.list.every(function (d) { return rows[d.i].li.hidden; });
     });
@@ -1074,9 +1326,12 @@ button { font: inherit; color: inherit; }
     });
     $("sealCount").textContent = nSeal + " / " + (WEEKS + 1);
     $("menuSealN").textContent = nSeal + " / " + (WEEKS + 1);
-    var nNotes = Object.keys(state.notes).length;
+    var nNotes = days.filter(function (d) {   // 心得本裡有幾則：有心得的天（一整天或某一段）
+      return !!state.notes[d.id] || CODES.some(function (cd) { return !!state.notes[d.id + cd[0]]; });
+    }).length;
     $("menuNotesN").textContent = nNotes ? nNotes + " 則" : "";
     if (!notesScreen.hidden) renderNotes();
+    if (tagScreen && !tagScreen.hidden) renderTagIndex();
 
     // 重聽排程：說明、選單旁的狀態、設定視窗裡的欄位
     var plan = "";
@@ -1267,19 +1522,8 @@ button { font: inherit; color: inherit; }
     try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
-  function openBook() {
-    $("menuPop").hidden = true;
-    $("menuBtn").setAttribute("aria-expanded", "false");
-    bookScreen.hidden = false;
-    bookScreen.scrollTop = 0;
-    document.documentElement.classList.add("noscroll");
-    try { $("bookBack").focus({ preventScroll: true }); } catch (e) {}
-  }
-  function closeBook() {
-    bookScreen.hidden = true;
-    document.documentElement.classList.remove("noscroll");
-    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
-  }
+  function openBook() { showTab("prog"); }
+  function closeBook() { showTab("list"); }
 
   /* ---------- 心得 ---------- */
   function nowStamp() {
@@ -1297,70 +1541,176 @@ button { font: inherit; color: inherit; }
     return box;
   }
 
-  var noteSheet = $("noteSheet"), noteText = $("noteText"), noteDay = null, noteLastFocus = null;
-  function noteCount() { $("nsCount").textContent = noteText.value.length + " / " + NOTE_MAX; }
+  // 一天的心得：點「第01天」或「心得」打開，裡面早上、中午、晚上（週末加補充）各一格；以前寫的整天心得也在這裡
+  var noteSheet = $("noteSheet"), noteDay = null, noteLastFocus = null;
   function openNote(i) {
-    var d = days[i], note = state.notes[d.id], editable = mode === "cloud" || mode === "local";
+    var d = days[i], editable = mode === "cloud" || mode === "local", list = $("nsList"), first = null;
     noteDay = i;
     noteLastFocus = document.activeElement;
     $("nsTitle").textContent = "第" + pad(d.n) + "天的心得";
-    noteText.value = note ? note.t : "";
-    noteText.readOnly = !editable;
-    noteText.placeholder = editable ? "聽完有什麼感受？哪一句話留在心裡？" : "";
-    $("nsAt").textContent = note && note.at ? atLabel(note.at) + " 寫" : "";
-    noteCount();
+    list.textContent = "";
+    var parts = CODES.filter(function (cd) { return cd[0] !== "x" || d.weekend; }).map(function (cd) {
+      return { key: d.id + cd[0], lab: cd[0] === "x" ? "補充" : cd[2], tags: true };
+    });
+    if (state.notes[d.id]) parts.push({ key: d.id, lab: "整天" });
+    parts.forEach(function (p, k) {
+      var n = state.notes[p.key], id = "ns-" + p.key;
+      var box = el("div", "ns-part");
+      var top = el("div", "ns-top");
+      var lab = el("label", "ns-lab", p.lab);
+      lab.htmlFor = id;
+      top.appendChild(lab);
+      top.appendChild(el("span", "note-at", n && n.at ? atLabel(n.at) + " 寫" : ""));
+      box.appendChild(top);
+      var ta = document.createElement("textarea");
+      ta.id = id;
+      ta.rows = 3;
+      ta.maxLength = NOTE_MAX;
+      ta.value = n ? n.t : "";
+      ta.readOnly = !editable;
+      ta.placeholder = editable ? "聽完有什麼感受？哪一句話留在心裡？" : "";
+      ta.setAttribute("data-key", p.key);
+      box.appendChild(ta);
+      if (p.tags && tagList().length) {          // 這一段的標籤：點一下標上，再點一下取消
+        var tb = el("div", "ns-tags");
+        tb.setAttribute("role", "group");
+        tb.setAttribute("aria-label", p.lab + "的標籤");
+        renderNsTags(tb, p.key);
+        box.appendChild(tb);
+      }
+      list.appendChild(box);
+      if (!first && !ta.value) first = ta;
+    });
     noteSheet.hidden = false;
-    var target = editable && !note ? noteText : $("nsDone");
-    try { target.focus({ preventScroll: true }); } catch (e) {}
+    noteSheet.querySelector(".note-panel").scrollTop = 0;
+    try { $("nsDone").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function renderNsTags(box, key) {
+    var tg = markTags(key), editable = canEdit();
+    box.textContent = "";
+    tagList().forEach(function (t) {
+      var b = el("button", "tpill tc" + tagColor(t), t.n);
+      b.type = "button";
+      b.setAttribute("aria-pressed", tg.indexOf(t.id) >= 0 ? "true" : "false");
+      b.disabled = !editable;
+      b.addEventListener("click", function () { toggleTag(key, t.id); renderNsTags(box, key); });
+      box.appendChild(b);
+    });
   }
   // 關掉視窗時就存起來（按完成、點外面、按 Esc 都一樣），不會因為忘了按儲存而不見
   function closeNote() {
     if (noteSheet.hidden) return;
-    if (noteDay != null && !noteText.readOnly) onNote(noteDay, noteText.value.replace(/\s+$/, "").slice(0, NOTE_MAX));
+    noteSheet.querySelectorAll("#nsList textarea").forEach(function (ta) {
+      if (!ta.readOnly) setNote(ta.getAttribute("data-key"), ta.value.replace(/\s+$/, "").slice(0, NOTE_MAX));
+    });
     noteSheet.hidden = true;
     noteDay = null;
     if (noteLastFocus && document.contains(noteLastFocus)) { try { noteLastFocus.focus({ preventScroll: true }); } catch (e) {} }
     noteLastFocus = null;
   }
 
+  // 一段的心得和標籤：三列版型裡點那一列（圓圈以外的地方）打開，心得本裡點某一段也會打開
+  var sessSheet = $("sessSheet"), ssMsg = $("ssMsg"), sessKey = null, sessLast = null;
+  function ssCount() { $("ssCount").textContent = ssMsg.value.length + " / " + NOTE_MAX; }
+  function openSess(i, code) {
+    var d = days[i], key = d.id + code, editable = canEdit();
+    var cd = CODES.filter(function (c) { return c[0] === code; })[0];
+    sessKey = key;
+    sessLast = document.activeElement;
+    $("ssTitle").textContent = "第" + pad(d.n) + "天・" + (code === "x" ? "補充" : cd[2]);
+    var sn = state.notes[key];
+    ssMsg.value = sn ? sn.t : "";
+    $("ssAt").textContent = sn && sn.at ? atLabel(sn.at) + " 寫" : "";
+    ssMsg.readOnly = !editable;
+    $("ssDone").checked = isDone(key);
+    $("ssDone").disabled = !editable;
+    ssCount();
+    renderSessTags();
+    sessSheet.hidden = false;
+    try { (editable ? ssMsg : $("ssOk")).focus({ preventScroll: true }); } catch (e) {}
+  }
+  function renderSessTags() {
+    var box = $("ssTags"), tg = markTags(sessKey);
+    box.textContent = "";
+    tagList().forEach(function (t) {
+      var b = el("button", "tpill tc" + tagColor(t), t.n);
+      b.type = "button";
+      b.setAttribute("aria-pressed", tg.indexOf(t.id) >= 0 ? "true" : "false");
+      b.disabled = !canEdit();
+      b.addEventListener("click", function () { saveSessMsg(); toggleTag(sessKey, t.id); renderSessTags(); });
+      box.appendChild(b);
+    });
+  }
+  function saveSessMsg() {
+    if (!sessKey || ssMsg.readOnly) return;
+    setNote(sessKey, ssMsg.value.replace(/\s+$/, "").slice(0, NOTE_MAX));
+  }
+  function closeSess() {
+    if (sessSheet.hidden) return;
+    saveSessMsg();
+    sessSheet.hidden = true;
+    sessKey = null;
+    if (sessLast && document.contains(sessLast)) { try { sessLast.focus({ preventScroll: true }); } catch (e) {} }
+    sessLast = null;
+  }
+
+  /* ---------- 版型：橫排或三列，換了就重排清單 ---------- */
+  function paintLayoutPick() {
+    document.querySelectorAll("[data-layout-pick]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-layout-pick") === layout ? "true" : "false");
+    });
+  }
+  document.querySelectorAll("[data-layout-pick]").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var v = b.getAttribute("data-layout-pick");
+      if (v === layout) return;
+      layout = v;
+      try { localStorage.setItem(LS_LAYOUT, v); } catch (e) {}
+      paintLayoutPick();
+      build();
+      paint();
+    });
+  });
+  paintLayoutPick();
+
   var notesScreen = $("notesScreen");
   function renderNotes() {
     var list = $("notesList"), n = 0;
     list.textContent = "";
     days.forEach(function (d) {
-      var note = state.notes[d.id];
-      if (!note) return;
+      var note = state.notes[d.id], ents = [];
+      CODES.forEach(function (cd) {
+        var sn = state.notes[d.id + cd[0]];
+        if (sn) ents.push({ lab: cd[0] === "x" ? "補充" : cd[2], n: sn, open: function () { openSess(d.i, cd[0]); } });
+      });
+      if (note) ents.push({ lab: ents.length ? "整天" : "", n: note, open: function () { openNote(d.i); } });
+      if (!ents.length) return;
       n++;
       var li = el("li");
-      var b = el("button", "note-card");
-      b.type = "button";
+      var card = el("div", "note-card");
       var head = el("span", "note-head");
       head.appendChild(dayLabel(d, el("span", "note-day")));
-      if (note.at) head.appendChild(el("span", "note-at", atLabel(note.at)));
-      b.appendChild(head);
-      b.appendChild(el("span", "note-text", note.t));
-      b.addEventListener("click", function () { openNote(d.i); });
-      li.appendChild(b);
+      card.appendChild(head);
+      ents.forEach(function (e) {
+        var b = el("button", "note-entry");
+        b.type = "button";
+        var top = el("span", "note-etop");
+        top.appendChild(el("b", null, e.lab));
+        if (e.n.at) top.appendChild(el("span", "note-at", atLabel(e.n.at)));
+        b.appendChild(top);
+        b.appendChild(el("span", "note-text", e.n.t));
+        b.addEventListener("click", e.open);
+        card.appendChild(b);
+      });
+      li.appendChild(card);
       list.appendChild(li);
     });
     $("notesCount").textContent = n + " 則";
     $("notesEmpty").hidden = n > 0;
     $("notesExport").disabled = n === 0 && !Object.keys(state.marks).length;   // 有心得或標籤就能匯出
   }
-  function openNotes() {
-    $("menuPop").hidden = true;
-    $("menuBtn").setAttribute("aria-expanded", "false");
-    renderNotes();
-    notesScreen.hidden = false;
-    notesScreen.scrollTop = 0;
-    document.documentElement.classList.add("noscroll");
-    try { $("notesBack").focus({ preventScroll: true }); } catch (e) {}
-  }
-  function closeNotes() {
-    notesScreen.hidden = true;
-    document.documentElement.classList.remove("noscroll");
-    try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
-  }
+  function openNotes() { showTab("notes"); }
+  function closeNotes() { showTab("list"); }
   // 網站版：把全部心得存成一個文字檔
   function exportNotes() {
     var t = new Date(), lines = ["信任・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
@@ -1368,7 +1718,10 @@ button { font: inherit; color: inherit; }
       var note = state.notes[d.id], marks = [];
       CODES.forEach(function (cd) {
         var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
-        if (names.length) marks.push(cd[1] + "｜" + names.join("、"));
+        var sn = state.notes[d.id + cd[0]];
+        if (!names.length && !sn) return;
+        marks.push((cd[0] === "x" ? "補充" : cd[2]) + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
+        if (sn) marks.push(sn.t);
       });
       if (!note && !marks.length) return;
       lines.push("第" + pad(d.n) + "天" + (note && note.at ? "（心得 " + atLabel(note.at) + " 寫）" : ""));
@@ -1376,13 +1729,29 @@ button { font: inherit; color: inherit; }
       if (note) lines.push(note.t);
       lines.push("");
     });
-    var blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/plain;charset=utf-8" });
-    var a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = "信任心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt";
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    saveTextFile("信任心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt", "\ufeff" + lines.join("\n"));
+  }
+  // 存成檔案：在 Claude 裡用 Claude 的下載（會先問要不要存），網站版直接下載
+  var downloadsP = window.claude && window.claude.use ? window.claude.use("downloads").catch(function () { return null; }) : Promise.resolve(null);
+  function saveTextFile(name, text) {
+    downloadsP.then(function (dl) {
+      if (dl) {
+        dl.save({ filename: name, data: text }).catch(function (err) {
+          var code = err && err.code;
+          if (code === "declined") return;                       // 自己按了不要
+          if (code === "rate_limited") { setStatus("已經有一個存檔視窗開著，等一下再按一次「匯出」。", true); return; }
+          setStatus("這裡沒辦法存檔，可以改用網站版匯出。", true);
+        });
+        return;
+      }
+      var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      var a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = name;
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1500);
+    });
   }
 
   /* ---------- 加到手機桌面（只在網站版出現；做法和好好呼吸一樣） ---------- */
@@ -1453,8 +1822,10 @@ button { font: inherit; color: inherit; }
     if (!id) markOnly = false;
     paint();
   }
+  var tagFilter = null;   // 標籤分頁：目前只看哪一個標籤
   function renderTagBar() {
     var bar = $("tagBar"), counts = tagCounts(), editable = canEdit();
+    if (tagFilter && !tagById(tagFilter)) tagFilter = null;
     if (markTag && (!tagById(markTag) || !editable)) { markTag = null; markOnly = false; }
     bar.textContent = "";
     tagList().forEach(function (t) {
@@ -1462,12 +1833,15 @@ button { font: inherit; color: inherit; }
       b.type = "button";
       b.appendChild(document.createTextNode(t.n));
       if (counts[t.id]) b.appendChild(el("span", "n", String(counts[t.id])));
-      b.setAttribute("aria-pressed", markTag === t.id ? "true" : "false");
-      b.disabled = !editable;
-      b.addEventListener("click", function () { setMarkTag(markTag === t.id ? null : t.id); });
+      b.setAttribute("aria-pressed", tagFilter === t.id ? "true" : "false");
+      b.addEventListener("click", function () {   // 點標籤：下面只列這個標籤標過的段落，再點一次看全部
+        tagFilter = tagFilter === t.id ? null : t.id;
+        renderTagBar();
+        renderTagIndex();
+      });
       bar.appendChild(b);
     });
-    $("tagHint").hidden = !!markTag || Object.keys(counts).length > 0;
+    $("tagHint").hidden = false;
     $("tagCardEdit").hidden = !editable;
   }
   function addTag(name) {
@@ -1576,7 +1950,7 @@ button { font: inherit; color: inherit; }
     var notes = {};
     Object.keys(rn).forEach(function (k) {
       var v = rn[k];
-      if (/^d\d\d$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
+      if (/^d\d\d[mnex]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
     });
     Object.keys(rr).forEach(function (k) {
       if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
@@ -1729,9 +2103,10 @@ button { font: inherit; color: inherit; }
     schedule();
   }
 
-  function onNote(i, text) {
+  function onNote(i, text) { setNote(days[i].id, text); }
+  function setNote(key, text) {             // key：d01 是一整天的心得，d01m 是第01天早上那一段的
     if (mode !== "cloud" && mode !== "local") return;
-    var key = days[i].id, cur = state.notes[key];
+    var cur = state.notes[key];
     if ((cur ? cur.t : "") === text) return;
     var v = text ? { t: text, at: nowStamp() } : null;
     if (v) state.notes[key] = v; else delete state.notes[key];
@@ -1862,12 +2237,76 @@ button { font: inherit; color: inherit; }
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
     try { r.chks[SESS[nx.s][0]].input.focus({ preventScroll: true }); } catch (e) {}
   });
+  /* ---------- 下方分頁：清單、標籤、心得、進度 ---------- */
+  var tagScreen = $("tagScreen"), curTab = "list";
+  var TAB_SCREENS = { tags: tagScreen, notes: notesScreen, prog: bookScreen };
+  function showTab(t) {
+    if (t !== "list" && !TAB_SCREENS[t]) t = "list";
+    curTab = t;
+    $("menuPop").hidden = true;
+    $("menuBtn").setAttribute("aria-expanded", "false");
+    if (t === "notes") renderNotes();
+    if (t === "tags") renderTagIndex();
+    Object.keys(TAB_SCREENS).forEach(function (k) { TAB_SCREENS[k].hidden = k !== t; });
+    if (t !== "list") TAB_SCREENS[t].scrollTop = 0;
+    document.documentElement.classList.toggle("noscroll", t !== "list");
+    document.querySelectorAll("[data-tab]").forEach(function (b) {
+      var on = b.getAttribute("data-tab") === t;
+      b.classList.toggle("on", on);
+      if (on) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
+    });
+  }
+  document.querySelectorAll("[data-tab]").forEach(function (b) {
+    b.addEventListener("click", function () { showTab(b.getAttribute("data-tab")); });
+  });
+  // 標籤分頁下半：每個標籤標在哪幾段，點一下跳到清單裡那一天
+  function renderTagIndex() {
+    var box = $("tagIndex"), any = false;
+    box.textContent = "";
+    tagList().forEach(function (t) {
+      if (tagFilter && t.id !== tagFilter) return;
+      var hits = [];
+      days.forEach(function (d) {
+        CODES.forEach(function (cd) { if (markTags(d.id + cd[0]).indexOf(t.id) >= 0) hits.push([d, cd]); });
+      });
+      if (!hits.length) return;
+      any = true;
+      var sec = el("section", "tix tc" + tagColor(t));
+      var h = el("h3", "tix-h");
+      h.appendChild(el("span", "tix-dot"));
+      h.appendChild(el("span", null, t.n));
+      h.appendChild(el("span", "tix-n", hits.length + " 段"));
+      sec.appendChild(h);
+      var list = el("div", "tix-list");
+      hits.forEach(function (x) {
+        var d = x[0], cd = x[1];
+        var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + (cd[0] === "x" ? "補充" : cd[2]));
+        b.type = "button";
+        b.addEventListener("click", function () {
+          showTab("list");
+          var r = rows[d.i];
+          if (!r) return;
+          r.li.scrollIntoView({ block: "center" });
+          try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
+        });
+        list.appendChild(b);
+      });
+      sec.appendChild(list);
+      box.appendChild(sec);
+    });
+    $("tagIndexEmpty").hidden = any;
+  }
+
   $("notesOpen").addEventListener("click", openNotes);
   $("notesBack").addEventListener("click", closeNotes);
-  $("notesExport").hidden = !!window.claude;            // 匯出只放在網站版
+  $("notesExport").hidden = false;                       // 網站版直接下載；Claude 裡用 Claude 的下載
+  if (window.claude) downloadsP.then(function (dl) { if (!dl) $("notesExport").hidden = true; });
   $("notesExport").addEventListener("click", exportNotes);
-  noteText.addEventListener("input", noteCount);
   noteSheet.addEventListener("submit", function (ev) { ev.preventDefault(); closeNote(); });
+  sessSheet.addEventListener("submit", function (ev) { ev.preventDefault(); closeSess(); });
+  sessSheet.addEventListener("click", function (ev) { if (ev.target === sessSheet) closeSess(); });
+  ssMsg.addEventListener("input", ssCount);
+  $("ssDone").addEventListener("change", function () { if (sessKey) onToggle(sessKey, $("ssDone").checked); });
   noteSheet.addEventListener("click", function (ev) { if (ev.target === noteSheet) closeNote(); });
   $("tagCardEdit").addEventListener("click", openTagSheet);
   $("markDone").addEventListener("click", function () { setMarkTag(null); });
@@ -1919,15 +2358,17 @@ button { font: inherit; color: inherit; }
     else if (!installSheet.hidden) closeInstall();
     else if (!tagSheet.hidden) closeTagSheet();
     else if (!noteSheet.hidden) closeNote();
+    else if (!sessSheet.hidden) closeSess();
     else if (!notesScreen.hidden) closeNotes();
     else if (!bookScreen.hidden) closeBook();
+    else if (!tagScreen.hidden) showTab("list");
     else if (!guideScreen.hidden) closeGuide();
     else if (markTag) setMarkTag(null);
   });
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(false);
   });
-  window.addEventListener("pagehide", function () { closeNote(); flush(false); });
+  window.addEventListener("pagehide", function () { closeNote(); closeSess(); flush(false); });
 
   var use = window.claude && typeof window.claude.use === "function" ? window.claude.use("db") : Promise.resolve(null);
   Promise.resolve(use).then(function (db) {
