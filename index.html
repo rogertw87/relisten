@@ -45,6 +45,7 @@
   --sel: var(--ink);
   --selfg: var(--screen);
   --warn: #b4472e; --seal: #c0432c;
+  --tg0: #1f6f86; --tg1: #b0611a; --tg2: #b5476a; --tg3: #4a7658; --tg4: #6a55a8; --tg5: #8a6d1f;   /* 標籤顏色 */
   --sans: "Noto Sans TC", "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
@@ -151,8 +152,7 @@ button { font: inherit; color: inherit; }
   font-size: 0.8125rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2);
   padding: 0 4px 8px; border-bottom: 1px solid var(--line);
 }
-.week h2 .range, .week h2 .wcnt { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
-.week h2 .wcnt { margin-left: auto; }
+.week h2 .range { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
 .week ol { list-style: none; margin: 0; padding: 0; }
 .day {
   display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px;
@@ -324,6 +324,66 @@ button { font: inherit; color: inherit; }
 .install-go { min-height: 52px; border: none; border-radius: 16px; background: var(--sel); color: var(--selfg); font-size: 1rem; font-weight: 500; cursor: pointer; }
 .install-ok { min-height: 48px; border: 1px solid var(--line); border-radius: 16px; background: none; color: var(--ink); font-size: 0.9375rem; cursor: pointer; }
 
+/* 標籤 */
+.tc0 { --tc: var(--tg0); } .tc1 { --tc: var(--tg1); } .tc2 { --tc: var(--tg2); }
+.tc3 { --tc: var(--tg3); } .tc4 { --tc: var(--tg4); } .tc5 { --tc: var(--tg5); }
+.tagcard {
+  padding: 16px 20px 18px; border-radius: 20px; background: var(--soft); border: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 12px;
+}
+.tagcard-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.tagcard-head h2 { margin: 0; font-size: 0.875rem; font-weight: 500; letter-spacing: .08em; color: var(--ink-2); }
+.tagcard-head .linkbtn { font-size: 0.8125rem; min-height: 32px; }
+.tagbar { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag-hint { margin: 0; font-size: 0.8125rem; line-height: 1.6; color: var(--muted-2); }
+.tpill {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 34px; padding: 0 12px;
+  border-radius: 17px; border: 1px solid var(--line-2); background: var(--card);
+  color: var(--ink); font: inherit; font-size: 0.8125rem; line-height: 1; white-space: nowrap; cursor: pointer;
+}
+.tpill::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--tc); }
+.tpill .n { font: 400 0.75rem var(--mono); color: var(--muted-2); }
+.tpill[aria-pressed="true"] { background: var(--tc); border-color: var(--tc); color: var(--page); }
+.tpill[aria-pressed="true"]::before { background: var(--page); }
+.tpill[aria-pressed="true"] .n { color: inherit; opacity: .85; }
+.tpill:disabled { cursor: default; opacity: .6; }
+/* 清單裡的小色點，和標註中的提示列 */
+.chk .tdots { position: absolute; top: 5px; right: 5px; display: flex; gap: 2px; pointer-events: none; }
+.chk .tdots i { width: 6px; height: 6px; border-radius: 50%; background: var(--tc); box-shadow: 0 0 0 1px var(--card); }
+.chk.on .tdots i { box-shadow: 0 0 0 1px var(--sel); }
+.weeks.marking .chk.tagged { border-color: var(--tc); box-shadow: 0 0 0 1.5px var(--tc); }
+.weeks.marking .chk.tagged:not(.on) { background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
+.markbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 6px 12px; padding: 8px 10px 8px 12px;
+  border-radius: 12px; border: 1px solid var(--tc); background: color-mix(in srgb, var(--tc) 8%, var(--page));
+  font-size: 0.8125rem; color: var(--ink);
+}
+.markbar[hidden] { display: none; }
+.markbar-txt { flex: 1 1 12em; min-width: 0; display: inline-flex; align-items: center; gap: 8px; }
+.markbar-txt::before { content: ""; flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--tc); }
+.markbar .hide { color: var(--muted); }
+.markbar .btn { min-height: 32px; }
+
+/* 編輯標籤視窗 */
+.award.tag-panel { max-width: 400px; align-items: stretch; text-align: left; gap: 14px; }
+.award.tag-panel .aw-title { text-align: center; }
+.tglist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.tgrow { display: flex; align-items: center; gap: 10px; }
+.tgrow .dot { flex: none; width: 10px; height: 10px; border-radius: 50%; background: var(--tc); }
+.tgrow input, .tgadd input {
+  flex: 1 1 auto; min-width: 0; min-height: 40px; padding: 6px 10px;
+  font: inherit; font-size: 1rem; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 10px;
+}
+.tgn { flex: none; min-width: 2.8em; font: 400 0.75rem var(--mono); color: var(--muted-2); text-align: right; }
+.tgdel {
+  flex: none; min-height: 40px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line);
+  background: none; color: var(--muted); font: inherit; font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
+}
+.tgdel.confirm { border-color: var(--warn); color: var(--warn); }
+.tg-empty { margin: 0; font-size: 0.875rem; color: var(--muted-2); }
+.tgadd { display: flex; gap: 8px; }
+
 /* 新印章、獎勵設定的彈出視窗 */
 .award-bg {
   position: fixed; inset: 0; z-index: 30; background: rgba(6,16,21,.55);
@@ -414,6 +474,12 @@ button { font: inherit; color: inherit; }
     </div>
   </section>
 
+  <section class="tagcard" aria-labelledby="tagCardTitle">
+    <div class="tagcard-head"><h2 id="tagCardTitle">標籤</h2><button type="button" class="linkbtn" id="tagCardEdit">編輯標籤</button></div>
+    <div class="tagbar" id="tagBar" role="group" aria-label="選一個標籤來標註"></div>
+    <p class="tag-hint" id="tagHint">選一個標籤，再點清單裡的早、午、晚，就能標上或取消。</p>
+  </section>
+
   <div class="bar">
     <div class="row1">
       <span class="count"><span>已聽</span> <b id="barCount">0</b> <span>/ 186</span></span>
@@ -424,11 +490,16 @@ button { font: inherit; color: inherit; }
       <span class="status" id="status" role="status" aria-live="polite">讀取進度中…</span>
       <label class="hide" for="hideDone"><input type="checkbox" id="hideDone"> 隱藏聽完的天</label>
     </div>
+    <div class="markbar" id="markBar" hidden>
+      <span class="markbar-txt" id="markTxt" aria-live="polite"></span>
+      <label class="hide" for="markOnly"><input type="checkbox" id="markOnly"> 只看已標的</label>
+      <button type="button" class="btn" id="markDone">完成</button>
+    </div>
   </div>
 
   <div class="weeks" id="weeks"></div>
 
-  <p class="foot" id="localNote" hidden>打勾、印章和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。心得可以用心得本的「匯出」另外存一份。</p>
+  <p class="foot" id="localNote" hidden>打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以用心得本的「匯出」另外存一份。</p>
 </main>
 
 <div class="sheet-bg" id="installSheet" hidden>
@@ -474,6 +545,19 @@ button { font: inherit; color: inherit; }
   </div>
 </section>
 
+<div class="award-bg" id="tagSheet" hidden>
+  <div class="award tag-panel" role="dialog" aria-modal="true" aria-labelledby="tgTitle">
+    <h2 class="aw-title" id="tgTitle">編輯標籤</h2>
+    <ul class="tglist" id="tagEditList"></ul>
+    <p class="tg-empty" id="tagEditEmpty" hidden>還沒有標籤。</p>
+    <form class="tgadd" id="tagAddForm">
+      <input type="text" id="tagAddInput" maxlength="12" autocomplete="off" placeholder="新增標籤" aria-label="新增標籤的名稱">
+      <button type="submit" class="mini-btn">新增</button>
+    </form>
+    <button type="button" class="aw-ok" id="tgDone">完成</button>
+  </div>
+</div>
+
 <div class="award-bg" id="sheet" hidden>
   <div class="award" role="dialog" aria-modal="true" aria-labelledby="shTitle" aria-describedby="shSub">
     <span class="aw-small" id="shSmall"></span>
@@ -501,6 +585,11 @@ button { font: inherit; color: inherit; }
   var FIRST = new Date(2026, 6, 1);
   var WD = ["日", "一", "二", "三", "四", "五", "六"];
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
+  var CODES = SESS.concat([["x", "補", "週末補充"]]);   // 可以標註的段落：早、午、晚，週末多一段補充
+  // 標籤：預設這幾個，可以自己新增、改名、刪除；c 是顏色編號（0–5）
+  var DEFAULT_TAGS = [{ id: "t1", n: "呼吸", c: 0 }, { id: "t2", n: "靜坐", c: 1 }, { id: "t3", n: "臣服", c: 2 },
+                      { id: "t4", n: "感恩", c: 3 }, { id: "t5", n: "身體", c: 4 }, { id: "t6", n: "問答", c: 5 }];
+  var TITLE_MAX = 40, TAG_MAX = 12, TAGS_MAX = 30;
   var LS_STATE = "trust-relisten:state";
   var LS_HIDE = "trust-relisten:hide-done";
   var LS_DATES = "trust-relisten:show-dates";
@@ -542,9 +631,11 @@ button { font: inherit; color: inherit; }
   var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
 
   /* ---------- State ---------- */
-  var state = { done: {}, rewards: {}, start: null, notes: {} };   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
+  var state = { done: {}, rewards: {}, start: null, notes: {}, tags: null, marks: {} };   // tags：null 表示用預設標籤；marks：每一段的標籤 { d01m: { tg: [標籤 id] } }   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
+  var markTag = null;              // 正在用來標註的標籤；選了之後，點早、午、晚就是標上或取消這個標籤
+  var markOnly = false;            // 標註時只看已經標了這個標籤的天
   var showDates = false;           // 顯示原本共修的日期（只記在這台裝置）
 
   /* ---------- Build the list once ---------- */
@@ -569,12 +660,20 @@ button { font: inherit; color: inherit; }
     input.disabled = true;
     input.setAttribute("aria-label", "第 " + day.n + " 天（" + md(day.date) + "）" + long);
     input.addEventListener("change", function () { onToggle(key, input.checked); });
+    input.addEventListener("click", function (ev) {
+      if (!markTag) return;
+      ev.preventDefault();             // 標註中：不改打勾，改成標上／取消標籤
+      toggleTag(key, markTag);
+    });
     label.appendChild(input);
     label.appendChild(el("span", "k", short));
     var mark = el("span", "mark");
     mark.setAttribute("aria-hidden", "true");
     label.appendChild(mark);
-    return { key: key, label: label, input: input };
+    var dots = el("span", "tdots");
+    dots.setAttribute("aria-hidden", "true");
+    label.appendChild(dots);
+    return { key: key, label: label, input: input, dots: dots, long: long };
   }
 
   function build() {
@@ -589,8 +688,6 @@ button { font: inherit; color: inherit; }
       var range = el("span", "range", md(a) + "–" + md(b));
       range.hidden = true;
       h.appendChild(range);
-      var wcnt = el("span", "wcnt", "");
-      h.appendChild(wcnt);
       sec.appendChild(h);
       var ol = el("ol");
       list.forEach(function (d) {
@@ -632,7 +729,7 @@ button { font: inherit; color: inherit; }
       all.hidden = true;
       sec.appendChild(all);
       weeksEl.appendChild(sec);
-      weekEls.push({ list: list, wcnt: wcnt, alldone: all, range: range });
+      weekEls.push({ list: list, alldone: all, range: range, sec: sec });
     });
   }
 
@@ -657,8 +754,10 @@ button { font: inherit; color: inherit; }
     var start = parseIso(state.start);
     var todayIdx = start ? dayDiff(new Date(), start) : null;
 
+    renderTagBar();
+    var mt = markTag ? tagById(markTag) : null;
     days.forEach(function (d) {
-      var r = rows[d.i], main = 0;
+      var r = rows[d.i], main = 0, hits = 0;
       Object.keys(r.chks).forEach(function (code) {
         var c = r.chks[code], on = isDone(c.key);
         if (c.input.checked !== on) c.input.checked = on;
@@ -666,7 +765,17 @@ button { font: inherit; color: inherit; }
         c.label.classList.toggle("on", on);
         c.label.classList.toggle("off", !editable);
         if (on) { cnt[code]++; if (code !== "x") main++; }
+        var tg = markTags(c.key), names = tg.map(function (id) { return tagById(id).n; });
+        c.dots.textContent = "";
+        tg.slice(0, 3).forEach(function (id) { c.dots.appendChild(el("i", "tc" + tagColor(tagById(id)))); });
+        var has = !!mt && tg.indexOf(mt.id) >= 0;
+        if (has) hits++;
+        c.label.classList.toggle("tagged", has);
+        var label = "第 " + d.n + " 天" + c.long + (names.length ? "，標籤：" + names.join("、") : "");
+        if (mt) label += "。點一下" + (has ? "取消" : "標上") + "「" + mt.n + "」";
+        c.input.setAttribute("aria-label", label);
       });
+      r.li.hidden = !!mt && markOnly && !hits;
       var done = main === 3;
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
@@ -694,11 +803,20 @@ button { font: inherit; color: inherit; }
       var got = 0;
       w.list.forEach(function (d) { SESS.forEach(function (s) { if (isDone(d.id + s[0])) got++; }); });
       var whole = w.list.length * 3;
-      w.wcnt.textContent = got + " / " + whole;
-      w.alldone.hidden = !(hideDone && got === whole);
+      w.alldone.hidden = !(hideDone && got === whole) || !!(mt && markOnly);
       w.range.hidden = !showDates;
+      w.sec.hidden = !!mt && markOnly && w.list.every(function (d) { return rows[d.i].li.hidden; });
     });
     weeksEl.classList.toggle("hide-done", hideDone);
+    weeksEl.classList.toggle("marking", !!mt);
+    for (var k = 0; k < 6; k++) weeksEl.classList.toggle("tc" + k, !!mt && tagColor(mt) === k);
+    var bar = $("markBar");
+    bar.hidden = !mt;
+    if (mt) {
+      bar.className = "markbar tc" + tagColor(mt);
+      $("markTxt").textContent = "標註「" + mt.n + "」：點早、午、晚標上或取消";
+      $("markOnly").checked = markOnly;
+    }
 
     var nSeal = 0;
     sealEls.forEach(function (s, k) {
@@ -915,7 +1033,7 @@ button { font: inherit; color: inherit; }
     });
     $("notesCount").textContent = n + " 則";
     $("notesEmpty").hidden = n > 0;
-    $("notesExport").disabled = n === 0;
+    $("notesExport").disabled = n === 0 && !Object.keys(state.marks).length;   // 有心得或標籤就能匯出
   }
   function openNotes() {
     $("menuPop").hidden = true;
@@ -935,10 +1053,16 @@ button { font: inherit; color: inherit; }
   function exportNotes() {
     var t = new Date(), lines = ["信任・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
     days.forEach(function (d) {
-      var note = state.notes[d.id];
-      if (!note) return;
-      lines.push("第" + pad(d.n) + "天" + (note.at ? "（" + atLabel(note.at) + " 寫）" : ""));
-      lines.push(note.t, "");
+      var note = state.notes[d.id], marks = [];
+      CODES.forEach(function (cd) {
+        var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
+        if (names.length) marks.push(cd[1] + "｜" + names.join("、"));
+      });
+      if (!note && !marks.length) return;
+      lines.push("第" + pad(d.n) + "天" + (note && note.at ? "（心得 " + atLabel(note.at) + " 寫）" : ""));
+      marks.forEach(function (x) { lines.push(x); });
+      if (note) lines.push(note.t);
+      lines.push("");
     });
     var blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/plain;charset=utf-8" });
     var a = document.createElement("a");
@@ -994,6 +1118,116 @@ button { font: inherit; color: inherit; }
     try { $("menuBtn").focus({ preventScroll: true }); } catch (e) {}
   }
 
+  /* ---------- 標籤：在首頁選一個標籤，再點清單裡的早、午、晚標上或取消 ---------- */
+  function canEdit() { return mode === "cloud" || mode === "local"; }
+  function tagList() { return state.tags || DEFAULT_TAGS; }
+  function tagById(id) { var l = tagList(); for (var i = 0; i < l.length; i++) if (l[i].id === id) return l[i]; return null; }
+  function tagColor(t) {
+    if (!t) return 0;
+    if (typeof t.c === "number") return ((t.c % 6) + 6) % 6;
+    return Math.max(0, tagList().indexOf(t)) % 6;
+  }
+  function markTags(key) {   // 這一段的標籤（略過已經刪掉的）
+    var m = state.marks[key];
+    return m ? m.tg.filter(function (id) { return !!tagById(id); }) : [];
+  }
+  function tagCounts() {
+    var counts = {};
+    Object.keys(state.marks).forEach(function (k) { markTags(k).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; }); });
+    return counts;
+  }
+  function setMarkTag(id) {
+    markTag = id;
+    if (!id) markOnly = false;
+    paint();
+  }
+  function renderTagBar() {
+    var bar = $("tagBar"), counts = tagCounts(), editable = canEdit();
+    if (markTag && (!tagById(markTag) || !editable)) { markTag = null; markOnly = false; }
+    bar.textContent = "";
+    tagList().forEach(function (t) {
+      var b = el("button", "tpill tc" + tagColor(t));
+      b.type = "button";
+      b.appendChild(document.createTextNode(t.n));
+      if (counts[t.id]) b.appendChild(el("span", "n", String(counts[t.id])));
+      b.setAttribute("aria-pressed", markTag === t.id ? "true" : "false");
+      b.disabled = !editable;
+      b.addEventListener("click", function () { setMarkTag(markTag === t.id ? null : t.id); });
+      bar.appendChild(b);
+    });
+    $("tagHint").hidden = !!markTag || Object.keys(counts).length > 0;
+    $("tagCardEdit").hidden = !editable;
+  }
+  function addTag(name) {
+    name = String(name || "").trim().slice(0, TAG_MAX);
+    if (!name) return null;
+    var list = tagList();
+    for (var i = 0; i < list.length; i++) if (list[i].n === name) return list[i].id;
+    if (list.length >= TAGS_MAX) return null;
+    var used = list.map(tagColor), c = 0, best = Infinity;
+    for (var k = 0; k < 6; k++) {
+      var n = used.filter(function (x) { return x === k; }).length;
+      if (n < best) { best = n; c = k; }
+    }
+    var id = "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5);
+    setTags(list.concat([{ id: id, n: name, c: c }]));
+    return id;
+  }
+  function renameTag(id, name) {
+    setTags(tagList().map(function (t) { return t.id === id ? { id: t.id, n: name, c: tagColor(t) } : t; }));
+  }
+  function deleteTag(id) {
+    setTags(tagList().filter(function (t) { return t.id !== id; }));
+  }
+  function toggleTag(key, id) {
+    var m = state.marks[key], tg = markTags(key), has = tg.indexOf(id) >= 0;
+    setMark(key, has ? tg.filter(function (x) { return x !== id; }) : tg.concat([id]), m ? m.ti : "");
+  }
+
+  /* ---------- 編輯標籤：改名、刪除、新增 ---------- */
+  var tagSheet = $("tagSheet");
+  function renderTagEdit() {
+    var ul = $("tagEditList"), counts = tagCounts();
+    ul.textContent = "";
+    tagList().forEach(function (t) {
+      var li = el("li", "tgrow tc" + tagColor(t));
+      li.appendChild(el("span", "dot"));
+      var inp = document.createElement("input");
+      inp.type = "text";
+      inp.value = t.n;
+      inp.maxLength = TAG_MAX;
+      inp.setAttribute("aria-label", "標籤名稱：" + t.n);
+      inp.addEventListener("change", function () {
+        var v = inp.value.trim().slice(0, TAG_MAX);
+        if (!v || v === t.n) { inp.value = t.n; return; }
+        renameTag(t.id, v);
+      });
+      li.appendChild(inp);
+      li.appendChild(el("span", "tgn", counts[t.id] ? counts[t.id] + " 段" : ""));
+      var del = el("button", "tgdel", "刪除");
+      del.type = "button";
+      del.addEventListener("click", function () {
+        if (!del.classList.contains("confirm")) { del.classList.add("confirm"); del.textContent = "確定刪除"; return; }
+        deleteTag(t.id);
+        renderTagEdit();
+      });
+      li.appendChild(del);
+      ul.appendChild(li);
+    });
+    $("tagEditEmpty").hidden = tagList().length > 0;
+  }
+  function openTagSheet() {
+    renderTagEdit();
+    tagSheet.hidden = false;
+    try { $("tgDone").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeTagSheet() {
+    var a = document.activeElement;
+    if (a && tagSheet.contains(a) && a.tagName === "INPUT") a.blur();   // 正在改的名字也存起來
+    tagSheet.hidden = true;
+    try { $("tagCardEdit").focus({ preventScroll: true }); } catch (e) {}
+  }
+
   /* ---------- Status line ---------- */
   var statusEl = $("status");
   function setStatus(text, warn, action) {
@@ -1011,10 +1245,11 @@ button { font: inherit; color: inherit; }
   var ref = null, docExists = false, lastRemote = {};
   var pending = newPatch(), inflight = null, writing = false, timer = null, failed = false;
 
-  function newPatch() { return { done: {}, rewards: {}, notes: {} }; }
+  function newPatch() { return { done: {}, rewards: {}, notes: {}, marks: {} }; }
   function hasPending() {
     return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 ||
-      Object.keys(pending.notes).length > 0 || "start" in pending;
+      Object.keys(pending.notes).length > 0 || Object.keys(pending.marks).length > 0 ||
+      "start" in pending || "tags" in pending;
   }
 
   function applyRemote(data) {
@@ -1034,18 +1269,45 @@ button { font: inherit; color: inherit; }
     Object.keys(rr).forEach(function (k) {
       if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
     });
+    var tags = null;
+    if (Array.isArray(lastRemote.tags)) {
+      tags = [];
+      lastRemote.tags.forEach(function (t) {
+        if (t && typeof t.id === "string" && typeof t.n === "string" && t.n.trim() && tags.length < TAGS_MAX)
+          tags.push({ id: t.id.slice(0, 24), n: t.n.trim().slice(0, TAG_MAX), c: typeof t.c === "number" ? t.c : tags.length });
+      });
+    }
+    var rm = lastRemote.marks && typeof lastRemote.marks === "object" ? lastRemote.marks : {};
+    var marks = {};
+    Object.keys(rm).forEach(function (k) {
+      var v = rm[k];
+      if (!/^d\d\d[mnex]$/.test(k) || !v || typeof v !== "object") return;
+      var tg = Array.isArray(v.tg) ? v.tg.filter(function (x) { return typeof x === "string"; }).slice(0, TAGS_MAX) : [];
+      var ti = typeof v.ti === "string" ? v.ti.slice(0, TITLE_MAX) : "";
+      if (tg.length || ti) marks[k] = { tg: tg, ti: ti };
+    });
     [inflight, pending].forEach(function (p) {
       if (!p) return;
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
       Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
       if ("start" in p) start = p.start;
       Object.keys(p.notes).forEach(function (k) { if (p.notes[k]) notes[k] = p.notes[k]; else delete notes[k]; });
+      Object.keys(p.marks).forEach(function (k) { if (p.marks[k]) marks[k] = p.marks[k]; else delete marks[k]; });
+      if ("tags" in p) tags = p.tags;
     });
     state.done = done;
     state.rewards = rewards;
     state.start = start;
     state.notes = notes;
+    state.tags = tags;
+    state.marks = marks;
     paint();
+  }
+
+  function fullMarks() {
+    var out = {};
+    Object.keys(state.marks).forEach(function (k) { if (state.marks[k]) out[k] = state.marks[k]; });
+    return out;
   }
 
   function fullNotes() {
@@ -1072,8 +1334,11 @@ button { font: inherit; color: inherit; }
     if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
     if ("start" in patch) body.start = patch.start;
     if (Object.keys(patch.notes).length) body.notes = patch.notes;
+    if (Object.keys(patch.marks).length) body.marks = patch.marks;
+    if ("tags" in patch) body.tags = patch.tags;
     var whole = function () {
-      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes() }).then(function () { docExists = true; });
+      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes(), tags: state.tags, marks: fullMarks() })
+        .then(function () { docExists = true; });
     };
     if (!docExists) return whole();
     return ref.update(body).catch(function (e) {
@@ -1109,6 +1374,10 @@ button { font: inherit; color: inherit; }
       var mergedN = {}; Object.keys(back.notes).forEach(function (k) { mergedN[k] = back.notes[k]; });
       Object.keys(pending.notes).forEach(function (k) { mergedN[k] = pending.notes[k]; });
       pending.notes = mergedN;
+      var mergedM = {}; Object.keys(back.marks).forEach(function (k) { mergedM[k] = back.marks[k]; });
+      Object.keys(pending.marks).forEach(function (k) { mergedM[k] = pending.marks[k]; });
+      pending.marks = mergedM;
+      if ("tags" in back && !("tags" in pending)) pending.tags = back.tags;
       var code = e && e.code;
       if (code === "invalid_argument" || code === "transform_error") {
         pending = newPatch();
@@ -1125,7 +1394,9 @@ button { font: inherit; color: inherit; }
   }
 
   function saveLocal() {
-    try { localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes() })); } catch (e) {}
+    try {
+      localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
+    } catch (e) {}
   }
 
   function onToggle(key, on) {
@@ -1155,6 +1426,31 @@ button { font: inherit; color: inherit; }
     paint();
     if (mode === "local") { saveLocal(); return; }
     pending.notes[key] = v;
+    setStatus("儲存中…");
+    schedule();
+  }
+
+  function setMark(key, tg, ti) {
+    if (!canEdit()) return;
+    var cur = state.marks[key], curTg = cur ? markTags(key) : [], curTi = cur ? cur.ti : "";
+    ti = ti || "";
+    if (curTi === ti && curTg.join() === tg.join()) return;
+    var v = tg.length || ti ? { tg: tg.slice(), ti: ti } : null;
+    if (v) state.marks[key] = v; else delete state.marks[key];
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.marks[key] = v;
+    setStatus("儲存中…");
+    schedule();
+  }
+
+  function setTags(list) {
+    if (!canEdit()) return;
+    state.tags = list.map(function (t) { return { id: t.id, n: t.n, c: tagColor(t) }; });
+    if (markTag && !tagById(markTag)) { markTag = null; markOnly = false; }
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.tags = state.tags;
     setStatus("儲存中…");
     schedule();
   }
@@ -1248,6 +1544,7 @@ button { font: inherit; color: inherit; }
   $("nextBtn").addEventListener("click", function () {
     var nx = nextIndex();
     if (!nx) return;
+    if (markTag) setMarkTag(null);
     var r = rows[nx.i];
     var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
@@ -1260,6 +1557,16 @@ button { font: inherit; color: inherit; }
   noteText.addEventListener("input", noteCount);
   noteSheet.addEventListener("submit", function (ev) { ev.preventDefault(); closeNote(); });
   noteSheet.addEventListener("click", function (ev) { if (ev.target === noteSheet) closeNote(); });
+  $("tagCardEdit").addEventListener("click", openTagSheet);
+  $("markDone").addEventListener("click", function () { setMarkTag(null); });
+  $("markOnly").addEventListener("change", function (ev) { markOnly = ev.target.checked; paint(); });
+  $("tgDone").addEventListener("click", closeTagSheet);
+  tagSheet.addEventListener("click", function (ev) { if (ev.target === tagSheet) closeTagSheet(); });
+  $("tagAddForm").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    var inp = $("tagAddInput");
+    if (addTag(inp.value)) { inp.value = ""; renderTagEdit(); }
+  });
   $("bookOpen").addEventListener("click", openBook);
   $("installItem").hidden = !!window.claude || isStandalone();   // Claude 裡、或已經從桌面打開時不顯示
   $("installItem").addEventListener("click", openInstall);
@@ -1296,9 +1603,11 @@ button { font: inherit; color: inherit; }
     if (ev.key !== "Escape") return;
     if (!sheet.hidden) closeSheet();
     else if (!installSheet.hidden) closeInstall();
+    else if (!tagSheet.hidden) closeTagSheet();
     else if (!noteSheet.hidden) closeNote();
     else if (!notesScreen.hidden) closeNotes();
     else if (!bookScreen.hidden) closeBook();
+    else if (markTag) setMarkTag(null);
   });
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "hidden") flush(false);
