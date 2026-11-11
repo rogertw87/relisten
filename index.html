@@ -25,32 +25,33 @@
    Layout: one 480px column like that site. Title, a summary card, a sticky progress strip, then ten week
    groups of day rows; each row has the day number on the left and a four-slot strip of session checks on the right. */
 :root {
-  --ink: #15303a;
-  --ink-2: #2f6475;
-  --muted: #4a6872;
-  --muted-2: #5d7f8a;
-  --accent: #1f6f86;
-  --accent-2: #3f8fa6;
-  --line: #d9e8ec;
-  --line-2: #cfe2e8;
-  --line-3: #e6f0f3;
-  --soft: #f4f9fa;
-  --soft-2: #e2eff2;
-  --chip: #e3f0f3;
-  --screen: #eef4f5;
+  /* 預設主題「淺色」：清晰淺色（文字、框線都加深，對比比較高） */
+  --ink: #06171d;
+  --ink-2: #0a3c4c;
+  --muted: #1d3a44;
+  --muted-2: #2a4a55;
+  --accent: #0a5468;
+  --accent-2: #0a5468;
+  --line: #8eabb4;
+  --line-2: #6f929d;
+  --line-3: #bcd1d7;
+  --soft: #eef5f7;
+  --soft-2: #d3e5ea;
+  --chip: #d3e5ea;
+  --screen: #e6f0f2;
   --page: #ffffff;
   --card: #ffffff;
-  --track: #c3dbe2;
-  --shadow: rgba(21,48,58,.15);
-  --sel: var(--ink);
-  --selfg: var(--screen);
+  --track: #8fb3bd;
+  --shadow: rgba(21,48,58,.18);
+  --sel: #06171d;
+  --selfg: #ffffff;
   --warn: #b4472e; --seal: #c0432c;
-  --tg0: #1f6f86; --tg1: #b0611a; --tg2: #b5476a; --tg3: #4a7658; --tg4: #6a55a8; --tg5: #8a6d1f;   /* 標籤顏色 */
+  --tg0: #0a5468; --tg1: #8a4510; --tg2: #93284f; --tg3: #2c573a; --tg4: #4b378c; --tg5: #664e0c;   /* 標籤顏色 */
   --sans: "Noto Sans TC", "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
   --sealw: clamp(46px, 13vw, 58px);
-  --chipw: clamp(40px, 11.5vw, 48px);
+  --chipw: clamp(42px, calc(25vw - 48px), 60px);   /* 早午晚的寬度：留給左邊「重聽 11/26 週四」一行的空間，其餘都給打勾格 */
   color-scheme: light;
 }
 
@@ -155,7 +156,7 @@ button { font: inherit; color: inherit; }
 .week h2 .range { font: 400 0.75rem var(--mono); letter-spacing: 0; color: var(--muted-2); }
 .week ol { list-style: none; margin: 0; padding: 0; }
 .day {
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px;
   padding: 12px 4px; border-bottom: 1px solid var(--line);
   scroll-margin-top: 7rem;
 }
@@ -171,13 +172,13 @@ button { font: inherit; color: inherit; }
 .dates .sub { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: 0.8125rem; color: var(--muted-2); }
 .dates .sub:empty { display: none; }
 .tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
-.day.done .info { opacity: .5; }
+.day.done .info { opacity: .8; }
 
 .checks { display: grid; grid-template-columns: repeat(4, var(--chipw)); gap: 6px; }
 .chk {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
   width: var(--chipw); height: 50px;
-  border: 1px solid var(--line-2); border-radius: 12px;
+  border: 1.5px solid var(--line-2); border-radius: 12px;
   background: var(--card); color: var(--muted);
   cursor: pointer; user-select: none; -webkit-user-select: none;
   transition: background-color .12s ease, border-color .12s ease, color .12s ease;
@@ -185,7 +186,7 @@ button { font: inherit; color: inherit; }
 .chk.x { border-style: dashed; }
 .chk input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .chk .k { font-size: 0.875rem; line-height: 1; }
-.chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--track); }
+.chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--muted-2); }
 .chk.on { background: var(--sel); border-color: var(--sel); border-style: solid; color: var(--selfg); }
 .chk.on .k { font-weight: 500; }
 .chk.on .mark {
@@ -201,6 +202,22 @@ button { font: inherit; color: inherit; }
 .week .alldone { margin: 0; padding: 12px 4px; color: var(--muted-2); font-size: 0.8125rem; border-bottom: 1px solid var(--line); }
 
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
+
+/* 選單裡的「主題」：淺色、夜間、黑白 */
+.menu-theme { min-width: 210px; padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+.menu-item + .menu-theme { border-top: 1px solid var(--line); margin-top: 4px; }
+.menu-theme-title { font-size: 0.75rem; color: var(--muted); }
+.menu-theme-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.menu-theme-opt {
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  min-height: 38px; padding: 0 4px; border-radius: 10px; border: 1.5px solid var(--line-2); background: var(--card);
+  color: var(--ink); font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
+}
+.menu-theme-opt[aria-pressed="true"] { background: var(--sel); color: var(--selfg); border-color: var(--sel); }
+.menu-theme-opt .sw { flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--line-2); }
+.sw.sw-a { background: #ffffff; border: 3px solid #0a5468; }
+.sw.sw-b { background: radial-gradient(circle, #ffd447 0 38%, #000000 41%); }
+.sw.sw-c { background: linear-gradient(90deg, #000000 50%, #ffffff 50%); }
 
 /* 選單裡的「印章冊」 */
 .menu-item {
@@ -348,9 +365,16 @@ button { font: inherit; color: inherit; }
 .tpill[aria-pressed="true"] .n { color: inherit; opacity: .85; }
 .tpill:disabled { cursor: default; opacity: .6; }
 /* 清單裡的小色點，和標註中的提示列 */
-.chk .tdots { position: absolute; top: 5px; right: 5px; display: flex; gap: 2px; pointer-events: none; }
-.chk .tdots i { width: 6px; height: 6px; border-radius: 50%; background: var(--tc); box-shadow: 0 0 0 1px var(--card); }
-.chk.on .tdots i { box-shadow: 0 0 0 1px var(--sel); }
+/* 標了標籤的段落：標籤名稱寫在那一格的正下方，沒標的天高度不變 */
+.day.has-tn { align-items: start; }
+.day.has-tn .info { min-height: 50px; }
+.checks .tn { grid-row: 2; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.tname {
+  display: block; padding: 2px 2px; border-radius: 6px; text-align: center;
+  background: color-mix(in srgb, var(--tc) 12%, var(--card)); color: var(--tc);
+  font-size: 0.6875rem; font-weight: 500; line-height: 1.4;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
 .weeks.marking .chk.tagged { border-color: var(--tc); box-shadow: 0 0 0 1.5px var(--tc); }
 .weeks.marking .chk.tagged:not(.on) { background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
 .markbar {
@@ -411,6 +435,11 @@ button { font: inherit; color: inherit; }
 .g-chip.on .o { width: 10px; height: 6px; border: 0; border-radius: 0; border-left: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: translateY(-2px) rotate(-45deg); }
 .g-chip.ring { border-color: var(--tc); box-shadow: 0 0 0 1.5px var(--tc); background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
 .g-chip .dt { position: absolute; top: 4px; right: 4px; width: 5px; height: 5px; border-radius: 50%; background: var(--tc); }
+.g-chips { align-items: flex-start; }
+.g-row.g-top { align-items: flex-start; }
+.g-row.g-top .g-day { line-height: 42px; }
+.g-cell { display: flex; flex-direction: column; gap: 4px; }
+.g-tn { padding: 1px 2px; border-radius: 5px; text-align: center; font-size: 0.625rem; font-weight: 500; line-height: 1.45; color: var(--tc); background: color-mix(in srgb, var(--tc) 12%, var(--card)); }
 .g-tap {
   position: absolute; left: 62%; top: 66%; width: 26px; height: 26px; margin: -13px 0 0 -13px; border-radius: 50%;
   background: color-mix(in srgb, var(--accent) 26%, transparent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
@@ -525,6 +554,7 @@ button { font: inherit; color: inherit; }
 }
 
 @media (max-width: 22.5rem) {
+  :root { --chipw: clamp(40px, calc(25vw - 46px), 44px); }
   .dates .orig { font-size: 1rem; }
   .checks { gap: 4px; }
 }
@@ -532,7 +562,37 @@ button { font: inherit; color: inherit; }
   .track > i, .chk, .seal { transition: none; }
   .aw-stamp.stamping { animation: none; }
 }
+
+/* ---------- 主題「夜間」：夜間高對比，黑底白字、打勾變黃色 ---------- */
+:root[data-look="night"] {
+  --ink: #ffffff; --ink-2: #e8f4f7; --muted: #d6e3e7; --muted-2: #c3d4d9;
+  --accent: #ffd447; --accent-2: #ffd447;
+  --line: #5d7680; --line-2: #9db3ba; --line-3: #33444a;
+  --soft: #10181b; --soft-2: #1e2b30; --chip: #1e2b30; --screen: #000000;
+  --page: #000000; --card: #0a1013; --track: #4a5f66; --shadow: rgba(0,0,0,.7);
+  --sel: #ffd447; --selfg: #000000;
+  --warn: #ff8a70; --seal: #ff7a5c;
+  --tg0: #62d2f0; --tg1: #ffae62; --tg2: #ff92b8; --tg3: #84de9a; --tg4: #c3abff; --tg5: #ffe36e;
+  color-scheme: dark;
+}
+
+/* ---------- 主題「黑白」：黑白分明，只有黑和白、粗框，聽完的天劃一條線 ---------- */
+:root[data-look="bw"] {
+  --ink: #000000; --ink-2: #000000; --muted: #111111; --muted-2: #222222;
+  --accent: #000000; --accent-2: #000000;
+  --line: #555555; --line-2: #000000; --line-3: #999999;
+  --soft: #f2f2f2; --soft-2: #e4e4e4; --chip: #e4e4e4; --screen: #ffffff;
+  --page: #ffffff; --card: #ffffff; --track: #b5b5b5; --shadow: rgba(0,0,0,.25);
+  --sel: #000000; --selfg: #ffffff;
+  --tg0: #004f73; --tg1: #843600; --tg2: #8a0c42; --tg3: #17552a; --tg4: #3a258a; --tg5: #574200;
+}
+:root[data-look="bw"] .chk { border-width: 2px; }
+:root[data-look="bw"] .chk .mark { border-width: 2px; border-color: var(--ink); }
+:root[data-look="bw"] .summary, :root[data-look="bw"] .tagcard { border-color: var(--ink); }
+:root[data-look="bw"] .day.done .info { opacity: 1; }
+:root[data-look="bw"] .day.done .orig { text-decoration: line-through; text-decoration-thickness: 1.5px; }
 </style>
+<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(l==="night"||l==="bw")document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
 </head>
 <body>
 <main class="page home">
@@ -543,6 +603,14 @@ button { font: inherit; color: inherit; }
       <button type="button" class="menu-item" id="bookOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg><span>印章冊</span><span class="menu-n" id="menuSealN">0 / 10</span></button>
       <button type="button" class="menu-item" id="guideOpen"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18a9 9 0 0 0 0 18ZM9.6 9.4a2.5 2.5 0 1 1 3.5 2.3c-.7.3-1.1.9-1.1 1.6v.5M12 16.9h.01"></path></svg><span>使用說明</span></button>
       <button type="button" class="menu-item" id="installItem" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2ZM12 8v7M8.8 11.8 12 15l3.2-3.2"></path></svg><span>加到手機桌面</span></button>
+      <div class="menu-theme" role="group" aria-labelledby="lookTitle">
+        <span class="menu-theme-title" id="lookTitle">主題</span>
+        <div class="menu-theme-opts">
+          <button type="button" class="menu-theme-opt" data-look-pick="" aria-pressed="true"><i class="sw sw-a" aria-hidden="true"></i>淺色</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="night" aria-pressed="false"><i class="sw sw-b" aria-hidden="true"></i>夜間</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="bw" aria-pressed="false"><i class="sw sw-c" aria-hidden="true"></i>黑白</button>
+        </div>
+      </div>
     </div>
   </div>
   <header class="head">
@@ -657,10 +725,10 @@ button { font: inherit; color: inherit; }
         <div class="gpic g-col" aria-hidden="true">
           <span class="g-pills"><span class="g-pill tc0 sel">呼吸<span class="g-tap"></span></span><span class="g-pill tc1">靜坐</span><span class="g-pill tc2">臣服</span></span>
           <svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg>
-          <div class="g-row"><span class="g-day">第<b>03</b>天</span><span class="g-chips"><span class="g-chip ring tc0">早<i class="o"></i><i class="dt tc0"></i><span class="g-tap"></span></span><span class="g-chip">午<i class="o"></i></span><span class="g-chip">晚<i class="o"></i></span></span></div>
+          <div class="g-row g-top"><span class="g-day">第<b>03</b>天</span><span class="g-chips"><span class="g-cell"><span class="g-chip ring tc0">早<i class="o"></i><span class="g-tap"></span></span><span class="g-tn tc0">呼吸</span></span><span class="g-chip">午<i class="o"></i></span><span class="g-chip">晚<i class="o"></i></span></span></div>
         </div>
         <h3>加標籤</h3>
-        <p>在「標籤」卡先點一個標籤，再點早、午、晚，就能標上或取消，這時不會改到打勾。標了的格子右上角有小色點；勾「只看已標的」只看這個標籤，按「完成」回到打勾。標籤可以用「編輯標籤」新增、改名、刪除。</p>
+        <p>在「標籤」卡先點一個標籤，再點早、午、晚，就能標上或取消，這時不會改到打勾。標了的格子下面會寫出標籤名稱；勾「只看已標的」只看這個標籤，按「完成」回到打勾。標籤可以用「編輯標籤」新增、改名、刪除。</p>
       </section>
 
       <section class="gcard">
@@ -689,6 +757,7 @@ button { font: inherit; color: inherit; }
           <li><span class="g-mini" aria-hidden="true"><span class="g-btnline">下一段</span></span><span>跳到第一段還沒聽的地方。</span></li>
           <li><span class="g-mini" aria-hidden="true"><span class="g-box">隱藏聽完的天</span></span><span>清單只留還沒聽完的天。</span></li>
           <li><span class="g-mini" aria-hidden="true"><span class="g-box">顯示共修日期</span></span><span>每天標出原本共修的日期，例如 7/1 週三。</span></li>
+          <li><span class="g-mini" aria-hidden="true"><span class="g-btnline">主題</span></span><span>在「…」選單換主題：淺色、夜間（黑底）、黑白。</span></li>
         </ul>
       </section>
 
@@ -837,10 +906,10 @@ button { font: inherit; color: inherit; }
     var mark = el("span", "mark");
     mark.setAttribute("aria-hidden", "true");
     label.appendChild(mark);
-    var dots = el("span", "tdots");
-    dots.setAttribute("aria-hidden", "true");
-    label.appendChild(dots);
-    return { key: key, label: label, input: input, dots: dots, long: long };
+    var names = el("span", "tn");          // 標籤名稱，排在這一格的正下方
+    names.setAttribute("aria-hidden", "true");
+    names.hidden = true;
+    return { key: key, label: label, input: input, names: names, long: long };
   }
 
   function build() {
@@ -887,6 +956,10 @@ button { font: inherit; color: inherit; }
           var x = makeChk(d, "x", "補", "週末補充");
           chks.x = x; checks.appendChild(x.label);
         }
+        Object.keys(chks).forEach(function (code, i) {
+          chks[code].names.style.gridColumn = String(i + 1);
+          checks.appendChild(chks[code].names);
+        });
         li.appendChild(checks);
         ol.appendChild(li);
         rows[d.i] = { li: li, chks: chks, sub: sub, info: info, nd: nd };
@@ -924,7 +997,7 @@ button { font: inherit; color: inherit; }
     renderTagBar();
     var mt = markTag ? tagById(markTag) : null;
     days.forEach(function (d) {
-      var r = rows[d.i], main = 0, hits = 0;
+      var r = rows[d.i], main = 0, hits = 0, named = false;
       Object.keys(r.chks).forEach(function (code) {
         var c = r.chks[code], on = isDone(c.key);
         if (c.input.checked !== on) c.input.checked = on;
@@ -933,8 +1006,10 @@ button { font: inherit; color: inherit; }
         c.label.classList.toggle("off", !editable);
         if (on) { cnt[code]++; if (code !== "x") main++; }
         var tg = markTags(c.key), names = tg.map(function (id) { return tagById(id).n; });
-        c.dots.textContent = "";
-        tg.slice(0, 3).forEach(function (id) { c.dots.appendChild(el("i", "tc" + tagColor(tagById(id)))); });
+        c.names.textContent = "";
+        tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
+        c.names.hidden = !tg.length;
+        if (tg.length) named = true;
         var has = !!mt && tg.indexOf(mt.id) >= 0;
         if (has) hits++;
         c.label.classList.toggle("tagged", has);
@@ -942,6 +1017,7 @@ button { font: inherit; color: inherit; }
         if (mt) label += "。點一下" + (has ? "取消" : "標上") + "「" + mt.n + "」";
         c.input.setAttribute("aria-label", label);
       });
+      r.li.classList.toggle("has-tn", named);   // 有標籤名稱的天：日期對齊格子那一排，不跟著名稱往下掉
       r.li.hidden = !!mt && markOnly && !hits;
       var done = main === 3;
       if (done) fullDays++;
@@ -1136,6 +1212,32 @@ button { font: inherit; color: inherit; }
   }
   // 第一張說明卡：圈住早、午、晚的框，用一條線連到標題「聽完就打勾」
   var callCard = document.querySelector(".g-call");
+
+  /* ---------- 主題：淺色（預設）、夜間高對比、黑白分明；選擇記在這台裝置 ---------- */
+  var LOOK_KEY = "trust-relisten:look", LOOK_BG = { "": "#ffffff", night: "#000000", bw: "#ffffff" };
+  function applyLook(v) {
+    if (!Object.prototype.hasOwnProperty.call(LOOK_BG, v)) v = "";
+    var root = document.documentElement;
+    if (v) root.setAttribute("data-look", v); else root.removeAttribute("data-look");
+    document.querySelectorAll("[data-look-pick]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-look-pick") === v ? "true" : "false");
+    });
+    var meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute("content", LOOK_BG[v]);
+  }
+  (function () {
+    var v = "";
+    try { v = localStorage.getItem(LOOK_KEY) || ""; } catch (e) {}
+    applyLook(v);
+    document.querySelectorAll("[data-look-pick]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var pick = b.getAttribute("data-look-pick");
+        try { if (pick) localStorage.setItem(LOOK_KEY, pick); else localStorage.removeItem(LOOK_KEY); } catch (e) {}
+        applyLook(pick);
+        drawLead();
+      });
+    });
+  })();
   function drawLead() {
     if (!callCard || guideScreen.hidden) return;
     var c = callCard.getBoundingClientRect();
