@@ -47,6 +47,7 @@
   --selfg: #ffffff;
   --warn: #b4472e; --seal: #c0432c;
   --tg0: #0a5468; --tg1: #8a4510; --tg2: #93284f; --tg3: #2c573a; --tg4: #4b378c; --tg5: #664e0c;   /* 標籤顏色 */
+  --star: #b25e00;   /* 想再聽的星星 */
   --sans: "Noto Sans TC", "PingFang TC", "Noto Sans CJK TC", "Microsoft JhengHei", system-ui, sans-serif;
   --mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --serif: "Noto Serif TC", "Songti TC", "Noto Serif CJK TC", "PMingLiU", serif;
@@ -205,6 +206,42 @@ button { font: inherit; color: inherit; }
   font-size: 0.625rem; font-style: normal; font-weight: 600; line-height: 1; letter-spacing: 0;
 }
 .chk .tb small { font-size: 0.5625rem; font-weight: 600; margin-left: 1px; }
+/* 想再聽：簡化用加粗的框框表示；詳細在「早上」後面一顆小星星 */
+.sb svg { width: 10px; height: 10px; fill: currentColor; }
+/* 想再聽的格子：框框粗細不變，只換成星星的顏色（黑白主題沒有顏色，改成點點的框） */
+.chk.starred, .chk.starred.on { border-color: var(--star); }
+:root[data-look="bw"] .chk.starred { border-style: dotted; }
+:root[data-look="bw"] .chk.starred.on { border-color: var(--card); }
+.g-chip.st { border-color: var(--star); }
+.sbody .k .sb { display: inline-flex; vertical-align: -1px; margin-left: 4px; color: var(--star); }
+.sbody .k .sb svg { width: 13px; height: 13px; }
+.star-btn {
+  display: inline-flex; align-items: center; gap: 4px; min-height: 30px; padding: 0 10px; border-radius: 99px;
+  border: 1px solid var(--line-2); background: var(--card); color: var(--muted); font: inherit; font-size: 0.75rem; cursor: pointer; white-space: nowrap;
+}
+.star-btn svg { width: 13px; height: 13px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.star-btn[aria-pressed="true"] { border-color: var(--star); color: var(--star); background: color-mix(in srgb, var(--star) 10%, var(--card)); }
+.star-btn[aria-pressed="true"] svg { fill: currentColor; }
+.star-btn:disabled { opacity: .5; cursor: default; }
+.star-btn.wide { align-self: flex-start; min-height: 40px; padding: 0 14px; font-size: 0.875rem; }
+.star-btn.wide svg { width: 16px; height: 16px; }
+.star-btn.icon { width: 40px; height: 40px; padding: 0; justify-content: center; border-radius: 12px; flex: none; }
+.star-btn.icon svg { width: 18px; height: 18px; }
+.ns-top .star-btn { margin-right: auto; min-height: 28px; padding: 0 9px; align-self: center; }
+.star-list { display: flex; flex-direction: column; gap: 8px; }
+.star-list:empty { display: none; }
+.star-item { display: flex; align-items: center; gap: 8px; }
+.star-go {
+  flex: 1; min-width: 0; min-height: 44px; padding: 6px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px;
+  border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.star-day { font-size: 0.9375rem; white-space: nowrap; }
+.star-tags { font-size: 0.75rem; color: var(--muted-2); }
+.star-done { margin-left: auto; font-size: 0.6875rem; color: var(--muted-2); white-space: nowrap; }
+.gx-starlist { display: flex; flex-direction: column; gap: 5px; }
+.gx-si { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 110px; padding: 5px 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--card); font-size: 11px; color: var(--ink); }
+.gx-si i { display: flex; color: var(--star); }
+.gx-si svg { width: 11px; height: 11px; fill: currentColor; }
 .chk.on { background: var(--sel); border-color: var(--sel); border-style: solid; color: var(--selfg); }
 .chk.on .k { font-weight: 500; }
 .chk.on .mark {
@@ -795,6 +832,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   --sel: #ffd447; --selfg: #000000;
   --warn: #ff8a70; --seal: #ff7a5c;
   --tg0: #62d2f0; --tg1: #ffae62; --tg2: #ff92b8; --tg3: #84de9a; --tg4: #c3abff; --tg5: #ffe36e;
+  --star: #ff8f5a;
   color-scheme: dark;
 }
 
@@ -807,6 +845,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   --page: #ffffff; --card: #ffffff; --track: #b5b5b5; --shadow: rgba(0,0,0,.25);
   --sel: #000000; --selfg: #ffffff;
   --tg0: #004f73; --tg1: #843600; --tg2: #8a0c42; --tg3: #17552a; --tg4: #3a258a; --tg5: #574200;
+  --star: #000000;
 }
 :root[data-look="bw"] .chk { border-width: 2px; }
 :root[data-look="bw"] .srow:not(.on) .ck .mark, :root[data-look="bw"] .ss-done input:not(:checked) + .mark { border-width: 2px; border-color: var(--ink); }
@@ -929,6 +968,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   <div class="award sess-panel" role="dialog" aria-modal="true" aria-labelledby="ssTitle">
     <h2 class="aw-title" id="ssTitle">第01天・早上</h2>
     <label class="ss-done"><input type="checkbox" id="ssDone"><span class="mark" aria-hidden="true"></span><span>聽完了</span></label>
+    <button type="button" class="star-btn wide" id="ssStar" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg><span>想再聽</span></button>
     <label class="ss-lab" for="ssMsg">心得</label>
     <textarea id="ssMsg" rows="4" maxlength="800" placeholder="這一段聽完有什麼感受？哪一句話留在心裡？"></textarea>
     <div class="note-meta"><span id="ssAt"></span><span id="ssCount">0 / 800</span></div>
@@ -951,6 +991,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np pen"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg><span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-pop"><span class="l"><span>早上</span><i></i></span><span class="gx-pills"><span class="gx-p tc0 sel gx-rel">呼吸<span class="g-tap"></span></span><span class="gx-p tc1">靜坐</span><span class="gx-p tc2">臣服</span></span></span></div><h3>選標籤</h3><p class="cap">在心得視窗裡點一下</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-chip st gx-rel">午</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-starlist"><span class="gx-si">第03天 中午<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span><span class="gx-si">第09天 晚上<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span></span></div><h3>想再聽</h3><p class="cap">在心得視窗點 ☆，框框會換顏色，進度分頁也會列出來</p></section>
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-box"><i></i>隱藏完成的練習</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-chips"><span class="d">第01天</span><span class="gx-c gone">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></div><h3>隱藏完成的練習</h3><p class="cap">聽完的先藏起來</p></section>
 
@@ -988,6 +1029,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         <label class="plan-check" for="showDates"><input type="checkbox" id="showDates"> 顯示共修日期</label>
       </div>
     </section>
+    <div class="book-head sub-head"><h2 id="starTitle">想再聽</h2><span class="book-n" id="starCount">0 段</span></div>
+    <div class="star-list" id="starList" role="list" aria-labelledby="starTitle"></div>
+    <p class="notes-empty" id="starEmpty">在心得視窗裡點「☆ 想再聽」，那一段就會列在這裡，有空再回來聽。</p>
     <div class="book-head sub-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
     <div class="book"><div class="seals" id="seals"></div></div>
   </div>
@@ -1142,7 +1186,13 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     ck.appendChild(mark);
     row.appendChild(ck);
     var body = el("div", "sbody");          // 早上、標籤、心得內容只是文字；要寫心得、選標籤點右邊的「心得」
-    body.appendChild(el("span", "k", sessLabel(day, code)));
+    var k = el("span", "k", sessLabel(day, code));
+    var star = el("span", "sb");           // 想再聽：早上後面一顆小星星
+    star.setAttribute("aria-hidden", "true");
+    star.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg>';
+    star.hidden = true;
+    k.appendChild(star);
+    body.appendChild(k);
     var names = el("span", "tn");          // 標籤名稱，排在這一列的右邊
     names.setAttribute("aria-hidden", "true");
     names.hidden = true;
@@ -1158,7 +1208,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       if (markTag) toggleTag(key, markTag); else openSess(day.i, code);
     });
     row.appendChild(body);
-    return { key: key, label: row, input: input, names: names, msg: msg, np: np, body: body, long: long };
+    return { key: key, label: row, input: input, names: names, msg: msg, np: np, body: body, star: star, long: long };
   }
 
   function makeChk(day, code, short, long) {
@@ -1188,7 +1238,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     badges.setAttribute("aria-hidden", "true");
     badges.hidden = true;
     label.appendChild(badges);
-    return { key: key, label: label, input: input, names: names, badges: badges, long: long };
+    return { key: key, label: label, input: input, names: names, badges: badges, long: long };   // 想再聽：用加粗的框框表示（class starred）
   }
 
   function build() {
@@ -1306,6 +1356,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
           c.badges.hidden = !tg.length;
           c.label.classList.toggle("has-tb", tg.length > 0);
         }
+        var starred = isStar(c.key);
+        if (c.star) c.star.hidden = !starred;
+        c.label.classList.toggle("starred", starred);
         var sn = state.notes[c.key], st = sn ? sn.t : "";
         if (c.msg) {
           if (c.msg.textContent !== st) c.msg.textContent = st;
@@ -1316,7 +1369,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var has = !!mt && tg.indexOf(mt.id) >= 0;
         if (has) hits++;
         c.label.classList.toggle("tagged", has);
-        var label = "第 " + d.n + " 天" + c.long + (names.length ? "，標籤：" + names.join("、") : "");
+        var label = "第 " + d.n + " 天" + c.long + (names.length ? "，標籤：" + names.join("、") : "") + (starred ? "，想再聽" : "");
         if (mt) label += "。點一下" + (has ? "取消" : "標上") + "「" + mt.n + "」";
         if (c.body) {
           c.input.setAttribute("aria-label", label + (mt ? "" : "：聽完打勾"));
@@ -1395,6 +1448,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     $("menuNotesN").textContent = nNotes ? nNotes + " 則" : "";
     if (!notesScreen.hidden) renderNotes();
     if (tagScreen && !tagScreen.hidden) renderTagIndex();
+    renderStars();
 
     // 重聽排程：說明、選單旁的狀態、設定視窗裡的欄位
     var plan = "";
@@ -1627,6 +1681,19 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       var lab = el("label", "ns-lab", p.lab);
       lab.htmlFor = id;
       top.appendChild(lab);
+      if (p.tags) {                              // 這一段想再聽：點一下加星，再點一下取消
+        var sb = el("button", "star-btn");
+        sb.type = "button";
+        sb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg><span>想再聽</span>';
+        sb.setAttribute("aria-label", p.lab + "：想再聽");
+        sb.disabled = !editable;
+        (function (b, key) {
+          var sync = function () { b.setAttribute("aria-pressed", isStar(key) ? "true" : "false"); };
+          sync();
+          b.addEventListener("click", function () { toggleStar(key); sync(); });
+        })(sb, p.key);
+        top.appendChild(sb);
+      }
       top.appendChild(el("span", "note-at", n && n.at ? atLabel(n.at) + " 寫" : ""));
       box.appendChild(top);
       var ta = document.createElement("textarea");
@@ -1691,6 +1758,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     ssMsg.readOnly = !editable;
     $("ssDone").checked = isDone(key);
     $("ssDone").disabled = !editable;
+    $("ssStar").setAttribute("aria-pressed", isStar(key) ? "true" : "false");
+    $("ssStar").disabled = !editable;
     ssCount();
     renderSessTags();
     sessSheet.hidden = false;
@@ -1786,8 +1855,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       dayCodes(d).forEach(function (cd) {
         var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
         var sn = state.notes[d.id + cd[0]];
-        if (!names.length && !sn) return;
-        marks.push(sessLabel(d, cd[0]) + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
+        if (!names.length && !sn && !isStar(d.id + cd[0])) return;
+        marks.push(sessLabel(d, cd[0]) + (isStar(d.id + cd[0]) ? "★" : "") + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
         if (sn) marks.push(sn.t);
       });
       if (!note && !marks.length) return;
@@ -1936,6 +2005,12 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var m = state.marks[key], tg = markTags(key), has = tg.indexOf(id) >= 0;
     setMark(key, has ? tg.filter(function (x) { return x !== id; }) : tg.concat([id]), m ? m.ti : "");
   }
+  // 想再聽：每一段可以加一顆星，進度分頁會列出來
+  function isStar(key) { var m = state.marks[key]; return !!(m && m.st); }
+  function toggleStar(key) {
+    var m = state.marks[key];
+    setMark(key, markTags(key), m ? m.ti : "", !isStar(key));
+  }
 
   /* ---------- 編輯標籤：改名、刪除、新增 ---------- */
   var tagSheet = $("tagSheet");
@@ -2038,7 +2113,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       if (!/^d\d\d[mnexy]$/.test(k) || !v || typeof v !== "object") return;
       var tg = Array.isArray(v.tg) ? v.tg.filter(function (x) { return typeof x === "string"; }).slice(0, TAGS_MAX) : [];
       var ti = typeof v.ti === "string" ? v.ti.slice(0, TITLE_MAX) : "";
-      if (tg.length || ti) marks[k] = { tg: tg, ti: ti };
+      var st = v.st === true;
+      if (tg.length || ti || st) { marks[k] = { tg: tg, ti: ti }; if (st) marks[k].st = true; }
     });
     [inflight, pending].forEach(function (p) {
       if (!p) return;
@@ -2189,12 +2265,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     schedule();
   }
 
-  function setMark(key, tg, ti) {
+  function setMark(key, tg, ti, st) {
     if (!canEdit()) return;
-    var cur = state.marks[key], curTg = cur ? markTags(key) : [], curTi = cur ? cur.ti : "";
+    var cur = state.marks[key], curTg = cur ? markTags(key) : [], curTi = cur ? cur.ti : "", curSt = !!(cur && cur.st);
     ti = ti || "";
-    if (curTi === ti && curTg.join() === tg.join()) return;
-    var v = tg.length || ti ? { tg: tg.slice(), ti: ti } : null;
+    st = st === undefined ? curSt : !!st;   // 沒指定就保留原本的「想再聽」
+    if (curTi === ti && curTg.join() === tg.join() && curSt === st) return;
+    var v = tg.length || ti || st ? { tg: tg.slice(), ti: ti } : null;
+    if (v && st) v.st = true;
     if (v) state.marks[key] = v; else delete state.marks[key];
     paint();
     if (mode === "local") { saveLocal(); return; }
@@ -2343,6 +2421,46 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   document.querySelectorAll("[data-tab]").forEach(function (b) {
     b.addEventListener("click", function () { showTab(b.getAttribute("data-tab")); });
   });
+  // 進度分頁：想再聽的段落，點一下跳到清單裡那一天；右邊的星星可以取消
+  function renderStars() {
+    var box = $("starList"), n = 0, editable = canEdit();
+    box.textContent = "";
+    days.forEach(function (d) {
+      dayCodes(d).forEach(function (cd) {
+        var key = d.id + cd[0];
+        if (!isStar(key)) return;
+        n++;
+        var item = el("div", "star-item");
+        item.setAttribute("role", "listitem");
+        var go = el("button", "star-go");
+        go.type = "button";
+        go.appendChild(el("span", "star-day", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0])));
+        var names = markTags(key).map(function (id) { return tagById(id).n; });
+        if (names.length) go.appendChild(el("span", "star-tags", names.join("、")));
+        if (isDone(key)) go.appendChild(el("span", "star-done", "聽過"));
+        go.addEventListener("click", function () {
+          showTab("list");
+          var r = rows[d.i];
+          if (!r) return;
+          r.li.scrollIntoView({ block: "center" });
+          try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
+        });
+        item.appendChild(go);
+        var off = el("button", "star-btn icon");
+        off.type = "button";
+        off.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg>';
+        off.setAttribute("aria-pressed", "true");
+        off.setAttribute("aria-label", "第" + pad(d.n) + "天" + sessLabel(d, cd[0]) + "：從想再聽拿掉");
+        off.disabled = !editable;
+        off.addEventListener("click", function () { toggleStar(key); });
+        item.appendChild(off);
+        box.appendChild(item);
+      });
+    });
+    $("starCount").textContent = n + " 段";
+    $("starEmpty").hidden = n > 0;
+  }
+
   // 標籤分頁下半：每個標籤標在哪幾段，點一下跳到清單裡那一天
   function renderTagIndex() {
     var box = $("tagIndex"), any = false;
@@ -2391,6 +2509,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   sessSheet.addEventListener("click", function (ev) { if (ev.target === sessSheet) closeSess(); });
   ssMsg.addEventListener("input", ssCount);
   $("ssDone").addEventListener("change", function () { if (sessKey) onToggle(sessKey, $("ssDone").checked); });
+  $("ssStar").addEventListener("click", function () {
+    if (!sessKey) return;
+    saveSessMsg(); toggleStar(sessKey);
+    $("ssStar").setAttribute("aria-pressed", isStar(sessKey) ? "true" : "false");
+  });
   noteSheet.addEventListener("click", function (ev) { if (ev.target === noteSheet) closeNote(); });
   $("tagCardEdit").addEventListener("click", openTagSheet);
   $("markDone").addEventListener("click", function () { setMarkTag(null); });
