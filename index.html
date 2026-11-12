@@ -172,6 +172,7 @@ button { font: inherit; color: inherit; }
 .dates .orig .dn { font: 400 1.125rem/1 var(--mono); letter-spacing: 0; margin: 0 3px; }
 .dates .orig .nd { display: inline-block; width: 6px; height: 6px; margin-left: 6px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
 .dates .sub { display: flex; flex-wrap: wrap; align-items: center; gap: 0 8px; font-size: 0.8125rem; color: var(--muted-2); }
+.dates .sub > span { word-break: keep-all; }   /* 放不下時在空白處換行（「重聽 11/26」「週四」），不把「週四」拆開 */
 .dates .sub:empty { display: none; }
 .tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
 .day.done .info { opacity: .8; }
@@ -194,6 +195,15 @@ button { font: inherit; color: inherit; }
 .chk .k { font-size: 0.875rem; line-height: 1; }
 .chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--muted-2); }
 .chk:not(.on) .mark { display: none; }   /* 簡化：沒聽完的格子不畫圈，只寫早、午、晚；聽完才出現勾 */
+/* 有標籤的格子：小圓標壓在框框上緣正中間，寫標籤的第一個字（顏色跟標籤一樣） */
+.chk .tb { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); display: flex; pointer-events: none; }
+.chk .tb i {
+  min-width: 16px; height: 16px; padding: 0 3px; border-radius: 8px; box-sizing: border-box;
+  display: inline-flex; align-items: center; justify-content: center; white-space: nowrap;
+  background: var(--tc, var(--muted-2)); color: var(--card); box-shadow: 0 0 0 1.5px var(--page);
+  font-size: 0.625rem; font-style: normal; font-weight: 600; line-height: 1; letter-spacing: 0;
+}
+.chk .tb small { font-size: 0.5625rem; font-weight: 600; margin-left: 1px; }
 .chk.on { background: var(--sel); border-color: var(--sel); border-style: solid; color: var(--selfg); }
 .chk.on .k { font-weight: 500; }
 .chk.on .mark {
@@ -366,9 +376,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .gx-pills{display:flex;gap:3px;flex-wrap:wrap}
 .gx-p{font-size:9px;padding:1px 6px;border-radius:99px;border:1px solid var(--line-2);background:var(--card)}
 .gx-p.sel{background:var(--tc);border-color:var(--tc);color:var(--page)}
-.gx-dayp{display:flex;flex-direction:column;gap:4px;align-items:flex-start;font-size:15px}
+.gx-dayp{display:flex;align-items:center;gap:12px;font-size:15px}
 .gx-dayp b{font:400 16px var(--mono)}
 .gx-np{position:relative;font-size:11px;padding:2px 9px;border-radius:99px;border:1px solid var(--line-2);color:var(--accent)}
+.gx-np.pen{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;padding:0}
+.gx-np.pen svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .gx-box{display:inline-flex;align-items:center;gap:6px;font-size:12px;position:relative}
 .gx-box i{width:15px;height:15px;border-radius:3px;background:var(--sel);display:inline-flex;align-items:center;justify-content:center}
 .gx-box i::after{content:"";width:7px;height:4px;border-left:1.6px solid var(--selfg);border-bottom:1.6px solid var(--selfg);transform:translateY(-1px) rotate(-45deg)}
@@ -461,6 +473,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   border: 1px solid var(--line-2); border-radius: 10px;
 }
 .plan .mini-btn { min-height: 40px; }
+.plan-pace { flex: 1 1 100%; display: flex; align-items: center; gap: 8px; font-size: 0.8125rem; color: var(--muted-2); }   /* 重聽速度：一天份用幾天聽 */
+.plan-pace select {
+  min-height: 40px; padding: 6px 10px; font: inherit; font-size: 0.9375rem; color: var(--ink); background: var(--card);
+  border: 1px solid var(--line-2); border-radius: 10px;
+}
 .plan-note { flex: 1 1 100%; margin: 0; font-size: 0.875rem; line-height: 1.5; color: var(--muted); }
 .plan-check { flex: 1 1 100%; display: inline-flex; align-items: center; gap: 8px; min-height: 32px; font-size: 0.8125rem; color: var(--muted-2); cursor: pointer; }
 .plan-check input { width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
@@ -505,9 +522,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .ns-tags .tpill { min-height: 30px; padding: 0 10px; font-size: 0.78125rem; }
 /* 簡化：每一天最右邊的「✎ 心得」 */
 .day:not(.rows) { grid-template-columns: minmax(0, 1fr) auto auto; }
-.day:not(.rows) > .npill { position: relative; background: none; font: inherit; font-size: 0.75rem; padding: 3px 8px 3px 7px; gap: 3px; cursor: pointer; }
-.day:not(.rows) > .npill svg { width: 11px; height: 11px; }
-.day:not(.rows) > .npill::after { content: ""; position: absolute; inset: -10px -6px; }   /* 手指好按 */
+.day:not(.rows) > .npill { position: relative; background: none; font: inherit; width: 34px; height: 34px; padding: 0; justify-content: center; cursor: pointer; }
+.day:not(.rows) > .npill svg { width: 15px; height: 15px; }
+.day:not(.rows) > .npill::after { content: ""; position: absolute; inset: -8px -6px; }   /* 手指好按：點的範圍比看起來大一點 */
 .day:not(.rows) > .npill.has { background: var(--soft-2); }
 .day:not(.rows) > .npill:disabled { cursor: default; opacity: .6; }
 .day:not(.rows) > .npill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -927,7 +944,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-tog"><span class="on">簡化</span><span>詳細</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-two"><span class="gx-mini"><span class="h">簡化</span><span class="gx-chips"><span class="d">第01天</span><span class="gx-c on">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></span><span class="gx-mini"><span class="h">詳細</span><span class="gx-r"><i class="on"></i>早上<b>心得</b></span><span class="gx-r"><i></i>中午<b>心得</b></span><span class="gx-r"><i></i>晚上<b>心得</b></span></span></span></div><h3>兩種看法</h3></section>
 
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np">心得<span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np pen"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg><span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-pop"><span class="l"><span>早上</span><i></i></span><span class="gx-pills"><span class="gx-p tc0 sel gx-rel">呼吸<span class="g-tap"></span></span><span class="gx-p tc1">靜坐</span><span class="gx-p tc2">臣服</span></span></span></div><h3>選標籤</h3><p class="cap">在心得視窗裡點一下</p></section>
 
@@ -937,7 +954,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-stamp">休息</span></div><h3>蓋印章</h3><p class="cap">聽完 7 天蓋一個</p></section>
 
-      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設</p></section>
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設，也可以放慢</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span></span></div><h3>換主題</h3></section>
 
@@ -962,6 +979,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         <label for="start">開始重聽</label>
         <input type="date" id="start">
         <button type="button" class="mini-btn" id="startClear" hidden>不排程</button>
+        <span class="plan-pace" id="paceRow" hidden><label for="pace">一天份用</label><select id="pace"><option value="1">1 天</option><option value="2">2 天</option><option value="3">3 天</option><option value="4">4 天</option><option value="5">5 天</option><option value="6">6 天</option><option value="7">7 天</option></select><span class="plan-pace-end">聽完</span></span>
         <p class="plan-note" id="planNote" hidden></p>
         <label class="plan-check" for="showDates"><input type="checkbox" id="showDates"> 顯示共修日期</label>
       </div>
@@ -1080,7 +1098,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
 
   /* ---------- State ---------- */
-  var state = { done: {}, rewards: {}, start: null, notes: {}, tags: null, marks: {} };   // tags：null 表示用預設標籤；marks：每一段的標籤 { d01m: { tg: [標籤 id] } }   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
+  var state = { done: {}, rewards: {}, start: null, pace: 1, notes: {}, tags: null, marks: {} };   // pace：重聽速度，幾天聽一天份（1–7）   // tags：null 表示用預設標籤；marks：每一段的標籤 { d01m: { tg: [標籤 id] } }   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
   var markTag = null;              // 正在用來標註的標籤；選了之後，點早、午、晚就是標上或取消這個標籤
@@ -1162,7 +1180,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var names = el("span", "tn");          // 標籤名稱，排在這一格的正下方
     names.setAttribute("aria-hidden", "true");
     names.hidden = true;
-    return { key: key, label: label, input: input, names: names, long: long };
+    var badges = el("span", "tb");          // 有標籤時，格子裡最上面的小圓標，寫標籤的第一個字
+    badges.setAttribute("aria-hidden", "true");
+    badges.hidden = true;
+    label.appendChild(badges);
+    return { key: key, label: label, input: input, names: names, badges: badges, long: long };
   }
 
   function build() {
@@ -1210,10 +1232,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         });
         li.appendChild(checks);
         var np = null;
-        if (layout !== "rows") {           // 簡化：每一天最右邊一個「✎ 心得」，點了寫早、午、晚的心得和標籤
-          np = el("button", "npill");
+        if (layout !== "rows") {           // 簡化：每一天最右邊一支筆（只有圖案），點了寫早、午、晚的心得和標籤
+          np = el("button", "npill pen");
           np.type = "button";
-          np.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg>心得';
+          np.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg>';
           np.addEventListener("click", function () { openNote(d.i); });
           li.appendChild(np);
         }
@@ -1248,7 +1270,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var nx = nextIndex();
     var cnt = { m: 0, n: 0, e: 0, x: 0, y: 0 }, fullDays = 0;
     var start = parseIso(state.start);
-    var todayIdx = start ? dayDiff(new Date(), start) : null;
+    var pace = state.pace || 1;                       // 幾天聽一天份
+    var sinceStart = start ? dayDiff(new Date(), start) : null;
+    var todayIdx = start ? (sinceStart < 0 ? -1 : Math.floor(sinceStart / pace)) : null;
 
     renderTagBar();
     var mt = markTag ? tagById(markTag) : null;
@@ -1267,6 +1291,17 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
         c.names.hidden = !tg.length;
         if (tg.length) named = true;
+        if (c.badges) {                     // 簡化：標了標籤的格子，框框裡最上面一個小圓標寫第一個標籤的第一個字；還有別的標籤就加「+幾」
+          c.badges.textContent = "";
+          if (tg.length) {
+            var t0 = tagById(tg[0]);
+            var bi = el("i", "tc" + tagColor(t0), Array.from(t0.n)[0] || "");
+            if (tg.length > 1) bi.appendChild(el("small", null, "+" + (tg.length - 1)));
+            c.badges.appendChild(bi);
+          }
+          c.badges.hidden = !tg.length;
+          c.label.classList.toggle("has-tb", tg.length > 0);
+        }
         var sn = state.notes[c.key], st = sn ? sn.t : "";
         if (c.msg) {
           if (c.msg.textContent !== st) c.msg.textContent = st;
@@ -1300,8 +1335,12 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       r.sub.textContent = "";
       if (showDates) r.sub.appendChild(el("span", "od", md(d.date) + " 週" + WD[d.dow]));
       if (start) {
-        var pd = addDays(start, d.i);
-        r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
+        var pd = addDays(start, d.i * pace);
+        if (pace === 1) r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
+        else {                                        // 放慢：一天份排好幾天，寫成「重聽 11/26–27」
+          var pe = addDays(pd, pace - 1);
+          r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + "–" + (pe.getMonth() === pd.getMonth() ? pe.getDate() : md(pe))));
+        }
         if (todayIdx === d.i) r.sub.appendChild(el("span", "tag", "今天"));
       }
     });
@@ -1356,9 +1395,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     // 重聽排程：說明、選單旁的狀態、設定視窗裡的欄位
     var plan = "";
     if (start) {
-      var end = addDays(start, TOTAL_DAYS - 1);
-      plan = "每天聽一天份，" + md(end) + "（週" + WD[end.getDay()] + "）聽完。";
-      if (todayIdx < 0) plan += md(start) + " 開始。";
+      var end = addDays(start, TOTAL_DAYS * pace - 1);
+      plan = (pace === 1 ? "每天聽一天份，" : "每 " + pace + " 天聽一天份，") + md(end) + "（週" + WD[end.getDay()] + "）聽完。";
+      if (sinceStart < 0) plan += md(start) + " 開始。";
       else if (todayIdx < TOTAL_DAYS) plan += "今天排的是第 " + (todayIdx + 1) + " 天。";
     }
     $("planNote").textContent = plan;
@@ -1367,6 +1406,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     if (document.activeElement !== startInput) startInput.value = state.start || "";
     startInput.disabled = !editable;
     $("startClear").hidden = !editable || !start;
+    $("paceRow").hidden = !start;
+    var paceSel = $("pace");
+    if (document.activeElement !== paceSel) paceSel.value = String(pace);
+    paceSel.disabled = !editable;
     $("showDates").checked = showDates;
 
     var nb = $("nextBtn");
@@ -1955,7 +1998,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function hasPending() {
     return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 ||
       Object.keys(pending.notes).length > 0 || Object.keys(pending.marks).length > 0 ||
-      "start" in pending || "tags" in pending;
+      "start" in pending || "pace" in pending || "tags" in pending;
   }
 
   function applyRemote(data) {
@@ -1966,6 +2009,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var rr = lastRemote.rewards && typeof lastRemote.rewards === "object" ? lastRemote.rewards : {};
     var rewards = {};
     var start = typeof lastRemote.start === "string" && parseIso(lastRemote.start) ? lastRemote.start : null;
+    var pace = typeof lastRemote.pace === "number" && lastRemote.pace >= 1 && lastRemote.pace <= 7 ? Math.round(lastRemote.pace) : 1;
     var rn = lastRemote.notes && typeof lastRemote.notes === "object" ? lastRemote.notes : {};
     var notes = {};
     Object.keys(rn).forEach(function (k) {
@@ -1997,6 +2041,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
       Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
       if ("start" in p) start = p.start;
+      if ("pace" in p) pace = p.pace;
       Object.keys(p.notes).forEach(function (k) { if (p.notes[k]) notes[k] = p.notes[k]; else delete notes[k]; });
       Object.keys(p.marks).forEach(function (k) { if (p.marks[k]) marks[k] = p.marks[k]; else delete marks[k]; });
       if ("tags" in p) tags = p.tags;
@@ -2004,6 +2049,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     state.done = done;
     state.rewards = rewards;
     state.start = start;
+    state.pace = pace;
     state.notes = notes;
     state.tags = tags;
     state.marks = marks;
@@ -2039,11 +2085,12 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     if (Object.keys(patch.done).length) body.done = patch.done;
     if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
     if ("start" in patch) body.start = patch.start;
+    if ("pace" in patch) body.pace = patch.pace;
     if (Object.keys(patch.notes).length) body.notes = patch.notes;
     if (Object.keys(patch.marks).length) body.marks = patch.marks;
     if ("tags" in patch) body.tags = patch.tags;
     var whole = function () {
-      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes(), tags: state.tags, marks: fullMarks() })
+      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, notes: fullNotes(), tags: state.tags, marks: fullMarks() })
         .then(function () { docExists = true; });
     };
     if (!docExists) return whole();
@@ -2077,6 +2124,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       Object.keys(pending.rewards).forEach(function (k) { mergedR[k] = pending.rewards[k]; });
       pending.rewards = mergedR;
       if ("start" in back && !("start" in pending)) pending.start = back.start;
+      if ("pace" in back && !("pace" in pending)) pending.pace = back.pace;
       var mergedN = {}; Object.keys(back.notes).forEach(function (k) { mergedN[k] = back.notes[k]; });
       Object.keys(pending.notes).forEach(function (k) { mergedN[k] = pending.notes[k]; });
       pending.notes = mergedN;
@@ -2101,7 +2149,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
   function saveLocal() {
     try {
-      localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
+      localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
     } catch (e) {}
   }
 
@@ -2170,6 +2218,18 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     paint();
     if (mode === "local") { saveLocal(); return; }
     pending.start = v;
+    setStatus("儲存中…");
+    schedule();
+  }
+
+  function onPace(value) {
+    if (mode !== "cloud" && mode !== "local") return;
+    var v = parseInt(value, 10);
+    if (!(v >= 1 && v <= 7) || v === state.pace) return;
+    state.pace = v;
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.pace = v;
     setStatus("儲存中…");
     schedule();
   }
@@ -2360,6 +2420,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     paint();
   });
   $("startClear").addEventListener("click", function () { onStart(""); });
+  $("pace").addEventListener("change", function (ev) { onPace(ev.target.value); });
   $("shOk").addEventListener("click", nextAward);
   $("shClose").addEventListener("click", closeSheet);
   $("shForm").addEventListener("submit", function (ev) {
