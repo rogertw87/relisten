@@ -176,7 +176,7 @@ button { font: inherit; color: inherit; }
 .tag { flex: none; padding: 1px 8px; border-radius: 12px; background: var(--soft-2); font-size: 0.75rem; color: var(--ink-2); }
 .day.done .info { opacity: .8; }
 
-.checks { display: grid; grid-template-columns: repeat(4, var(--chipw)); gap: 6px; }
+.checks { --cg: 6px; display: grid; grid-template-columns: repeat(4, var(--chipw)); gap: var(--cg); }
 .chk {
   position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px;
   width: var(--chipw); height: 50px;
@@ -185,7 +185,11 @@ button { font: inherit; color: inherit; }
   cursor: pointer; user-select: none; -webkit-user-select: none;
   transition: background-color .12s ease, border-color .12s ease, color .12s ease;
 }
-.chk.x { border-style: dashed; }
+.chk.x, .chk.y { border-style: dashed; }
+/* 週六：早、10點、午、下午、晚 五格排一行，總寬度、高度都和其他天一樣 */
+.day.sat .checks { grid-template-columns: repeat(5, calc((4 * var(--chipw) - var(--cg)) / 5)); }
+.day.sat .chk { width: 100%; border-radius: 10px; }
+.day.sat .chk.x .k, .chk.y .k { font-size: 0.75rem; letter-spacing: -.03em; white-space: nowrap; }
 .chk input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .chk .k { font-size: 0.875rem; line-height: 1; }
 .chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--muted-2); }
@@ -220,7 +224,7 @@ li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-heig
 .day.rows .checks { display: flex; flex-direction: column; gap: 0; }
 .srow { display: flex; align-items: stretch; min-height: 46px; }
 .srow + .srow { border-top: 1px solid var(--line-3); }
-.srow.x { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--soft) 8px 9px); }
+.srow.x, .srow.y { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--soft) 8px 9px); }
 .srow.off { opacity: .5; }
 .ck { position: relative; flex: none; width: 48px; display: flex; justify-content: center; padding-top: 12px; cursor: pointer; }
 .ck input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
@@ -752,7 +756,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 @media (max-width: 22.5rem) {
   :root { --chipw: clamp(34px, calc(25vw - 54px), 37px); }
   .dates .orig { font-size: 1rem; }
-  .checks { gap: 4px; }
+  .checks { --cg: 4px; }
+  .day.sat .chk.x .k, .chk.y .k { font-size: 0.6875rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .track > i, .chk, .seal { transition: none; }
@@ -1006,7 +1011,26 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var FIRST = new Date(2026, 6, 1);
   var WD = ["日", "一", "二", "三", "四", "五", "六"];
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
-  var CODES = SESS.concat([["x", "補", "週末補充"]]);   // 可以標註的段落：早、午、晚，週末多一段補充
+  var CODES = SESS.concat([["x", "補", "週末補充"], ["y", "下午", "週六下午補充"]]);   // 可以標註的段落：早、午、晚，週末多補充（週六 10 點、下午兩段）
+  // 每一天的補充：週六有 10 點和下午兩段（x、y），週日下午一段（x），平日沒有
+  function extras(d) {
+    if (d.dow === 6) return [["x", "10點", "週六 10 點補充"], ["y", "下午", "週六下午補充"]];
+    if (d.dow === 0) return [["x", "下午", "週日下午補充"]];
+    return [];
+  }
+  // 一天裡的順序照時間排：週六 早、10點、午、下午、晚；週日 早、午、下午、晚
+  function dayCodes(d) {
+    var ex = extras(d);
+    if (d.dow === 6) return [SESS[0], ex[0], SESS[1], ex[1], SESS[2]];
+    if (d.dow === 0) return [SESS[0], SESS[1], ex[0], SESS[2]];
+    return SESS.slice();
+  }
+  function sessLabel(d, code) {
+    if (code === "x") return d.dow === 6 ? "補充・10點" : "補充・下午";
+    if (code === "y") return "補充・下午";
+    for (var k = 0; k < SESS.length; k++) if (SESS[k][0] === code) return SESS[k][2];
+    return "";
+  }
   // 標籤：預設這幾個，可以自己新增、改名、刪除；c 是顏色編號（0–5）
   var DEFAULT_TAGS = [{ id: "t1", n: "呼吸", c: 0 }, { id: "t2", n: "靜坐", c: 1 }, { id: "t3", n: "臣服", c: 2 },
                       { id: "t4", n: "感恩", c: 3 }, { id: "t5", n: "身體", c: 4 }, { id: "t6", n: "問答", c: 5 }];
@@ -1042,7 +1066,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
               week: Math.floor(i / 7) };
     days.push(d);
     SESS.forEach(function (s) { ALL_KEYS.push(d.id + s[0]); });
-    if (weekend) ALL_KEYS.push(d.id + "x");
+    extras(d).forEach(function (e) { ALL_KEYS.push(d.id + e[0]); });
   }
   var MAIN_TOTAL = TOTAL_DAYS * 3;
   var NOTE_MAX = 800;                                // 每天心得的字數上限
@@ -1096,7 +1120,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     ck.appendChild(mark);
     row.appendChild(ck);
     var body = el("div", "sbody");          // 早上、標籤、心得內容只是文字；要寫心得、選標籤點右邊的「心得」
-    body.appendChild(el("span", "k", code === "x" ? "補充" : long));
+    body.appendChild(el("span", "k", sessLabel(day, code)));
     var names = el("span", "tn");          // 標籤名稱，排在這一列的右邊
     names.setAttribute("aria-hidden", "true");
     names.hidden = true;
@@ -1159,7 +1183,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       sec.appendChild(h);
       var ol = el("ol");
       list.forEach(function (d) {
-        var li = el("li", layout === "rows" ? "day rows" : "day");
+        var li = el("li", (layout === "rows" ? "day rows" : "day") + (d.dow === 6 ? " sat" : ""));
         li.id = "day-" + pad(d.n);
         var info = el("button", "info");
         info.type = "button";
@@ -1180,14 +1204,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         li.appendChild(info);
         var checks = el("div", "checks");
         var chks = {};
-        SESS.forEach(function (s) {
+        dayCodes(d).forEach(function (s) {   // 早、午、晚，週末的補充照時間插在中間
           var c = makeChk(d, s[0], s[1], s[2]);
           chks[s[0]] = c; checks.appendChild(c.label);
         });
-        if (d.weekend) {
-          var x = makeChk(d, "x", "補", "週末補充");
-          chks.x = x; checks.appendChild(x.label);
-        }
         li.appendChild(checks);
         var np = null;
         if (layout !== "rows") {           // 簡化：每一天最右邊一個「✎ 心得」，點了寫早、午、晚的心得和標籤
@@ -1226,7 +1246,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function paint() {
     var editable = mode === "cloud" || mode === "local";
     var nx = nextIndex();
-    var cnt = { m: 0, n: 0, e: 0, x: 0 }, fullDays = 0;
+    var cnt = { m: 0, n: 0, e: 0, x: 0, y: 0 }, fullDays = 0;
     var start = parseIso(state.start);
     var todayIdx = start ? dayDiff(new Date(), start) : null;
 
@@ -1241,7 +1261,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         c.label.classList.toggle("on", on);
         c.names.classList.toggle("on", on);
         c.label.classList.toggle("off", !editable);
-        if (on) { cnt[code]++; if (code !== "x") main++; }
+        if (on) { cnt[code]++; if (code !== "x" && code !== "y") main++; }
         var tg = markTags(c.key), names = tg.map(function (id) { return tagById(id).n; });
         c.names.textContent = "";
         tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
@@ -1549,8 +1569,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     noteLastFocus = document.activeElement;
     $("nsTitle").textContent = "第" + pad(d.n) + "天的心得";
     list.textContent = "";
-    var parts = CODES.filter(function (cd) { return cd[0] !== "x" || d.weekend; }).map(function (cd) {
-      return { key: d.id + cd[0], lab: cd[0] === "x" ? "補充" : cd[2], tags: true };
+    var parts = dayCodes(d).map(function (cd) {
+      return { key: d.id + cd[0], lab: sessLabel(d, cd[0]), tags: true };
     });
     if (state.notes[d.id]) parts.push({ key: d.id, lab: "整天" });
     parts.forEach(function (p, k) {
@@ -1617,7 +1637,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var cd = CODES.filter(function (c) { return c[0] === code; })[0];
     sessKey = key;
     sessLast = document.activeElement;
-    $("ssTitle").textContent = "第" + pad(d.n) + "天・" + (code === "x" ? "補充" : cd[2]);
+    $("ssTitle").textContent = "第" + pad(d.n) + "天・" + sessLabel(d, code);
     var sn = state.notes[key];
     ssMsg.value = sn ? sn.t : "";
     $("ssAt").textContent = sn && sn.at ? atLabel(sn.at) + " 寫" : "";
@@ -1679,9 +1699,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     list.textContent = "";
     days.forEach(function (d) {
       var note = state.notes[d.id], ents = [];
-      CODES.forEach(function (cd) {
+      dayCodes(d).forEach(function (cd) {
         var sn = state.notes[d.id + cd[0]];
-        if (sn) ents.push({ lab: cd[0] === "x" ? "補充" : cd[2], n: sn, open: function () { openSess(d.i, cd[0]); } });
+        if (sn) ents.push({ lab: sessLabel(d, cd[0]), n: sn, open: function () { openSess(d.i, cd[0]); } });
       });
       if (note) ents.push({ lab: ents.length ? "整天" : "", n: note, open: function () { openNote(d.i); } });
       if (!ents.length) return;
@@ -1716,11 +1736,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var t = new Date(), lines = ["信任・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
     days.forEach(function (d) {
       var note = state.notes[d.id], marks = [];
-      CODES.forEach(function (cd) {
+      dayCodes(d).forEach(function (cd) {
         var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
         var sn = state.notes[d.id + cd[0]];
         if (!names.length && !sn) return;
-        marks.push((cd[0] === "x" ? "補充" : cd[2]) + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
+        marks.push(sessLabel(d, cd[0]) + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
         if (sn) marks.push(sn.t);
       });
       if (!note && !marks.length) return;
@@ -1950,7 +1970,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var notes = {};
     Object.keys(rn).forEach(function (k) {
       var v = rn[k];
-      if (/^d\d\d[mnex]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
+      if (/^d\d\d[mnexy]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
     });
     Object.keys(rr).forEach(function (k) {
       if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
@@ -1967,7 +1987,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var marks = {};
     Object.keys(rm).forEach(function (k) {
       var v = rm[k];
-      if (!/^d\d\d[mnex]$/.test(k) || !v || typeof v !== "object") return;
+      if (!/^d\d\d[mnexy]$/.test(k) || !v || typeof v !== "object") return;
       var tg = Array.isArray(v.tg) ? v.tg.filter(function (x) { return typeof x === "string"; }).slice(0, TAGS_MAX) : [];
       var ti = typeof v.ti === "string" ? v.ti.slice(0, TITLE_MAX) : "";
       if (tg.length || ti) marks[k] = { tg: tg, ti: ti };
@@ -2267,7 +2287,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       if (tagFilter && t.id !== tagFilter) return;
       var hits = [];
       days.forEach(function (d) {
-        CODES.forEach(function (cd) { if (markTags(d.id + cd[0]).indexOf(t.id) >= 0) hits.push([d, cd]); });
+        dayCodes(d).forEach(function (cd) { if (markTags(d.id + cd[0]).indexOf(t.id) >= 0) hits.push([d, cd]); });
       });
       if (!hits.length) return;
       any = true;
@@ -2280,7 +2300,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       var list = el("div", "tix-list");
       hits.forEach(function (x) {
         var d = x[0], cd = x[1];
-        var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + (cd[0] === "x" ? "補充" : cd[2]));
+        var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0]));
         b.type = "button";
         b.addEventListener("click", function () {
           showTab("list");
