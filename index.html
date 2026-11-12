@@ -206,13 +206,14 @@ button { font: inherit; color: inherit; }
   font-size: 0.625rem; font-style: normal; font-weight: 600; line-height: 1; letter-spacing: 0;
 }
 .chk .tb small { font-size: 0.5625rem; font-weight: 600; margin-left: 1px; }
-/* 想再聽：簡化用加粗的框框表示；詳細在「早上」後面一顆小星星 */
+/* 想再聽：詳細在「早上」後面一顆小星星 */
 .sb svg { width: 10px; height: 10px; fill: currentColor; }
-/* 想再聽的格子：框框粗細不變，只換成星星的顏色（黑白主題沒有顏色，改成點點的框） */
-.chk.starred, .chk.starred.on { border-color: var(--star); }
-:root[data-look="bw"] .chk.starred { border-style: dotted; }
-:root[data-look="bw"] .chk.starred.on { border-color: var(--card); }
-.g-chip.st { border-color: var(--star); }
+/* 想再聽的格子：框框上緣的小圓標裡多一顆星星（有標籤時排在標籤旁邊） */
+.chk .tb { gap: 2px; }
+.chk .tb i.st { background: var(--star); padding: 0; width: 16px; min-width: 16px; }
+.chk .tb i.st svg { width: 10px; height: 10px; fill: currentColor; }
+.gx-sb { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--star); color: var(--card); box-shadow: 0 0 0 1.5px var(--soft); }
+.gx-sb svg { width: 9px; height: 9px; fill: currentColor; }
 .sbody .k .sb { display: inline-flex; vertical-align: -1px; margin-left: 4px; color: var(--star); }
 .sbody .k .sb svg { width: 13px; height: 13px; }
 .star-btn {
@@ -832,7 +833,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   --sel: #ffd447; --selfg: #000000;
   --warn: #ff8a70; --seal: #ff7a5c;
   --tg0: #62d2f0; --tg1: #ffae62; --tg2: #ff92b8; --tg3: #84de9a; --tg4: #c3abff; --tg5: #ffe36e;
-  --star: #ff8f5a;
+  --star: #ffb648;
   color-scheme: dark;
 }
 
@@ -991,7 +992,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np pen"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg><span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-pop"><span class="l"><span>早上</span><i></i></span><span class="gx-pills"><span class="gx-p tc0 sel gx-rel">呼吸<span class="g-tap"></span></span><span class="gx-p tc1">靜坐</span><span class="gx-p tc2">臣服</span></span></span></div><h3>選標籤</h3><p class="cap">在心得視窗裡點一下</p></section>
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-chip st gx-rel">午</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-starlist"><span class="gx-si">第03天 中午<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span><span class="gx-si">第09天 晚上<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span></span></div><h3>想再聽</h3><p class="cap">在心得視窗點 ☆，框框會換顏色，進度分頁也會列出來</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-chip gx-rel">午<span class="gx-sb"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-starlist"><span class="gx-si">第03天 中午<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span><span class="gx-si">第09天 晚上<i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg></i></span></span></div><h3>想再聽</h3><p class="cap">在心得視窗點 ☆，格子上方會出現星星，進度分頁也會列出來</p></section>
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-box"><i></i>隱藏完成的練習</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-chips"><span class="d">第01天</span><span class="gx-c gone">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></div><h3>隱藏完成的練習</h3><p class="cap">聽完的先藏起來</p></section>
 
@@ -1238,7 +1239,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     badges.setAttribute("aria-hidden", "true");
     badges.hidden = true;
     label.appendChild(badges);
-    return { key: key, label: label, input: input, names: names, badges: badges, long: long };   // 想再聽：用加粗的框框表示（class starred）
+    return { key: key, label: label, input: input, names: names, badges: badges, long: long };   // 想再聽：框框上緣多一顆星星
   }
 
   function build() {
@@ -1345,7 +1346,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
         c.names.hidden = !tg.length;
         if (tg.length) named = true;
-        if (c.badges) {                     // 簡化：標了標籤的格子，框框裡最上面一個小圓標寫第一個標籤的第一個字；還有別的標籤就加「+幾」
+        var starred = isStar(c.key);
+        if (c.badges) {                     // 簡化：框框上緣正中間的小圓標：第一個標籤的第一個字（還有別的標籤就加「+幾」），想再聽的再加一顆星星
           c.badges.textContent = "";
           if (tg.length) {
             var t0 = tagById(tg[0]);
@@ -1353,10 +1355,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
             if (tg.length > 1) bi.appendChild(el("small", null, "+" + (tg.length - 1)));
             c.badges.appendChild(bi);
           }
-          c.badges.hidden = !tg.length;
-          c.label.classList.toggle("has-tb", tg.length > 0);
+          if (starred) {
+            var si = el("i", "st");
+            si.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg>';
+            c.badges.appendChild(si);
+          }
+          c.badges.hidden = !tg.length && !starred;
+          c.label.classList.toggle("has-tb", tg.length > 0 || starred);
         }
-        var starred = isStar(c.key);
         if (c.star) c.star.hidden = !starred;
         c.label.classList.toggle("starred", starred);
         var sn = state.notes[c.key], st = sn ? sn.t : "";
