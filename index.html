@@ -465,7 +465,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .gx-tab small{font-size:10px;color:var(--muted);text-align:center;line-height:1.35}
 .gx-file{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:44px;height:54px;border:1.5px solid var(--line-2);border-radius:6px;font:500 10px var(--mono);color:var(--ink-2);background:var(--card)}
 .gx-btn{position:relative;font-size:12px;padding:4px 12px;border-radius:99px;border:1px solid var(--line-2);background:var(--card)}
-.gx-sw{display:flex;gap:10px}
+.gx-sw{display:grid;grid-template-columns:repeat(4,auto);justify-content:center;gap:8px 12px}
 .gx-sw span{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px}
 .gx-sw i{width:24px;height:24px;border-radius:50%;box-shadow:0 0 0 1.5px var(--line-2)}
 .gx-dots{position:relative;display:inline-flex;width:30px;height:30px;align-items:center;justify-content:center}
@@ -473,20 +473,24 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .gcard .cap{margin:0;font-size:.8125rem;color:var(--muted)}
 
 /* 選單裡的「主題」：淺色、夜間、黑白 */
-.menu-theme { min-width: 210px; padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
+.menu-theme { min-width: 236px; padding: 10px 14px 12px; display: flex; flex-direction: column; gap: 8px; }
 .menu-item + .menu-theme { border-top: 1px solid var(--line); margin-top: 4px; }
 .menu-theme-title { font-size: 0.75rem; color: var(--muted); }
-.menu-theme-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.menu-theme-opts { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
 .menu-theme-opt {
-  display: flex; align-items: center; justify-content: center; gap: 6px;
-  min-height: 38px; padding: 0 4px; border-radius: 10px; border: 1.5px solid var(--line-2); background: var(--card);
-  color: var(--ink); font-size: 0.8125rem; cursor: pointer; white-space: nowrap;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  min-height: 54px; padding: 6px 2px; border-radius: 10px; border: 1.5px solid var(--line-2); background: var(--card);
+  color: var(--ink); font-size: 0.75rem; line-height: 1.2; cursor: pointer; white-space: nowrap;
 }
 .menu-theme-opt[aria-pressed="true"] { background: var(--sel); color: var(--selfg); border-color: var(--sel); }
-.menu-theme-opt .sw { flex: none; width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--line-2); }
+.menu-theme-opt .sw { flex: none; width: 18px; height: 18px; border-radius: 50%; box-shadow: 0 0 0 1.5px var(--line-2); }
 .sw.sw-a { background: #ffffff; border: 3px solid #0a5468; }
 .sw.sw-b { background: radial-gradient(circle, #ffd447 0 38%, #000000 41%); }
 .sw.sw-c { background: linear-gradient(90deg, #000000 50%, #ffffff 50%); }
+.sw.sw-d { background: #fffaf3; border: 3px solid #a8461d; }
+.sw.sw-e { background: #fbfdfb; border: 3px solid #2d6a43; }
+.sw.sw-f { background: #fdfcff; border: 3px solid #5b3fa0; }
+.sw.sw-g { background: radial-gradient(circle, #7cc4ff 0 38%, #0b1626 41%); }
 
 /* 選單裡的「印章冊」 */
 .menu-item {
@@ -932,13 +936,55 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   --star: #000000;
 }
 :root[data-look="bw"] .chk { border-width: 2px; }
+
+/* ---------- 主題「晨曦」：暖米色，像清晨的光，打勾是深咖啡 ---------- */
+:root[data-look="sunrise"] {
+  --ink: #2b1a10; --ink-2: #5a2f17; --muted: #4a3428; --muted-2: #6a4c3c;
+  --accent: #a8461d; --accent-2: #a8461d;
+  --line: #d2b6a0; --line-2: #b08d74; --line-3: #ead9cb;
+  --soft: #fbf2e8; --soft-2: #f1dfcd; --chip: #f1dfcd; --screen: #f7ebdf;
+  --page: #fffaf3; --card: #fffdf9; --track: #d9b79c; --shadow: rgba(90,47,23,.16);
+  --sel: #5a2f17; --selfg: #fffaf3;
+  --star: #9a5a00;
+}
+/* ---------- 主題「森林」：淡淡的綠，打勾是深綠 ---------- */
+:root[data-look="forest"] {
+  --ink: #0f2417; --ink-2: #1e4a2e; --muted: #2b4434; --muted-2: #3f5a48;
+  --accent: #2d6a43; --accent-2: #2d6a43;
+  --line: #a9c3b0; --line-2: #7fa08a; --line-3: #d3e3d7;
+  --soft: #eff6f0; --soft-2: #d6e8da; --chip: #d6e8da; --screen: #e6f1e8;
+  --page: #fbfdfb; --card: #ffffff; --track: #9cc0a6; --shadow: rgba(20,60,35,.16);
+  --sel: #1e4a2e; --selfg: #ffffff;
+}
+/* ---------- 主題「薰衣草」：淡紫色，打勾是深紫 ---------- */
+:root[data-look="lavender"] {
+  --ink: #1d1530; --ink-2: #3d2a6b; --muted: #3a3050; --muted-2: #554a6e;
+  --accent: #5b3fa0; --accent-2: #5b3fa0;
+  --line: #c3b8dc; --line-2: #9a8cc0; --line-3: #e2dbf0;
+  --soft: #f5f2fb; --soft-2: #e5ddf5; --chip: #e5ddf5; --screen: #eee8f8;
+  --page: #fdfcff; --card: #ffffff; --track: #b9a9de; --shadow: rgba(50,30,90,.16);
+  --sel: #3d2a6b; --selfg: #ffffff;
+}
+/* ---------- 主題「深海」：深藍底，比夜間柔和，打勾是淺藍 ---------- */
+:root[data-look="ocean"] {
+  --ink: #eaf2fb; --ink-2: #cfe2f6; --muted: #b9cbe0; --muted-2: #9fb3cb;
+  --accent: #7cc4ff; --accent-2: #7cc4ff;
+  --line: #3a5272; --line-2: #6b86a8; --line-3: #24364f;
+  --soft: #13233a; --soft-2: #1d3150; --chip: #1d3150; --screen: #0b1626;
+  --page: #0b1626; --card: #102035; --track: #3a5677; --shadow: rgba(0,0,0,.6);
+  --sel: #7cc4ff; --selfg: #0b1626;
+  --warn: #ff9b85; --seal: #ff8a6e;
+  --tg0: #62d2f0; --tg1: #ffae62; --tg2: #ff92b8; --tg3: #84de9a; --tg4: #c3abff; --tg5: #ffe36e;
+  --star: #ffb648;
+  color-scheme: dark;
+}
 :root[data-look="bw"] .srow:not(.on) .ck .mark, :root[data-look="bw"] .ss-done input:not(:checked) + .mark { border-width: 2px; border-color: var(--ink); }
 :root[data-look="bw"] .srow + .srow { border-top-color: var(--line); }
 :root[data-look="bw"] .summary, :root[data-look="bw"] .tagcard { border-color: var(--ink); }
 :root[data-look="bw"] .day.done .info { opacity: 1; }
 :root[data-look="bw"] .day.done .orig { text-decoration: line-through; text-decoration-thickness: 1.5px; }
 </style>
-<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(l==="night"||l==="bw")document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
+<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean)$/.test(l))document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
 </head>
 <body>
 <main class="page home">
@@ -960,6 +1006,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
           <button type="button" class="menu-theme-opt" data-look-pick="" aria-pressed="true"><i class="sw sw-a" aria-hidden="true"></i>淺色</button>
           <button type="button" class="menu-theme-opt" data-look-pick="night" aria-pressed="false"><i class="sw sw-b" aria-hidden="true"></i>夜間</button>
           <button type="button" class="menu-theme-opt" data-look-pick="bw" aria-pressed="false"><i class="sw sw-c" aria-hidden="true"></i>黑白</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="sunrise" aria-pressed="false"><i class="sw sw-d" aria-hidden="true"></i>晨曦</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="forest" aria-pressed="false"><i class="sw sw-e" aria-hidden="true"></i>森林</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="lavender" aria-pressed="false"><i class="sw sw-f" aria-hidden="true"></i>薰衣草</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="ocean" aria-pressed="false"><i class="sw sw-g" aria-hidden="true"></i>深海</button>
         </div>
       </div>
     </div>
@@ -1115,7 +1165,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設，也可以放慢</p></section>
 
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span></span></div><h3>換主題</h3></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span><span><i style="background:#fffaf3;border:3px solid #a8461d"></i>晨曦</span><span><i style="background:#fbfdfb;border:3px solid #2d6a43"></i>森林</span><span><i style="background:#fdfcff;border:3px solid #5b3fa0"></i>薰衣草</span><span><i style="background:radial-gradient(circle,#7cc4ff 0 38%,#0b1626 41%)"></i>深海</span></span></div><h3>換主題</h3><p class="cap">七種顏色，記在各自的裝置</p></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me two">復習</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
       <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>同步筆記</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
@@ -1758,8 +1808,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   // 第一張說明卡：圈住早、午、晚的框，用一條線連到標題「聽完就打勾」
   var callCard = document.querySelector(".g-call");
 
-  /* ---------- 主題：淺色（預設）、夜間高對比、黑白分明；選擇記在這台裝置 ---------- */
-  var LOOK_KEY = "trust-relisten:look", LOOK_BG = { "": "#ffffff", night: "#000000", bw: "#ffffff" };
+  /* ---------- 主題：淺色（預設）、夜間高對比、黑白分明、晨曦、森林、薰衣草、深海；選擇記在這台裝置 ---------- */
+  var LOOK_KEY = "trust-relisten:look", LOOK_BG = { "": "#ffffff", night: "#000000", bw: "#ffffff", sunrise: "#fffaf3", forest: "#fbfdfb", lavender: "#fdfcff", ocean: "#0b1626" };
   function applyLook(v) {
     if (!Object.prototype.hasOwnProperty.call(LOOK_BG, v)) v = "";
     var root = document.documentElement;
