@@ -2892,8 +2892,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     pill.hidden = false;
     card.hidden = false;
     pill.className = "sync-pill " + st;
-    pt.textContent = { off: "同步筆記", busy: "同步中", fail: "同步失敗", tap: "點我同步", ok: "已同步" }[st];
-    pill.setAttribute("aria-label", { off: "用 Google 登入同步筆記", busy: "同步中", fail: "同步失敗，點一下再試", tap: "有變更還沒同步，點一下同步", ok: "已同步，點一下再同步一次" }[st]);
+    pt.textContent = { off: "同步筆記", busy: "同步筆記中", fail: "同步筆記失敗", tap: "點我同步筆記", ok: "已同步筆記" }[st];
+    pill.setAttribute("aria-label", { off: "用 Google 登入同步筆記", busy: "同步筆記中", fail: "同步筆記失敗，點一下再試", tap: "有變更還沒同步，點一下同步筆記", ok: "已同步筆記，點一下再同步一次" }[st]);
     $("syncIn").hidden = !!sync;
     $("syncNowBtn").hidden = !sync;
     $("syncOut").hidden = !sync;
