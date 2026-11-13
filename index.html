@@ -942,7 +942,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 <body>
 <main class="page home">
   <div class="inapp-ban" id="inappBan" role="alert" hidden>
-    <div><b>在這個 App 裡沒辦法登入同步</b><span id="inappMsg">請改用 Chrome 或 Safari 打開這個網址，就可以登入。</span>
+    <div><b>在這個 App 裡沒辦法登入同步筆記</b><span id="inappMsg">請改用 Chrome 或 Safari 打開這個網址，就可以登入。</span>
       <a class="inapp-go" id="inappGo" hidden>改用瀏覽器打開</a></div>
     <button type="button" class="inapp-x" id="inappX" aria-label="關閉提示">✕</button>
   </div>
@@ -967,7 +967,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     <h1 class="title" id="yrTitle">信任</h1>
     <div class="head-btns">
       <button type="button" class="yr-btn" id="yrBtn" aria-haspopup="dialog"><span id="yrBtnT">2026 全球共修</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
-    <button type="button" class="sync-pill" id="syncPill" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span id="syncPillT">登入同步</span></button>
+    <button type="button" class="sync-pill" id="syncPill" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span id="syncPillT">同步筆記</span></button>
     </div>
     <p class="sub">全球線上共修・重聽進度表</p>
   </header>
@@ -1116,7 +1116,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span></span></div><h3>換主題</h3></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me">信</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
-      <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>登入同步</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>雲端同步</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
+      <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>同步筆記</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
 
     </div>
   </div>
@@ -1127,15 +1127,15 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     <button type="button" class="back" id="bookBack">← 返回</button>
     <div class="book-head"><h2 id="progTitle">進度</h2></div>
     <section class="sync-card" id="syncCard" aria-labelledby="syncTitle" hidden>
-      <h3 id="syncTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>雲端同步</h3>
+      <h3 id="syncTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</h3>
       <div class="sync-row">
-        <p class="sync-t" id="syncText">用 Google 帳號登入，換手機、用電腦都看得到同一份進度。</p>
+        <p class="sync-t" id="syncText">用 Google 帳號登入「同步筆記」，換手機、用電腦都看得到同一份打勾和心得。</p>
         <div class="sync-btns">
           <button type="button" class="mini-btn" id="syncNowBtn" hidden>立即同步</button>
           <button type="button" class="mini-btn" id="syncOut" hidden>登出</button>
         </div>
       </div>
-      <button type="button" class="sync-in" id="syncIn">用 Google 登入同步</button>
+      <button type="button" class="sync-in" id="syncIn">用 Google 登入同步筆記</button>
       <p class="sync-note">資料存在你自己的 Google 雲端硬碟裡一個隱藏的專用資料夾，只有這個網頁讀得到，別人（包括做這個網頁的人）都看不到。</p>
     </section>
     <section class="summary" aria-label="整體進度">
@@ -2891,8 +2891,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     pill.hidden = false;
     card.hidden = false;
     pill.className = "sync-pill " + st;
-    pt.textContent = { off: "登入同步", busy: "同步中", fail: "同步失敗", tap: "點我同步", ok: "已同步" }[st];
-    pill.setAttribute("aria-label", { off: "用 Google 登入同步", busy: "同步中", fail: "同步失敗，點一下再試", tap: "有變更還沒同步，點一下同步", ok: "已同步，點一下再同步一次" }[st]);
+    pt.textContent = { off: "同步筆記", busy: "同步中", fail: "同步失敗", tap: "點我同步", ok: "已同步" }[st];
+    pill.setAttribute("aria-label", { off: "用 Google 登入同步筆記", busy: "同步中", fail: "同步失敗，點一下再試", tap: "有變更還沒同步，點一下同步", ok: "已同步，點一下再同步一次" }[st]);
     $("syncIn").hidden = !!sync;
     $("syncNowBtn").hidden = !sync;
     $("syncOut").hidden = !sync;
@@ -2900,12 +2900,12 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     if (!sync) {
       txt.textContent = syncErr === "loading" ? "正在載入 Google 登入，請再按一次。"
         : syncErr === "denied" ? "沒有拿到存取雲端硬碟的允許，所以還沒開始同步。可以再按一次登入。"
-        : "用 Google 帳號登入，換手機、用電腦都看得到同一份進度。";
+        : "用 Google 帳號登入「同步筆記」，換手機、用電腦都看得到同一份打勾和心得。";
     } else {
       txt.textContent = "";
       txt.appendChild(document.createTextNode("用 "));
       txt.appendChild(el("b", null, sync.email || "你的 Google 帳號"));
-      txt.appendChild(document.createTextNode(" 同步中"));
+      txt.appendChild(document.createTextNode(" 同步筆記"));
       txt.appendChild(document.createElement("br"));
       txt.appendChild(document.createTextNode(
         st === "busy" ? "同步中…"
@@ -2918,7 +2918,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var ln = $("localNote");
     if (ln) ln.textContent = sync
       ? "打勾、印章、標籤和心得會同步到你的 Google 雲端硬碟（" + (sync.email || "已登入") + "），換手機、用電腦登入同一個帳號就看得到。"
-      : "打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以到「進度」分頁用 Google 登入同步，或用心得本的「匯出」另外存一份。";
+      : "打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以到「進度」分頁用 Google 登入「同步筆記」，或用心得本的「匯出」另外存一份。";
   }
   function startSync() {
     if (!syncOn) return;
