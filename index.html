@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="description" content="2026「信任」共修的重聽進度表：62 天，每天早、午、晚三段。">
+<meta name="description" content="楊定一博士 2020～2026 全球線上共修的重聽進度表：每天早、午、晚三段，可以切換年份。">
 <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-180.png">
@@ -12,11 +12,11 @@
 <meta name="theme-color" content="#ffffff">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="信任">
+<meta name="apple-mobile-web-app-title" content="共修重聽">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <style>:root{color-scheme:light;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>信任重聽進度表</title>
+<title>全球共修重聽</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=JetBrains+Mono:wght@300;400;500&display=swap">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@700&text=%E4%BC%91%E6%81%AF%E6%94%BE%E9%AC%86%E5%AE%89%E9%9D%9C%E4%B8%AD%E5%BF%83%E6%9C%AC%E6%80%A7%E8%87%A3%E6%9C%8D%E7%9C%9F%E5%AF%A6%E4%BF%A1%E4%BB%B0%E4%BB%BB%E5%9C%93%E6%BB%BF&display=swap">
 <style>
@@ -106,6 +106,41 @@ button { font: inherit; color: inherit; }
   letter-spacing: .3em; text-indent: .3em; color: var(--ink-2);
 }
 .sub { margin: 0; font-size: 0.8125rem; letter-spacing: .14em; text-indent: .14em; color: var(--muted-2); }
+/* 切換年份：標題下面的「2026 全球共修 ▾」和選年份的面板 */
+.title.long { font-size: 1.75rem; letter-spacing: .14em; text-indent: .14em; text-wrap: balance; }
+.head .title { max-width: calc(100% - 80px); }   /* 左右留給右上角的「⋯」，長的標題會在中間換行 */
+.head-btns { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 8px; }
+.head-btns .sync-pill { height: 33px; }
+@media (max-width: 22.5rem) { .title.long { font-size: 1.5rem; } }
+.yr-btn {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px 6px 16px; border-radius: 99px;
+  border: 1px solid var(--line-2); background: var(--card); color: var(--ink-2); font: inherit; font-size: 0.875rem; letter-spacing: .06em; cursor: pointer;
+}
+.yr-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+.yr-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.award-bg.yr-bg { align-items: flex-end; padding: 0; }
+.yr-panel {
+  width: 100%; max-width: 480px; max-height: 88%; overflow-y: auto; margin: 0 auto;
+  background: var(--page); color: var(--ink); border-radius: 24px 24px 0 0;
+  padding: 22px max(18px, env(safe-area-inset-right, 0px)) calc(20px + env(safe-area-inset-bottom, 0px)) max(18px, env(safe-area-inset-left, 0px));
+  display: flex; flex-direction: column; gap: 10px;
+}
+.yr-panel h2 { margin: 0 4px 6px; font-size: 1.125rem; font-weight: 600; }
+.yr-list { display: flex; flex-direction: column; gap: 8px; }
+.yr-row {
+  display: grid; grid-template-columns: 48px minmax(0, 1fr) auto; align-items: center; gap: 4px 12px; width: 100%;
+  padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); color: var(--ink);
+  font: inherit; text-align: left; cursor: pointer;
+}
+.yr-row.on { border-color: var(--sel); box-shadow: 0 0 0 1.5px var(--sel); }
+.yr-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.yr-y { font: 400 1rem var(--mono); color: var(--muted-2); }
+.yr-t { font-size: 1rem; line-height: 1.4; }
+.yr-t small { display: block; font-size: 0.75rem; color: var(--muted-2); }
+.yr-p { font: 400 0.75rem var(--mono); color: var(--muted-2); text-align: right; white-space: nowrap; }
+.yr-bar { grid-column: 2 / 4; height: 4px; border-radius: 2px; background: var(--line-3); overflow: hidden; }
+.yr-bar i { display: block; height: 100%; border-radius: 2px; background: var(--accent); }
+.yr-panel .aw-alt { margin-top: 4px; }
 
 /* 整體進度 */
 .summary {
@@ -503,7 +538,6 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
 /* 雲端同步（網站版）：左上角的小按鈕、進度分頁最上面的卡片、第一次登入的詢問、LINE 裡的提示 */
 .sync-pill {
-  position: absolute; top: 70px; left: max(16px, env(safe-area-inset-left, 0px)); z-index: 6;
   display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 11px 0 9px; border-radius: 99px;
   border: 1px solid var(--line-2); background: var(--card); color: var(--accent); font: inherit; font-size: 0.75rem; white-space: nowrap; cursor: pointer;
 }
@@ -536,6 +570,11 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .inapp-ban b { display: block; }
 .inapp-go { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 99px; background: #4a3500; color: #fff3c4; font-size: 0.8125rem; text-decoration: none; }
 .inapp-x { flex: none; width: 32px; height: 32px; margin-left: auto; border: 0; background: none; color: #7a5c00; font: inherit; font-size: 1rem; cursor: pointer; }
+.gx-yr { padding: 4px 12px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink-2); font-size: 11px; white-space: nowrap; }
+.gx-yrs { display: flex; flex-direction: column; gap: 4px; min-width: 150px; }
+.gx-yrs span { display: flex; gap: 8px; padding: 4px 8px; border: 1px solid var(--line); border-radius: 7px; background: var(--card); font-size: 10px; color: var(--ink); }
+.gx-yrs span.on { border-color: var(--sel); box-shadow: 0 0 0 1px var(--sel); }
+.gx-yrs b { font: 400 10px var(--mono); color: var(--muted-2); }
 .gx-syncpill { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px 5px 8px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--card); color: var(--accent); font-size: 11px; white-space: nowrap; }
 .gx-syncpill svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
 .gx-devs { display: flex; align-items: flex-end; gap: 8px; }
@@ -902,7 +941,6 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 </head>
 <body>
 <main class="page home">
-  <button type="button" class="sync-pill" id="syncPill" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span id="syncPillT">登入同步</span></button>
   <div class="inapp-ban" id="inappBan" role="alert" hidden>
     <div><b>在這個 App 裡沒辦法登入同步</b><span id="inappMsg">請改用 Chrome 或 Safari 打開這個網址，就可以登入。</span>
       <a class="inapp-go" id="inappGo" hidden>改用瀏覽器打開</a></div>
@@ -926,15 +964,19 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     </div>
   </div>
   <header class="head">
-    <h1 class="title">信任</h1>
-    <p class="sub">2026 全球線上共修・重聽進度表</p>
+    <h1 class="title" id="yrTitle">信任</h1>
+    <div class="head-btns">
+      <button type="button" class="yr-btn" id="yrBtn" aria-haspopup="dialog"><span id="yrBtnT">2026 全球共修</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+    <button type="button" class="sync-pill" id="syncPill" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span id="syncPillT">登入同步</span></button>
+    </div>
+    <p class="sub">全球線上共修・重聽進度表</p>
   </header>
 
 
 
   <div class="bar">
     <div class="row1">
-      <span class="count"><span>已聽</span> <b id="barCount">0</b> <span>/ 186</span></span>
+      <span class="count"><span>已聽</span> <b id="barCount">0</b> <span id="barTotal">/ 186</span></span>
       <div class="track" aria-hidden="true"><i id="barFill"></i></div>
       <div class="lay-wrap">
       <div class="lay-toggle" role="group" aria-label="顯示方式">
@@ -1025,6 +1067,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   </div>
 </div>
 
+<div class="award-bg yr-bg" id="yrSheet" hidden>
+  <div class="yr-panel" role="dialog" aria-modal="true" aria-labelledby="yrSheetTitle">
+    <h2 id="yrSheetTitle">選擇要重聽的全球共修</h2>
+    <div class="yr-list" id="yrList"></div>
+    <button type="button" class="aw-alt" id="yrClose">關閉</button>
+  </div>
+</div>
+
 <form class="award-bg" id="sessSheet" hidden>
   <div class="award sess-panel" role="dialog" aria-modal="true" aria-labelledby="ssTitle">
     <h2 class="aw-title" id="ssTitle">第01天・早上</h2>
@@ -1048,6 +1098,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-chip gx-rel">早<i class="o"></i><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-chip on">早<i class="o"></i></span></div><h3>打勾</h3><p class="cap">聽完點一下，再點取消</p></section>
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-tog"><span class="on">簡化</span><span>詳細</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-two"><span class="gx-mini"><span class="h">簡化</span><span class="gx-chips"><span class="d">第01天</span><span class="gx-c on">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></span><span class="gx-mini"><span class="h">詳細</span><span class="gx-r"><i class="on"></i>早上<b>心得</b></span><span class="gx-r"><i></i>中午<b>心得</b></span><span class="gx-r"><i></i>晚上<b>心得</b></span></span></span></div><h3>兩種看法</h3></section>
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-yr">2026 全球共修 ▾</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-yrs"><span class="on"><b>2026</b>信任</span><span><b>2025</b>中道，中道到底</span><span><b>2024</b>心，向前行</span></span></div><h3>換年份</h3><p class="cap">2020～2026 每一屆分開記</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np pen"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg><span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
@@ -1090,8 +1141,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     <section class="summary" aria-label="整體進度">
       <div class="total">
         <span class="num" id="doneCount">0</span>
-        <span class="of">/ 186 段</span>
-        <span class="days">聽完 <b id="dayCount">0</b> / 62 天</span>
+        <span class="of" id="sumTotal">/ 186 段</span>
+        <span class="days">聽完 <b id="dayCount">0</b> / <span id="dayTotal">62</span> 天</span>
       </div>
       <div class="track" id="totalTrack" role="progressbar" aria-label="已聽段數" aria-valuemin="0" aria-valuemax="186" aria-valuenow="0"><i id="totalFill"></i></div>
       <div class="plan">
@@ -1146,26 +1197,46 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 (function () {
   "use strict";
 
-  /* ---------- Calendar of the original 共修 ---------- */
-  var TOTAL_DAYS = 62;
-  var FIRST = new Date(2026, 6, 1);
+  /* ---------- 歷年的全球共修：每一屆各自的天數、開始日期、週末補充 ---------- */
+  // px：這一屆資料的前綴（2026 沒有前綴，沿用原本的資料）；rule：每天有哪幾段（2026 照實際，其他先用預設：週末各一段補充）
+  // seal：印章冊第九週那一顆印章的字；天數和日期是官網寫的「7/1 開始、兩個月」，實際以 App 為準
+  var YEARS = [
+    { id: "2026", px: "",    title: "信任",           sub: "",                         first: [2026, 6, 1], days: 62, seal: "信任", rule: "2026" },
+    { id: "2025", px: "y25", title: "中道，中道到底", sub: "",                         first: [2025, 6, 1], days: 62, seal: "中道", rule: "basic" },
+    { id: "2024", px: "y24", title: "心，向前行",     sub: "",                         first: [2024, 6, 1], days: 62, seal: "向前", rule: "basic" },
+    { id: "2023", px: "y23", title: "清醒的呼吸",     sub: "",                         first: [2023, 6, 1], days: 62, seal: "呼吸", rule: "basic" },
+    { id: "2022", px: "y22", title: "定在心",         sub: "新世界，新的正常，全新的開始", first: [2022, 6, 1], days: 62, seal: "在心", rule: "basic" },
+    { id: "2021", px: "y21", title: "沒有路的路",     sub: "全球靜心",                  first: [2021, 6, 1], days: 62, seal: "靜心", rule: "basic" },
+    { id: "2020", px: "y20", title: "唯識的每日靜心", sub: "",                         first: [2020, 6, 1], days: 62, seal: "唯識", rule: "basic" }
+  ];
+  var LS_YEAR = "trust-relisten:year";
+  function yearById(id) { for (var k = 0; k < YEARS.length; k++) if (YEARS[k].id === id) return YEARS[k]; return null; }
+  function yearFromHash() { var m = /^#(20\d\d)$/.exec(location.hash || ""); return m ? yearById(m[1]) : null; }
+  var Y = yearFromHash();
+  if (!Y) { try { Y = yearById(localStorage.getItem(LS_YEAR)); } catch (e) {} }
+  if (!Y) Y = YEARS[0];
+  var TOTAL_DAYS = Y.days;
+  var FIRST = new Date(Y.first[0], Y.first[1], Y.first[2]);
   var WD = ["日", "一", "二", "三", "四", "五", "六"];
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
   var CODES = SESS.concat([["x", "補", "週末補充"], ["y", "下午", "週六下午補充"]]);   // 可以標註的段落：早、午、晚，週末多補充（週六 10 點、下午兩段）
-  // 每一天的補充：週六有 10 點和下午兩段（x、y），週日下午一段（x），平日沒有
+  // 每一天的補充：2026 週六有 10 點和下午兩段（x、y），週日下午一段（x）；其他年份先用預設：週六、週日各一段補充
   function extras(d) {
+    if (d.y.rule !== "2026") return d.weekend ? [["x", "補", "週末補充"]] : [];
     if (d.dow === 6) return [["x", "10點", "週六 10 點補充"], ["y", "下午", "週六下午補充"]];
     if (d.dow === 0) return [["x", "下午", "週日下午補充"]];
     return [];
   }
-  // 一天裡的順序照時間排：週六 早、10點、午、下午、晚；週日 早、午、下午、晚
+  // 一天裡的順序照時間排：2026 週六 早、10點、午、下午、晚；週日 早、午、下午、晚；其他年份補充排在最後
   function dayCodes(d) {
     var ex = extras(d);
+    if (d.y.rule !== "2026") return SESS.concat(ex);
     if (d.dow === 6) return [SESS[0], ex[0], SESS[1], ex[1], SESS[2]];
     if (d.dow === 0) return [SESS[0], SESS[1], ex[0], SESS[2]];
     return SESS.slice();
   }
   function sessLabel(d, code) {
+    if (code === "x" && d.y.rule !== "2026") return "補充";
     if (code === "x") return d.dow === 6 ? "補充・10點" : "補充・下午";
     if (code === "y") return "補充・下午";
     for (var k = 0; k < SESS.length; k++) if (SESS[k][0] === code) return SESS[k][2];
@@ -1196,31 +1267,42 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   }
   function md(d) { return (d.getMonth() + 1) + "/" + d.getDate(); }
 
-  var days = [];
-  var ALL_KEYS = [];
-  for (var i = 0; i < TOTAL_DAYS; i++) {
-    var date = addDays(FIRST, i);
-    var dow = date.getDay();
-    var weekend = dow === 0 || dow === 6;
-    var d = { i: i, n: i + 1, id: "d" + pad(i + 1), date: date, dow: dow, weekend: weekend,
-              week: Math.floor(i / 7) };
-    days.push(d);
-    SESS.forEach(function (s) { ALL_KEYS.push(d.id + s[0]); });
-    extras(d).forEach(function (e) { ALL_KEYS.push(d.id + e[0]); });
+  function yearDays(y) {
+    var out = [], f = new Date(y.first[0], y.first[1], y.first[2]);
+    for (var i = 0; i < y.days; i++) {
+      var date = addDays(f, i), dow = date.getDay();
+      out.push({ i: i, n: i + 1, id: y.px + "d" + pad(i + 1), date: date, dow: dow, weekend: dow === 0 || dow === 6,
+                 week: Math.floor(i / 7), y: y });
+    }
+    return out;
   }
-  var MAIN_TOTAL = TOTAL_DAYS * 3;
+  var EVERY_KEY = [];                                // 七屆全部的段落（讀資料時用來檢查）
+  YEARS.forEach(function (y) { yearDays(y).forEach(function (d) { dayCodes(d).forEach(function (c) { EVERY_KEY.push(d.id + c[0]); }); }); });
   var NOTE_MAX = 800;                                // 每天心得的字數上限
-  var WEEKS = Math.ceil(TOTAL_DAYS / 7);            // 9 週：每 7 天一週，最後一週 6 天
-  var WEEK_DAYS = [];
-  days.forEach(function (d) { (WEEK_DAYS[d.week] = WEEK_DAYS[d.week] || []).push(d); });
-  var NUM = ["一", "二", "三", "四", "五", "六", "七", "八", "九"];
-  // 印章：每聽完一週蓋一個，全部聽完再蓋「圓滿」；樣式和好好呼吸的印章冊一樣
-  var STAMPS = ["休息", "放鬆", "安靜", "中心", "本性", "臣服", "真實", "信仰", "信任", "圓滿"];
-  var ST_ROT = [-6, 4, -3, 7, -5, 3, -4, 6, -5, -7];
-  var ALL = WEEKS;                                   // 「圓滿」在印章冊裡的位置
+  var NUM = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
+  // 印章：每聽完一週蓋一個，全部聽完再蓋「圓滿」；第九週那一顆是這一屆的主題
+  var STAMP_BASE = ["休息", "放鬆", "安靜", "中心", "本性", "臣服", "真實", "信仰"];
+  var ST_ROT = [-6, 4, -3, 7, -5, 3, -4, 6, -5, -7, 5, -3, 4, -6, 3];
+  var days, ALL_KEYS, MAIN_TOTAL, WEEKS, WEEK_DAYS, STAMPS, ALL;
+  function setupYear() {                             // 換一屆時，重算這一屆的天數、週數、印章
+    TOTAL_DAYS = Y.days;
+    FIRST = new Date(Y.first[0], Y.first[1], Y.first[2]);
+    days = yearDays(Y);
+    ALL_KEYS = [];
+    days.forEach(function (d) { dayCodes(d).forEach(function (c) { ALL_KEYS.push(d.id + c[0]); }); });
+    MAIN_TOTAL = TOTAL_DAYS * 3;
+    WEEKS = Math.ceil(TOTAL_DAYS / 7);
+    WEEK_DAYS = [];
+    days.forEach(function (d) { (WEEK_DAYS[d.week] = WEEK_DAYS[d.week] || []).push(d); });
+    STAMPS = [];
+    for (var k = 0; k < WEEKS; k++) STAMPS.push(k === WEEKS - 1 ? Y.seal : STAMP_BASE[k % STAMP_BASE.length]);
+    STAMPS.push("圓滿");
+    ALL = WEEKS;                                     // 「圓滿」在印章冊裡的位置
+  }
+  setupYear();
 
   /* ---------- State ---------- */
-  var state = { done: {}, rewards: {}, start: null, pace: 1, notes: {}, tags: null, marks: {} };   // pace：重聽速度，幾天聽一天份（1–7）   // tags：null 表示用預設標籤；marks：每一段的標籤 { d01m: { tg: [標籤 id] } }   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
+  var state = { done: {}, rewards: {}, start: null, pace: 1, plans: {}, notes: {}, tags: null, marks: {} };   // plans：2026 以外各屆的重聽排程 { y25: { start, pace } }   // pace：重聽速度，幾天聽一天份（1–7）   // tags：null 表示用預設標籤；marks：每一段的標籤 { d01m: { tg: [標籤 id] } }   // start：重聽排程的開始日期；notes：每天的心得 { d01: { t: 文字, at: 寫的時間 } }
   var mode = "loading";            // loading | cloud | local | readonly
   var hideDone = false;
   var markTag = null;              // 正在用來標註的標籤；選了之後，點早、午、晚就是標上或取消這個標籤
@@ -1333,7 +1415,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       sec.appendChild(h);
       var ol = el("ol");
       list.forEach(function (d) {
-        var li = el("li", (layout === "rows" ? "day rows" : "day") + (d.dow === 6 ? " sat" : ""));
+        var li = el("li", (layout === "rows" ? "day rows" : "day") + (dayCodes(d).length === 5 ? " sat" : ""));
         li.id = "day-" + pad(d.n);
         var info = el("button", "info");
         info.type = "button";
@@ -1397,8 +1479,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var editable = mode === "cloud" || mode === "local";
     var nx = nextIndex();
     var cnt = { m: 0, n: 0, e: 0, x: 0, y: 0 }, fullDays = 0;
-    var start = parseIso(state.start);
-    var pace = state.pace || 1;                       // 幾天聽一天份
+    var start = parseIso(curStart());
+    var pace = curPace();                             // 幾天聽一天份
     var sinceStart = start ? dayDiff(new Date(), start) : null;
     var todayIdx = start ? (sinceStart < 0 ? -1 : Math.floor(sinceStart / pace)) : null;
 
@@ -1485,6 +1567,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     $("doneCount").textContent = mainDone;
     $("barCount").textContent = mainDone;
     $("dayCount").textContent = fullDays;
+    $("dayTotal").textContent = TOTAL_DAYS;
+    $("sumTotal").textContent = "/ " + MAIN_TOTAL + " 段";
+    $("barTotal").textContent = "/ " + MAIN_TOTAL;
+    $("totalTrack").setAttribute("aria-valuemax", MAIN_TOTAL);
     $("totalTrack").setAttribute("aria-valuenow", mainDone);
     setWidth("totalFill", mainDone, MAIN_TOTAL);
     setWidth("barFill", mainDone, MAIN_TOTAL);
@@ -1540,7 +1626,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     $("planNote").textContent = plan;
     $("planNote").hidden = !plan;
     var startInput = $("start");
-    if (document.activeElement !== startInput) startInput.value = state.start || "";
+    if (document.activeElement !== startInput) startInput.value = curStart() || "";
     startInput.disabled = !editable;
     $("startClear").hidden = !editable || !start;
     $("paceRow").hidden = !start;
@@ -1568,7 +1654,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     if (k === ALL) { for (var w = 0; w < WEEKS; w++) if (weekGot(w) < weekWhole(w)) return false; return true; }
     return weekGot(k) === weekWhole(k);
   }
-  function rwKey(k) { return k === ALL ? "all" : "w" + (k + 1); }
+  function rwKey(k) { return Y.px + (k === ALL ? "all" : "w" + (k + 1)); }
   function sealName(k) { return k === ALL ? "全部" : "第" + NUM[k] + "週"; }
   function sealRange(k) {
     if (k === ALL) return "第 1–" + TOTAL_DAYS + " 天";
@@ -1580,6 +1666,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var sealEls = [];
   function buildSeals() {
     var box = $("seals");
+    box.textContent = "";
+    sealEls = [];
     for (var k = 0; k <= WEEKS; k++) {
       (function (k) {
         var b = el("button", "seal-item");
@@ -1928,7 +2016,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function closeNotes() { showTab("list"); }
   // 網站版：把全部心得存成一個文字檔
   function exportNotes() {
-    var t = new Date(), lines = ["信任・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
+    var t = new Date(), lines = [Y.id + " 全球共修「" + Y.title + "」・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
     days.forEach(function (d) {
       var note = state.notes[d.id], marks = [];
       dayCodes(d).forEach(function (cd) {
@@ -1944,7 +2032,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       if (note) lines.push(note.t);
       lines.push("");
     });
-    saveTextFile("信任心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt", "\ufeff" + lines.join("\n"));
+    saveTextFile(Y.id + Y.title.replace(/[，,\s]/g, "") + "心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt", "\ufeff" + lines.join("\n"));
   }
   // 存成檔案：在 Claude 裡用 Claude 的下載（會先問要不要存），網站版直接下載
   var downloadsP = window.claude && window.claude.use ? window.claude.use("downloads").catch(function () { return null; }) : Promise.resolve(null);
@@ -2152,9 +2240,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var ref = null, docExists = false, lastRemote = {};
   var pending = newPatch(), inflight = null, writing = false, timer = null, failed = false;
 
-  function newPatch() { return { done: {}, rewards: {}, notes: {}, marks: {} }; }
+  function newPatch() { return { done: {}, rewards: {}, plans: {}, notes: {}, marks: {} }; }
   function hasPending() {
-    return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 ||
+    return Object.keys(pending.done).length > 0 || Object.keys(pending.rewards).length > 0 || Object.keys(pending.plans).length > 0 ||
       Object.keys(pending.notes).length > 0 || Object.keys(pending.marks).length > 0 ||
       "start" in pending || "pace" in pending || "tags" in pending;
   }
@@ -2163,19 +2251,28 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     lastRemote = data || {};
     var remote = lastRemote.done && typeof lastRemote.done === "object" ? lastRemote.done : {};
     var done = {};
-    ALL_KEYS.forEach(function (k) { if (remote[k] === true) done[k] = true; });
+    EVERY_KEY.forEach(function (k) { if (remote[k] === true) done[k] = true; });
     var rr = lastRemote.rewards && typeof lastRemote.rewards === "object" ? lastRemote.rewards : {};
     var rewards = {};
     var start = typeof lastRemote.start === "string" && parseIso(lastRemote.start) ? lastRemote.start : null;
     var pace = typeof lastRemote.pace === "number" && lastRemote.pace >= 1 && lastRemote.pace <= 7 ? Math.round(lastRemote.pace) : 1;
+    var rp = lastRemote.plans && typeof lastRemote.plans === "object" ? lastRemote.plans : {};
+    var plans = {};
+    Object.keys(rp).forEach(function (k) {
+      var v = rp[k];
+      if (!/^y\d\d$/.test(k) || !v || typeof v !== "object") return;
+      var st = typeof v.start === "string" && parseIso(v.start) ? v.start : null;
+      var pc = typeof v.pace === "number" && v.pace >= 1 && v.pace <= 7 ? Math.round(v.pace) : 1;
+      if (st || pc !== 1) plans[k] = { start: st, pace: pc };
+    });
     var rn = lastRemote.notes && typeof lastRemote.notes === "object" ? lastRemote.notes : {};
     var notes = {};
     Object.keys(rn).forEach(function (k) {
       var v = rn[k];
-      if (/^d\d\d[mnexy]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
+      if (/^(y\d\d)?d\d\d[mnexy]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
     });
     Object.keys(rr).forEach(function (k) {
-      if (/^(w[1-9]|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
+      if (/^(y\d\d)?(w\d\d?|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
     });
     var tags = null;
     if (Array.isArray(lastRemote.tags)) {
@@ -2189,7 +2286,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var marks = {};
     Object.keys(rm).forEach(function (k) {
       var v = rm[k];
-      if (!/^d\d\d[mnexy]$/.test(k) || !v || typeof v !== "object") return;
+      if (!/^(y\d\d)?d\d\d[mnexy]$/.test(k) || !v || typeof v !== "object") return;
       var tg = Array.isArray(v.tg) ? v.tg.filter(function (x) { return typeof x === "string"; }).slice(0, TAGS_MAX) : [];
       var ti = typeof v.ti === "string" ? v.ti.slice(0, TITLE_MAX) : "";
       var st = v.st === true;
@@ -2199,6 +2296,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       if (!p) return;
       Object.keys(p.done).forEach(function (k) { if (p.done[k]) done[k] = true; else delete done[k]; });
       Object.keys(p.rewards).forEach(function (k) { if (p.rewards[k]) rewards[k] = p.rewards[k]; else delete rewards[k]; });
+      Object.keys(p.plans).forEach(function (k) { if (p.plans[k]) plans[k] = p.plans[k]; else delete plans[k]; });
       if ("start" in p) start = p.start;
       if ("pace" in p) pace = p.pace;
       Object.keys(p.notes).forEach(function (k) { if (p.notes[k]) notes[k] = p.notes[k]; else delete notes[k]; });
@@ -2209,6 +2307,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     state.rewards = rewards;
     state.start = start;
     state.pace = pace;
+    state.plans = plans;
     state.notes = notes;
     state.tags = tags;
     state.marks = marks;
@@ -2243,13 +2342,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var body = {};
     if (Object.keys(patch.done).length) body.done = patch.done;
     if (Object.keys(patch.rewards).length) body.rewards = patch.rewards;
+    if (Object.keys(patch.plans).length) body.plans = patch.plans;
     if ("start" in patch) body.start = patch.start;
     if ("pace" in patch) body.pace = patch.pace;
     if (Object.keys(patch.notes).length) body.notes = patch.notes;
     if (Object.keys(patch.marks).length) body.marks = patch.marks;
     if ("tags" in patch) body.tags = patch.tags;
     var whole = function () {
-      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, notes: fullNotes(), tags: state.tags, marks: fullMarks() })
+      return ref.set({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, plans: state.plans, notes: fullNotes(), tags: state.tags, marks: fullMarks() })
         .then(function () { docExists = true; });
     };
     if (!docExists) return whole();
@@ -2282,6 +2382,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       var mergedR = {}; Object.keys(back.rewards).forEach(function (k) { mergedR[k] = back.rewards[k]; });
       Object.keys(pending.rewards).forEach(function (k) { mergedR[k] = pending.rewards[k]; });
       pending.rewards = mergedR;
+      var mergedP = {}; Object.keys(back.plans).forEach(function (k) { mergedP[k] = back.plans[k]; });
+      Object.keys(pending.plans).forEach(function (k) { mergedP[k] = pending.plans[k]; });
+      pending.plans = mergedP;
       if ("start" in back && !("start" in pending)) pending.start = back.start;
       if ("pace" in back && !("pace" in pending)) pending.pace = back.pace;
       var mergedN = {}; Object.keys(back.notes).forEach(function (k) { mergedN[k] = back.notes[k]; });
@@ -2308,7 +2411,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
   function writeLocal() {
     try {
-      localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
+      localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, plans: state.plans, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
     } catch (e) {}
   }
   function saveLocal() {
@@ -2318,7 +2421,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
   function onToggle(key, on) {
     if (mode !== "cloud" && mode !== "local") { paint(); return; }
-    var w = days[parseInt(key.slice(1, 3), 10) - 1].week;
+    var w = days[parseInt(key.replace(/^y\d\d/, "").slice(1, 3), 10) - 1].week;
     var hadWeek = sealOn(w), hadAll = sealOn(ALL);
     if (on) state.done[key] = true; else delete state.done[key];
     paint();
@@ -2375,10 +2478,23 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     schedule();
   }
 
+  // 重聽排程：2026 存在 start、pace（和以前一樣），其他屆存在 plans 裡
+  function curStart() { return Y.px ? (state.plans[Y.px] || {}).start || null : state.start; }
+  function curPace() { return (Y.px ? (state.plans[Y.px] || {}).pace : state.pace) || 1; }
+  function setPlan(start, pace) {
+    var v = start || pace !== 1 ? { start: start || null, pace: pace } : null;
+    if (v) state.plans[Y.px] = v; else delete state.plans[Y.px];
+    paint();
+    if (mode === "local") { saveLocal(); return; }
+    pending.plans[Y.px] = v;
+    setStatus("儲存中…");
+    schedule();
+  }
   function onStart(value) {
     if (mode !== "cloud" && mode !== "local") return;
     var v = parseIso(value) ? value : null;
-    if (v === state.start) return;
+    if (v === curStart()) return;
+    if (Y.px) { setPlan(v, curPace()); return; }
     state.start = v;
     paint();
     if (mode === "local") { saveLocal(); return; }
@@ -2390,7 +2506,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function onPace(value) {
     if (mode !== "cloud" && mode !== "local") return;
     var v = parseInt(value, 10);
-    if (!(v >= 1 && v <= 7) || v === state.pace) return;
+    if (!(v >= 1 && v <= 7) || v === curPace()) return;
+    if (Y.px) { setPlan(curStart(), v); return; }
     state.pace = v;
     paint();
     if (mode === "local") { saveLocal(); return; }
@@ -2462,6 +2579,75 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     }, function () {});
   }
 
+  /* ---------- 切換年份：2020～2026 的全球共修 ---------- */
+  function yearProgress(y) {
+    var re = new RegExp("^" + y.px + "d\\d\\d[mne]$"), n = 0;
+    Object.keys(state.done).forEach(function (k) { if (state.done[k] && re.test(k)) n++; });
+    return n;
+  }
+  function paintYearHead() {
+    var t = $("yrTitle");
+    t.textContent = Y.title;
+    t.classList.toggle("long", Array.from(Y.title).length > 5);
+    $("yrBtnT").textContent = Y.id + " 全球共修";
+    $("yrBtn").setAttribute("aria-label", "現在是 " + Y.id + " 全球共修「" + Y.title + "」，點一下換別的年份");
+    document.title = Y.title + "・全球共修重聽";
+  }
+  function renderYears() {
+    var box = $("yrList");
+    box.textContent = "";
+    YEARS.forEach(function (y) {
+      var got = yearProgress(y), whole = y.days * 3;
+      var b = el("button", "yr-row" + (y === Y ? " on" : ""));
+      b.type = "button";
+      if (y === Y) b.setAttribute("aria-current", "true");
+      b.appendChild(el("span", "yr-y", y.id));
+      var t = el("span", "yr-t", y.title);
+      if (y.sub) t.appendChild(el("small", null, y.sub));
+      b.appendChild(t);
+      b.appendChild(el("span", "yr-p", got >= whole ? "聽完了 ✓" : got ? got + " / " + whole : "還沒開始"));
+      if (got) { var bar = el("span", "yr-bar"), fill = el("i"); fill.style.width = Math.min(100, Math.round(100 * got / whole)) + "%"; bar.appendChild(fill); b.appendChild(bar); }
+      b.addEventListener("click", function () { closeYears(); setYear(y.id); });
+      box.appendChild(b);
+    });
+  }
+  var yrSheet = $("yrSheet"), yrLast = null;
+  function openYears() {
+    yrLast = document.activeElement;
+    renderYears();
+    yrSheet.hidden = false;
+    try { yrSheet.querySelector(".yr-row.on").focus({ preventScroll: true }); } catch (e) {}
+  }
+  function closeYears() {
+    if (yrSheet.hidden) return;
+    yrSheet.hidden = true;
+    if (yrLast && document.contains(yrLast)) { try { yrLast.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  function setYear(id) {
+    var y = yearById(id);
+    if (!y) return;
+    try { localStorage.setItem(LS_YEAR, y.id); } catch (e) {}
+    if (location.hash !== "#" + y.id) { try { history.replaceState(null, "", "#" + y.id); } catch (e) {} }
+    if (y === Y) return;
+    Y = y;
+    closeNote(); closeSess();
+    markTag = null; markOnly = false;
+    setupYear();
+    paintYearHead();
+    build();
+    buildSeals();
+    paint();
+    if (!notesScreen.hidden) renderNotes();
+    if (tagScreen && !tagScreen.hidden) renderTagIndex();
+    window.scrollTo(0, 0);
+  }
+  $("yrBtn").addEventListener("click", openYears);
+  $("yrClose").addEventListener("click", closeYears);
+  yrSheet.addEventListener("click", function (ev) { if (ev.target === yrSheet) closeYears(); });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape" && !yrSheet.hidden) { ev.stopPropagation(); closeYears(); } }, true);
+  window.addEventListener("hashchange", function () { var y = yearFromHash(); if (y) setYear(y.id); });
+  paintYearHead();
+
   /* ---------- 雲端同步（只有網站版）：存在每個人自己的 Google 雲端硬碟，應用程式專用的隱藏資料夾 ---------- */
   // 在 Google Cloud 建好「網頁應用程式」用戶端後，把用戶端 ID 填在這裡；空的就完全不顯示同步
   var GOOGLE_CLIENT_ID = "890024987381-574tckkbppf5fhcieorg9m83ugtkk8g0.apps.googleusercontent.com";
@@ -2488,17 +2674,19 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     Object.keys(st.marks || {}).forEach(function (k) { if (st.marks[k]) f["m:" + k] = st.marks[k]; });
     if (st.start) f.start = st.start;
     if (st.pace && st.pace !== 1) f.pace = st.pace;
+    Object.keys(st.plans || {}).forEach(function (k) { if (st.plans[k]) f["p:" + k] = st.plans[k]; });
     if (st.tags) f.tags = st.tags;
     return f;
   }
   function unflat(f) {
-    var o = { done: {}, rewards: {}, notes: {}, marks: {}, start: null, pace: 1, tags: null };
+    var o = { done: {}, rewards: {}, plans: {}, notes: {}, marks: {}, start: null, pace: 1, tags: null };
     Object.keys(f).forEach(function (k) {
       var v = f[k], p = k.slice(0, 2), id = k.slice(2);
       if (p === "d:") o.done[id] = true;
       else if (p === "r:") o.rewards[id] = v;
       else if (p === "n:") o.notes[id] = v;
       else if (p === "m:") o.marks[id] = v;
+      else if (p === "p:") o.plans[id] = v;
       else if (k === "start") o.start = v;
       else if (k === "pace") o.pace = v;
       else if (k === "tags") o.tags = v;
