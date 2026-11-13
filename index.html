@@ -259,6 +259,7 @@ button { font: inherit; color: inherit; }
 .week .alldone { margin: 0; padding: 12px 4px; color: var(--muted-2); font-size: 0.8125rem; border-bottom: 1px solid var(--line); }
 
 .foot { margin: 0 4px; color: var(--muted-2); font-size: 0.75rem; line-height: 1.7; text-wrap: pretty; }
+.foot.legal a { color: var(--muted-2); }
 
 /* ---------- 三列版型：日期一行，下面早、午、晚（週末加補充）各一列 ---------- */
 .day.rows { display: block; padding: 14px 0 4px; border-bottom: 0; }
@@ -957,6 +958,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   <div class="weeks" id="weeks"></div>
 
   <p class="foot" id="localNote" hidden>打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以用心得本的「匯出」另外存一份。</p>
+  <p class="foot legal" id="legalLinks"><a href="privacy.html">隱私權政策</a>・<a href="terms.html">使用條款</a></p>
 </main>
 
 <div class="sheet-bg" id="installSheet" hidden>
@@ -2469,6 +2471,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var LS_STAMPS = "trust-relisten:stamps";   // 每一筆資料最後一次修改的時間，兩台裝置合併時用
   var DRIVE = "https://www.googleapis.com/drive/v3", UPLOAD = "https://www.googleapis.com/upload/drive/v3/files";
   var syncOn = !window.claude && !!GOOGLE_CLIENT_ID;
+  if (window.claude) $("legalLinks").hidden = true;   // 隱私權政策、使用條款只在網站版顯示
   var sync = null, stamps = {}, lastFlat = null;
   var syncTimer = null, syncBusy = false, syncAgain = false, syncErr = "", tokenClient = null, gisP = null;
 
