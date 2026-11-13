@@ -555,6 +555,20 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .sync-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 @keyframes syncPulse { from { opacity: 1; } to { opacity: .35; } }
 @media (prefers-reduced-motion: reduce) { .sync-pill.busy svg { animation: none; } }
+/* 通行證過期時，分頁列上方的提示：點一下就重新連上並同步 */
+.sync-bar {
+  position: fixed; z-index: 26; left: 50%; transform: translateX(-50%);
+  bottom: calc(72px + env(safe-area-inset-bottom, 0px)); width: calc(100% - 32px); max-width: 448px;
+  display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 8px 8px 8px 14px; border-radius: 16px;
+  border: 1.5px solid var(--accent); background: var(--card); color: var(--ink); box-shadow: 0 6px 20px var(--shadow);
+  font: inherit; font-size: 0.875rem; text-align: left; cursor: pointer;
+}
+.sync-bar svg { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sync-bar-t { flex: 1; min-width: 0; line-height: 1.4; }
+.sync-bar-go { flex: none; padding: 7px 14px; border-radius: 10px; background: var(--sel); color: var(--selfg); font-weight: 600; font-size: 0.8125rem; }
+.sync-bar:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:root.syncbar-on main.home { padding-bottom: calc(156px + env(safe-area-inset-bottom, 0px)); }
+:root.syncbar-on .tab-screen .screen-inner { padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px)); }
 .sync-card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 20px; background: var(--soft); border: 1px solid var(--line); }
 .sync-card h3 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 600; }
 .sync-card h3 svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
@@ -1104,6 +1118,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   </div>
 </section>
 
+<button type="button" class="sync-bar" id="syncBar" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span class="sync-bar-t" id="syncBarT">點一下載入最新的筆記</span><span class="sync-bar-go">同步</span></button>
+
 <nav class="tabbar" id="tabbar" aria-label="分頁">
   <div class="tabbar-in">
     <button type="button" class="tab on" data-tab="list" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單</button>
@@ -1193,7 +1209,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span><span><i style="background:#fffaf3;border:3px solid #a8461d"></i>晨曦</span><span><i style="background:#fbfdfb;border:3px solid #2d6a43"></i>森林</span><span><i style="background:#fdfcff;border:3px solid #5b3fa0"></i>薰衣草</span><span><i style="background:radial-gradient(circle,#7cc4ff 0 38%,#0b1626 41%)"></i>深海</span><span><i style="background:radial-gradient(circle at 32% 34%,#fff 0 9%,transparent 12%),radial-gradient(circle at 64% 62%,#e6c36a 0 14%,transparent 17%),#0a0d24"></i>夜空</span></span></div><h3>換主題</h3><p class="cap">八種主題，記在各自的裝置</p></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me two">復習</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
-      <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>同步筆記</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
+      <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>同步筆記</h3><p class="cap">用 Google 登入，換手機、用電腦都同步；隔一陣子再打開，點一下畫面就會接著同步</p></section>
 
     </div>
   </div>
@@ -3065,14 +3081,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   }
   function gisReady() { return !!(window.google && google.accounts && google.accounts.oauth2); }
   // 一定要在使用者點按鈕的當下呼叫，不然 Google 的視窗會被瀏覽器擋掉
-  function askToken(done) {
-    if (!gisReady()) { loadGis().catch(function () {}); syncErr = "loading"; paintSync(); return; }
+  function askToken(done, fail) {
+    if (!gisReady()) { loadGis().catch(function () {}); syncErr = "loading"; paintSync(); if (fail) fail(); return; }
     if (!tokenClient) tokenClient = google.accounts.oauth2.initTokenClient({ client_id: GOOGLE_CLIENT_ID, scope: SYNC_SCOPE, callback: function () {} });
     tokenClient.callback = function (r) {
       if (r && r.access_token && google.accounts.oauth2.hasGrantedAllScopes(r, SYNC_SCOPE)) done(r);
-      else { syncErr = "denied"; paintSync(); }
+      else { syncErr = "denied"; paintSync(); if (fail) fail(); }
     };
-    tokenClient.error_callback = function () { syncErr = "closed"; paintSync(); };
+    tokenClient.error_callback = function () { syncErr = "closed"; paintSync(); if (fail) fail(); };
     var opt = { prompt: "" };
     if (sync && sync.email) opt.login_hint = sync.email;
     tokenClient.requestAccessToken(opt);
@@ -3119,6 +3135,35 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     askToken(function (r) { takeToken(r); syncNow(); });
   }
 
+  // 通行證過期以後，使用者第一次點畫面（打勾、開心得、換分頁…）就順便向 Google 拿新的通行證，接著自動同步。
+  // Google 規定一定要使用者點一下才能拿，所以沒辦法在背景自己續期。已經同意過的人，Google 的視窗會跳出來一下就自己關掉。
+  // 點輸入框不算（免得打字時跳走）；使用者把 Google 的視窗關掉的話，10 分鐘內不再自動跳。
+  var renewing = false, renewQuietUntil = 0;
+  function autoRenew(ev) {
+    if (!syncOn || !sync || tokenOk() || renewing || syncBusy) return;
+    if (Date.now() < renewQuietUntil || inApp() || !gisReady()) return;
+    var t = ev.target;
+    if (t && t.closest && t.closest('#syncPill, #syncCard, #syncAsk, #syncBar, #inappBan, textarea, select, input:not([type="checkbox"]):not([type="radio"])')) return;
+    renewing = true;
+    askToken(function (r) { renewing = false; takeToken(r); syncNow(); },
+      function () { renewing = false; renewQuietUntil = Date.now() + 10 * 60 * 1000; });
+  }
+  document.addEventListener("click", autoRenew, true);
+  function unsyncedCount() {
+    var at = sync && sync.at || 0;
+    return Object.keys(stamps).filter(function (k) { return stamps[k] > at; }).length;
+  }
+  // 畫面下方的提示：通行證過期時出現，提醒點一下就能同步
+  function paintSyncBar() {
+    var bar = $("syncBar"), show = !!sync && !tokenOk() && !syncBusy && !inApp();
+    bar.hidden = !show;
+    document.documentElement.classList.toggle("syncbar-on", show);
+    if (!show) return;
+    var n = unsyncedCount();
+    $("syncBarT").textContent = n ? "有 " + n + " 筆還沒存到雲端，點一下同步" : "點一下載入最新的筆記";
+    bar.setAttribute("aria-label", n ? "有 " + n + " 筆變更還沒存到雲端，點一下同步筆記" : "點一下載入最新的筆記");
+  }
+
   // LINE、Facebook 這類 App 裡的瀏覽器，Google 不讓登入
   function inApp() { return /\bLine\/|FBAN|FBAV|Instagram|MicroMessenger/i.test(navigator.userAgent || ""); }
   function showInApp(force) {
@@ -3143,6 +3188,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   }
   function paintSync() {
     if (!syncOn) return;
+    paintSyncBar();
     var pill = $("syncPill"), pt = $("syncPillT"), card = $("syncCard"), txt = $("syncText");
     var st = !sync ? "off" : syncBusy ? "busy" : syncErr === "fail" ? "fail" : (!tokenOk() || !sync.at || dirty()) ? "tap" : "ok";
     pill.hidden = false;
@@ -3168,7 +3214,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         st === "busy" ? "同步中…"
         : st === "fail" ? "這次沒有同步成功，可能是網路不穩，按「立即同步」再試一次。"
         : syncErr === "loading" ? "正在載入 Google 登入，請再按一次。"
-        : !tokenOk() ? "登入已經過了一段時間，按「立即同步」重新連上（不用再輸入密碼）。"
+        : !tokenOk() ? "登入已經過了一段時間。點一下畫面任何地方，或按「立即同步」，就會重新連上，不用再輸入密碼。"
         : dirty() ? "有新的變更，幾秒後會自動存上去。"
         : sync.at ? agoLabel(sync.at) + "存好" : "準備中…"));
     }
@@ -3189,6 +3235,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     setInterval(paintSync, 30000);
   }
   $("syncPill").addEventListener("click", tapSync);
+  $("syncBar").addEventListener("click", tapSync);
   $("syncIn").addEventListener("click", signIn);
   $("syncNowBtn").addEventListener("click", tapSync);
   $("syncOut").addEventListener("click", signOut);
