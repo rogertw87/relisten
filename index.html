@@ -491,6 +491,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .sw.sw-e { background: #fbfdfb; border: 3px solid #2d6a43; }
 .sw.sw-f { background: #fdfcff; border: 3px solid #5b3fa0; }
 .sw.sw-g { background: radial-gradient(circle, #7cc4ff 0 38%, #0b1626 41%); }
+.sw.sw-h { background: radial-gradient(circle at 32% 34%, #ffffff 0 9%, transparent 12%), radial-gradient(circle at 64% 62%, #e6c36a 0 14%, transparent 17%), #0a0d24; }
 
 /* 選單裡的「印章冊」 */
 .menu-item {
@@ -983,8 +984,31 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 :root[data-look="bw"] .summary, :root[data-look="bw"] .tagcard { border-color: var(--ink); }
 :root[data-look="bw"] .day.done .info { opacity: 1; }
 :root[data-look="bw"] .day.done .orig { text-decoration: line-through; text-decoration-thickness: 1.5px; }
+
+/* ---------- 主題「夜空」：從好好呼吸搬過來。深藍的夜，金色打勾；清單和各頁底下鋪一張星空圖（程式畫出，存在 --sky），
+   流星雨畫在 .sky-fx 這張畫布上 ---------- */
+:root[data-look="starry"] {
+  --ink: #eef0fb; --ink-2: #c9cff5; --muted: #c0c5e3; --muted-2: #a9afd2;
+  --accent: #e6c36a; --accent-2: #8fa2f0;
+  --line: #3a4480; --line-2: #6c78bd; --line-3: #1d2452;
+  --soft: #12173f; --soft-2: #1a2052; --chip: #1a2052; --screen: #000000;
+  --page: #0a0d24; --card: #10143a; --track: #3a4378; --shadow: rgba(0,0,0,.5);
+  --sel: #e6c36a; --selfg: #141a3a;
+  --warn: #ff9b85; --seal: #ff8a6e;
+  --tg0: #62d2f0; --tg1: #ffae62; --tg2: #ff92b8; --tg3: #84de9a; --tg4: #c3abff; --tg5: #ffe36e;
+  --star: #ff9f5a;
+  color-scheme: dark;
+}
+:root[data-look="starry"] .home::before {
+  content: ""; position: fixed; top: 0; bottom: 0; left: 50%; width: 100%; max-width: 480px;
+  transform: translateX(-50%); z-index: -1; pointer-events: none;
+  background: #000000 var(--sky, none) center / cover;
+}
+:root[data-look="starry"] .screen { background: #000000 var(--sky, none) center / cover; }
+.sky-fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
+.home > .sky-fx { left: 50%; max-width: 480px; transform: translateX(-50%); }
 </style>
-<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean)$/.test(l))document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
+<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean|starry)$/.test(l))document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
 </head>
 <body>
 <main class="page home">
@@ -1010,6 +1034,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
           <button type="button" class="menu-theme-opt" data-look-pick="forest" aria-pressed="false"><i class="sw sw-e" aria-hidden="true"></i>森林</button>
           <button type="button" class="menu-theme-opt" data-look-pick="lavender" aria-pressed="false"><i class="sw sw-f" aria-hidden="true"></i>薰衣草</button>
           <button type="button" class="menu-theme-opt" data-look-pick="ocean" aria-pressed="false"><i class="sw sw-g" aria-hidden="true"></i>深海</button>
+          <button type="button" class="menu-theme-opt" data-look-pick="starry" aria-pressed="false"><i class="sw sw-h" aria-hidden="true"></i>夜空</button>
         </div>
       </div>
     </div>
@@ -1165,7 +1190,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設，也可以放慢</p></section>
 
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span><span><i style="background:#fffaf3;border:3px solid #a8461d"></i>晨曦</span><span><i style="background:#fbfdfb;border:3px solid #2d6a43"></i>森林</span><span><i style="background:#fdfcff;border:3px solid #5b3fa0"></i>薰衣草</span><span><i style="background:radial-gradient(circle,#7cc4ff 0 38%,#0b1626 41%)"></i>深海</span></span></div><h3>換主題</h3><p class="cap">七種顏色，記在各自的裝置</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span><span><i style="background:#fffaf3;border:3px solid #a8461d"></i>晨曦</span><span><i style="background:#fbfdfb;border:3px solid #2d6a43"></i>森林</span><span><i style="background:#fdfcff;border:3px solid #5b3fa0"></i>薰衣草</span><span><i style="background:radial-gradient(circle,#7cc4ff 0 38%,#0b1626 41%)"></i>深海</span><span><i style="background:radial-gradient(circle at 32% 34%,#fff 0 9%,transparent 12%),radial-gradient(circle at 64% 62%,#e6c36a 0 14%,transparent 17%),#0a0d24"></i>夜空</span></span></div><h3>換主題</h3><p class="cap">八種主題，記在各自的裝置</p></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me two">復習</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
       <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>同步筆記</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>同步筆記</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
@@ -1250,16 +1275,16 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   "use strict";
 
   /* ---------- 歷年的全球共修：每一屆各自的天數、開始日期、週末補充 ---------- */
-  // px：這一屆資料的前綴（2026 沒有前綴，沿用原本的資料）；rule：每天有哪幾段（2026 照實際，其他先用預設：週末各一段補充）
+  // px：這一屆資料的前綴（2026 沒有前綴，沿用原本的資料）；rule：每天有哪幾段（std：每一屆都比照 2026，週六 10 點和下午、週日下午各有補充；basic：週末各一段補充，目前沒有使用）
   // seal：印章冊第九週那一顆印章的字；天數和日期是官網寫的「7/1 開始、兩個月」，實際以 App 為準
   var YEARS = [
-    { id: "2026", px: "",    title: "信任",           sub: "",                         first: [2026, 6, 1], days: 62, seal: "信任", rule: "2026" },
-    { id: "2025", px: "y25", title: "中道，中道到底", sub: "",                         first: [2025, 6, 1], days: 62, seal: "中道", rule: "basic" },
-    { id: "2024", px: "y24", title: "心，向前行",     sub: "",                         first: [2024, 6, 1], days: 62, seal: "向前", rule: "basic" },
-    { id: "2023", px: "y23", title: "清醒的呼吸",     sub: "",                         first: [2023, 6, 1], days: 62, seal: "呼吸", rule: "basic" },
-    { id: "2022", px: "y22", title: "定在心",         sub: "新世界，新的正常，全新的開始", first: [2022, 6, 1], days: 62, seal: "在心", rule: "basic" },
-    { id: "2021", px: "y21", title: "沒有路的路",     sub: "全球靜心",                  first: [2021, 6, 1], days: 62, seal: "靜心", rule: "basic" },
-    { id: "2020", px: "y20", title: "唯識的每日靜心", sub: "",                         first: [2020, 6, 1], days: 62, seal: "唯識", rule: "basic" }
+    { id: "2026", px: "",    title: "信任",           sub: "",                         first: [2026, 6, 1], days: 62, seal: "信任", rule: "std" },
+    { id: "2025", px: "y25", title: "中道，中道到底", sub: "",                         first: [2025, 6, 1], days: 62, seal: "中道", rule: "std" },
+    { id: "2024", px: "y24", title: "心，向前行",     sub: "",                         first: [2024, 6, 1], days: 62, seal: "向前", rule: "std" },
+    { id: "2023", px: "y23", title: "清醒的呼吸",     sub: "",                         first: [2023, 6, 1], days: 62, seal: "呼吸", rule: "std" },
+    { id: "2022", px: "y22", title: "定在心",         sub: "新世界，新的正常，全新的開始", first: [2022, 6, 1], days: 62, seal: "在心", rule: "std" },
+    { id: "2021", px: "y21", title: "沒有路的路",     sub: "全球靜心",                  first: [2021, 6, 1], days: 62, seal: "靜心", rule: "std" },
+    { id: "2020", px: "y20", title: "唯識的每日靜心", sub: "",                         first: [2020, 6, 1], days: 62, seal: "唯識", rule: "std" }
   ];
   var LS_YEAR = "trust-relisten:year";
   function yearById(id) { for (var k = 0; k < YEARS.length; k++) if (YEARS[k].id === id) return YEARS[k]; return null; }
@@ -1272,23 +1297,23 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var WD = ["日", "一", "二", "三", "四", "五", "六"];
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
   var CODES = SESS.concat([["x", "補", "週末補充"], ["y", "下午", "週六下午補充"]]);   // 可以標註的段落：早、午、晚，週末多補充（週六 10 點、下午兩段）
-  // 每一天的補充：2026 週六有 10 點和下午兩段（x、y），週日下午一段（x）；其他年份先用預設：週六、週日各一段補充
+  // 每一天的補充：週六有 10 點和下午兩段（x、y），週日下午一段（x），每一屆都一樣
   function extras(d) {
-    if (d.y.rule !== "2026") return d.weekend ? [["x", "補", "週末補充"]] : [];
+    if (d.y.rule === "basic") return d.weekend ? [["x", "補", "週末補充"]] : [];
     if (d.dow === 6) return [["x", "10點", "週六 10 點補充"], ["y", "下午", "週六下午補充"]];
     if (d.dow === 0) return [["x", "下午", "週日下午補充"]];
     return [];
   }
-  // 一天裡的順序照時間排：2026 週六 早、10點、午、下午、晚；週日 早、午、下午、晚；其他年份補充排在最後
+  // 一天裡的順序照時間排：週六 早、10點、午、下午、晚；週日 早、午、下午、晚
   function dayCodes(d) {
     var ex = extras(d);
-    if (d.y.rule !== "2026") return SESS.concat(ex);
+    if (d.y.rule === "basic") return SESS.concat(ex);
     if (d.dow === 6) return [SESS[0], ex[0], SESS[1], ex[1], SESS[2]];
     if (d.dow === 0) return [SESS[0], SESS[1], ex[0], SESS[2]];
     return SESS.slice();
   }
   function sessLabel(d, code) {
-    if (code === "x" && d.y.rule !== "2026") return "補充";
+    if (code === "x" && d.y.rule === "basic") return "補充";
     if (code === "x") return d.dow === 6 ? "補充・10點" : "補充・下午";
     if (code === "y") return "補充・下午";
     for (var k = 0; k < SESS.length; k++) if (SESS[k][0] === code) return SESS[k][2];
@@ -1808,8 +1833,186 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   // 第一張說明卡：圈住早、午、晚的框，用一條線連到標題「聽完就打勾」
   var callCard = document.querySelector(".g-call");
 
-  /* ---------- 主題：淺色（預設）、夜間高對比、黑白分明、晨曦、森林、薰衣草、深海；選擇記在這台裝置 ---------- */
-  var LOOK_KEY = "trust-relisten:look", LOOK_BG = { "": "#ffffff", night: "#000000", bw: "#ffffff", sunrise: "#fffaf3", forest: "#fbfdfb", lavender: "#fdfcff", ocean: "#0b1626" };
+
+  /* ---------- 主題「夜空」：從好好呼吸搬過來。一張程式畫的星空（銀河、小星、少數亮星）當背景，
+     上面有流星雨、輪流閃爍的星星，偶爾飛過一台飛碟。手機開了「減少動態效果」就只留星空、不動。 ---------- */
+  let _starUrl=null;let _starV=2;const starTex=()=>{if(_starUrl)return _starUrl;try{const W=480,H=1000,k=2,c=document.createElement('canvas');c.width=W*k;c.height=H*k;const x=c.getContext('2d');x.scale(k,k);let r=11;const R=()=>(r=(r*16807)%2147483647)/2147483647,G=()=>(R()+R()+R()+R()-2)/2;
+    const bg=x.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#000000');bg.addColorStop(1,'#000000');x.fillStyle=bg;x.fillRect(0,0,W,H);
+    const ax=-60,ay=H*.92,bx=W+60,by=H*.08,dx=bx-ax,dy=by-ay,len=Math.hypot(dx,dy),nx=-dy/len,ny=dx/len,band=t=>[ax+dx*t,ay+dy*t];
+    const blob=(px,py,rad,col)=>{const g=x.createRadialGradient(px,py,0,px,py,rad);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=g;x.fillRect(px-rad,py-rad,rad*2,rad*2);};
+    const hs=(i,j,s)=>{let h=(Math.imul(i,374761393)+Math.imul(j,668265263)+Math.imul(s,982451653))|0;h=Math.imul(h^(h>>>13),1274126177);return ((h^(h>>>16))>>>0)/4294967295;};
+    const vn=(X,Y,s)=>{const i=Math.floor(X),j=Math.floor(Y),fx=X-i,fy=Y-j,u=fx*fx*(3-2*fx),v=fy*fy*(3-2*fy),a=hs(i,j,s),b=hs(i+1,j,s),c2=hs(i,j+1,s),d=hs(i+1,j+1,s);return a+(b-a)*u+(c2-a)*v+(a-b-c2+d)*u*v;};
+    const fbm=(X,Y,s)=>{let t=0,am=.5,f=1;for(let o=0;o<5;o++){t+=am*vn(X*f,Y*f,s+o);f*=2.03;am*=.5;}return t;};
+    const GW=240,GH=Math.round(GW*H/W),gc=document.createElement('canvas');gc.width=GW;gc.height=GH;const gx=gc.getContext('2d'),im=gx.createImageData(GW,GH),MI=new Float32Array(GW*GH);
+    for(let gy=0;gy<GH;gy++)for(let gp=0;gp<GW;gp++){const px=gp/GW*W,py=gy/GH*H,rx=px-ax,ry=py-ay,t=(rx*dx+ry*dy)/(len*len),d0=rx*nx+ry*ny;
+      const d=d0-(fbm(t*3,7.3,40)-.5)*70,core=Math.exp(-Math.pow((t-.6)/.16,2)),wid=50+45*core;
+      const prof=Math.exp(-(d*d)/(2*wid*wid)),along=.4+.6*Math.exp(-Math.pow((t-.55)/.35,2)),n=fbm(px/70,py/70,1),n2=fbm(px/20,py/20,9);
+      let I=prof*along*Math.pow(n,2.2)*2.2*(.55+.9*n2)+core*Math.exp(-(d*d)/(2*30*30))*1.1*Math.pow(n,1.5)*1.6;
+      const dn=fbm(px/40+3,py/40,20),lane=Math.exp(-Math.pow((d-4-(dn-.5)*50)/(16+22*core),2)),dust=Math.min(1,Math.max(0,(dn-.3)*2.2))*lane*Math.min(1,.35+t*1.4);
+      I*=1-.95*dust;I*=1-Math.max(0,fbm(px/12,py/12,30)-.5)*prof*1.3;MI[gy*GW+gp]=I;
+      const w=core,o=(gy*GW+gp)*4,v=Math.min(1,I);im.data[o]=Math.min(255,(150+110*w)*v);im.data[o+1]=Math.min(255,(165+50*w)*v);im.data[o+2]=Math.min(255,(235-75*w)*v);im.data[o+3]=255;}
+    gx.putImageData(im,0,0);x.globalCompositeOperation='lighter';x.imageSmoothingEnabled=true;x.globalAlpha=.38;x.filter='blur(1.5px)';x.drawImage(gc,0,0,W,H);x.filter='none';x.globalAlpha=.2;x.drawImage(gc,0,0,W,H);x.globalAlpha=1;x.globalCompositeOperation='source-over';
+    const MIat=(px,py)=>MI[Math.min(GH-1,Math.max(0,Math.floor(py/H*GH)))*GW+Math.min(GW-1,Math.max(0,Math.floor(px/W*GW)))];
+    const star=(px,py,m)=>{const tc=R(),col=tc<.12?'170,195,255':tc<.25?'205,220,255':tc<.85?'255,255,255':tc<.95?'255,236,200':'255,205,160',rad=.22+m*1.05,a=Math.min(1,.18+m*.9);x.fillStyle='rgba('+col+','+a.toFixed(2)+')';x.beginPath();x.arc(px,py,rad,0,Math.PI*2);x.fill();
+      if(m>.8){blob(px,py,3+m*5,'rgba('+col+','+(0.25*m).toFixed(2)+')');if(m>.93){x.strokeStyle='rgba('+col+',.22)';x.lineWidth=.4;x.beginPath();x.moveTo(px-7,py);x.lineTo(px+7,py);x.moveTo(px,py-7);x.lineTo(px,py+7);x.stroke();}}};
+    for(let j=0;j<1700;j++)star(R()*W,R()*H,Math.pow(R(),3.2));
+    for(let j=0,m=0;j<400000&&m<26000;j++){const px=R()*W,py=R()*H;if(R()<Math.min(1,MIat(px,py)*1.6)){const a=.12+R()*.3,cc=R();x.fillStyle=cc<.3?'rgba(200,212,255,'+a.toFixed(2)+')':cc<.85?'rgba(255,255,255,'+a.toFixed(2)+')':'rgba(255,225,190,'+a.toFixed(2)+')';const z=R()<.8?.5:.8;x.fillRect(px,py,z,z);m++;}}
+    for(let j=0,m=0;j<80000&&m<4000;j++){const px=R()*W,py=R()*H;if(R()<Math.min(1,MIat(px,py)*1.4)){star(px,py,Math.pow(R(),5)*.6);m++;}}
+    for(let j=0;j<22;j++)star(R()*W,R()*H*.9,.85+R()*.15);
+    _starUrl='url('+c.toDataURL('image/jpeg',.9)+')';}catch(e){_starUrl='none';}return _starUrl;};
+  
+  const fxImgs = {};
+  function glowImg(key, n, stops) {
+    if (fxImgs[key]) return fxImgs[key];
+    const c = document.createElement('canvas'); c.width = c.height = n;
+    const g = c.getContext('2d'), r = g.createRadialGradient(n / 2, n / 2, 0, n / 2, n / 2, n / 2);
+    stops.forEach(([p, col]) => r.addColorStop(p, col)); g.fillStyle = r; g.fillRect(0, 0, n, n); return fxImgs[key] = c;
+  }
+  const metImg = () => glowImg('meteor', 64, [[0, 'rgba(255,255,255,1)'], [.18, 'rgba(226,238,255,.85)'], [.45, 'rgba(150,185,255,.28)'], [1, 'rgba(120,160,255,0)']]);
+  // 流星：從右上往左下，尾巴隨飛行距離拉開
+  const newMet = (W, H) => {
+    const R = Math.random, a = (152 + R() * 7) * Math.PI / 180, dx = Math.cos(a), dy = Math.sin(a),
+      x = W * (.45 + R() * .75), y = H * (-.1 + R() * .28), v = 430 + R() * 220,
+      tx = dx < 0 ? (-60 - x) / (dx * v) : 99, ty = dy > 0 ? (H + 60 - y) / (dy * v) : 99;
+    return { x, y, dx, dy, v, len: 80 + R() * 70, w: 1.1 + R() * .9, age: 0, trav: 0, life: Math.max(.5, Math.min(tx, ty)) + .25 };
+  };
+  // 會閃爍的星星：亮起來、停一下、暗下去，然後換個地方重來
+  const newTw = (W, H) => {
+    const R = Math.random;
+    return { x: R() * W, y: R() * H * .92, r: 1.5 + R() * 2.4, t: -R() * 10, up: .9 + R() * 1.3, hold: .25 + R() * .7, dn: 1 + R() * 1.6, gap: 5 + R() * 9 };
+  };
+  const twA = w => {
+    if (w.t < 0) return 0;
+    if (w.t < w.up) return w.t / w.up;
+    const b = w.t - w.up; if (b < w.hold) return 1;
+    const c = b - w.hold; return c < w.dn ? 1 - c / w.dn : 0;
+  };
+  // 飛碟：慢慢橫越，幾秒後突然加速竄走，後面拖一道彩虹
+  const newUfo = (W, H) => {
+    const R = Math.random, dir = R() < .5 ? 1 : -1;
+    return { dir, x: dir > 0 ? -50 : W + 50, y0: H * (.08 + R() * .17), y: 0, v: 16 + R() * 14, s: 11 + R() * 5, t: 0, cruise: 5 + R() * 7, out: false, outT: 0, a: 0, sp: 0 };
+  };
+  const RB = ['rgba(255,95,109,', 'rgba(255,163,108,', 'rgba(255,224,102,', 'rgba(125,223,143,', 'rgba(111,200,255,', 'rgba(176,139,255,'];
+  function drawUfo(g, u, t) {
+    const s = u.s, d = u.dir; g.save(); g.translate(u.x, u.y);
+    const L = Math.min(250, s * 2 + (u.sp || 0) * .34);
+    if (L > s * 2.2) {
+      g.globalCompositeOperation = 'lighter';
+      for (let i = 0; i < 6; i++) {
+        const o = (i - 2.5) * s * .15, x0 = -d * s * .85, x1 = -d * L, gr = g.createLinearGradient(x0, 0, x1, 0);
+        gr.addColorStop(0, RB[i] + (.55 * u.a).toFixed(3) + ')'); gr.addColorStop(.45, RB[i] + (.3 * u.a).toFixed(3) + ')'); gr.addColorStop(1, RB[i] + '0)');
+        g.strokeStyle = gr; g.lineWidth = s * .14; g.lineCap = 'round';
+        g.beginPath(); g.moveTo(x0, o); g.bezierCurveTo(x0 + (x1 - x0) * .4, o * 1.25, x0 + (x1 - x0) * .7, o * 1.6, x1, o * 2); g.stroke();
+      }
+      g.globalCompositeOperation = 'source-over';
+    }
+    g.globalCompositeOperation = 'lighter';
+    const gl = g.createRadialGradient(0, 0, 0, 0, 0, s * 2.4);
+    gl.addColorStop(0, 'rgba(150,220,255,' + (.2 * u.a).toFixed(3) + ')'); gl.addColorStop(1, 'rgba(120,180,255,0)');
+    g.fillStyle = gl; g.beginPath(); g.arc(0, 0, s * 2.4, 0, 6.2832); g.fill();
+    g.globalCompositeOperation = 'source-over';
+    g.globalAlpha = u.a; g.fillStyle = '#101d28'; g.strokeStyle = 'rgba(175,218,255,.8)'; g.lineWidth = 1;
+    g.beginPath(); g.ellipse(0, 0, s, s * .28, 0, 0, 6.2832); g.fill(); g.stroke();
+    g.beginPath(); g.ellipse(0, -s * .04, s * .46, s * .34, 0, Math.PI, 0); g.fill(); g.stroke();
+    for (let i = -1; i <= 1; i++) {
+      const bl = .3 + .7 * Math.pow(Math.sin(t * 3.2 + i * 2.1), 2);
+      g.fillStyle = 'rgba(255,' + Math.round(198 + 45 * bl) + ',140,' + (bl * u.a).toFixed(3) + ')';
+      g.beginPath(); g.arc(i * s * .52, s * .2, s * .1, 0, 6.2832); g.fill();
+    }
+    g.globalAlpha = 1; g.restore();
+  }
+  const METEORS = {
+      init(st) { st.p = []; st.q = []; st.next = 4 + Math.random() * 8; st.u = null; st.uNext = 25 + Math.random() * 30; st.tw = null; },
+      move(st, dt, W, H) {
+        st.next -= dt;
+        if (st.next <= 0) {
+          const n = 3 + ((Math.random() * 4) | 0);
+          for (let i = 0; i < n; i++) st.q.push(i * (.12 + Math.random() * .35));
+          st.next = 15 + Math.random() * 11;
+        }
+        st.q = st.q.map(v => v - dt).filter(v => { if (v <= 0) { st.p.push(newMet(W, H)); return false; } return true; });
+        const keep = [];
+        for (const m of st.p) { m.age += dt; const d = m.v * dt; m.trav += d; m.x += m.dx * d; m.y += m.dy * d; if (m.age < m.life) keep.push(m); }
+        st.p = keep;
+        if (!st.tw) { st.tw = []; for (let i = 0; i < 11; i++) st.tw.push(newTw(W, H)); }
+        for (const w of st.tw) { w.t += dt; if (w.t > w.up + w.hold + w.dn) { const n = newTw(W, H); n.t = -Math.random() * w.gap; Object.assign(w, n); } }
+        if (!st.u) { st.uNext -= dt; if (st.uNext <= 0) { st.u = newUfo(W, H); st.uNext = 70 + Math.random() * 70; } }
+        else {
+          const u = st.u; u.t += dt;
+          if (!u.out && u.t > u.cruise) { u.out = true; u.outT = u.t; }
+          const k = u.out ? u.t - u.outT : 0, sp = u.v * (1 + k * k * 34); u.sp = sp;
+          u.x += u.dir * sp * dt; if (u.out) u.y0 -= sp * .35 * dt;
+          u.y = u.y0 + Math.sin(u.t * 1.1) * 3.5;
+          u.a = Math.min(1, u.t / 1.2) * (u.out ? Math.max(0, 1 - k / 1.1) : 1);
+          if (u.a <= 0 || u.x < -120 || u.x > W + 120 || u.y < -120) st.u = null;
+        }
+      },
+      draw(st, g, W, H, t) {
+        const img = metImg();
+        if (st.u) drawUfo(g, st.u, t);
+        g.globalCompositeOperation = 'lighter';
+        if (st.tw) for (const w of st.tw) {
+          const a = twA(w); if (a <= .02) continue;
+          const r = w.r * 3.2; g.globalAlpha = a * .95; g.drawImage(img, w.x - r, w.y - r, r * 2, r * 2);
+          if (w.r > 2.4) {
+            const L = w.r * 3.4; g.strokeStyle = 'rgba(255,255,255,' + (a * .45).toFixed(3) + ')'; g.lineWidth = .8;
+            g.beginPath(); g.moveTo(w.x - L, w.y); g.lineTo(w.x + L, w.y); g.moveTo(w.x, w.y - L); g.lineTo(w.x, w.y + L); g.stroke();
+          }
+          g.globalAlpha = 1;
+        }
+        for (const m of st.p) {
+          const u = m.age / m.life, a = (u < .08 ? u / .08 : 1) * (u > .62 ? Math.max(0, (1 - u) / .38) : 1) * .9;
+          if (a <= .01) continue;
+          const L = Math.min(m.len, m.trav), tx = m.x - m.dx * L, ty = m.y - m.dy * L, gr = g.createLinearGradient(m.x, m.y, tx, ty);
+          gr.addColorStop(0, 'rgba(255,255,255,' + a.toFixed(3) + ')'); gr.addColorStop(.18, 'rgba(214,232,255,' + (a * .55).toFixed(3) + ')');
+          gr.addColorStop(.55, 'rgba(150,190,255,' + (a * .18).toFixed(3) + ')'); gr.addColorStop(1, 'rgba(120,160,255,0)');
+          g.strokeStyle = gr; g.lineWidth = m.w; g.lineCap = 'round';
+          g.beginPath(); g.moveTo(m.x, m.y); g.lineTo(tx, ty); g.stroke();
+          const r = m.w * 3.4; g.globalAlpha = a; g.drawImage(img, m.x - r, m.y - r, r * 2, r * 2); g.globalAlpha = 1;
+        }
+        g.globalCompositeOperation = 'source-over';
+      }
+    };
+  function reducedMotion() { return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches); }
+  var fx = { c: null, raf: 0, last: null, st: null, w: 0, h: 0, drawn: null };
+  // 畫在最上層的畫面：使用說明、標籤、心得、進度打開時畫在那一頁，否則畫在清單
+  function fxHost() {
+    var guide = document.getElementById("guideScreen");
+    if (guide && !guide.hidden) return guide;
+    var open = document.querySelectorAll(".screen:not([hidden])");
+    return open.length ? open[open.length - 1] : document.querySelector(".home");
+  }
+  function drawFx(now) {
+    fx.raf = requestAnimationFrame(drawFx);
+    var host = fxHost(), c = fx.c;
+    if (!host) { c.hidden = true; fx.last = null; return; }
+    if (c.parentNode !== host) host.insertBefore(c, host.firstChild);
+    c.hidden = false;
+    var W = c.clientWidth, H = c.clientHeight; if (!W || !H) return;
+    if (!fx.st || Math.abs(W - fx.w) > 40) { fx.st = {}; METEORS.init(fx.st, W, H); }
+    fx.w = W; fx.h = H;
+    var k = Math.min(2, window.devicePixelRatio || 1), cw = Math.round(W * k), ch = Math.round(H * k);
+    if (c.width !== cw || c.height !== ch) { c.width = cw; c.height = ch; }
+    var dt = fx.last == null ? 0 : Math.min(.05, Math.max(0, now - fx.last) / 1000); fx.last = now;
+    METEORS.move(fx.st, dt, W, H);
+    var g = c.getContext("2d"); g.setTransform(k, 0, 0, k, 0, 0); g.clearRect(0, 0, W, H); METEORS.draw(fx.st, g, W, H, now / 1000);
+  }
+  function syncSky(on) {
+    var root = document.documentElement;
+    if (on) root.style.setProperty("--sky", starTex()); else root.style.removeProperty("--sky");
+    var move = on && !reducedMotion();
+    if (move) {
+      if (!fx.c) { fx.c = document.createElement("canvas"); fx.c.className = "sky-fx"; fx.c.setAttribute("aria-hidden", "true"); }
+      if (!fx.raf) { fx.last = null; fx.st = null; fx.raf = requestAnimationFrame(drawFx); }
+    } else {
+      if (fx.raf) cancelAnimationFrame(fx.raf);
+      fx.raf = 0; fx.st = null;
+      if (fx.c) fx.c.remove();
+    }
+  }
+
+  /* ---------- 主題：淺色（預設）、夜間高對比、黑白分明、晨曦、森林、薰衣草、深海、夜空；選擇記在這台裝置 ---------- */
+  var LOOK_KEY = "trust-relisten:look", LOOK_BG = { "": "#ffffff", night: "#000000", bw: "#ffffff", sunrise: "#fffaf3", forest: "#fbfdfb", lavender: "#fdfcff", ocean: "#0b1626", starry: "#0a0d24" };
   function applyLook(v) {
     if (!Object.prototype.hasOwnProperty.call(LOOK_BG, v)) v = "";
     var root = document.documentElement;
@@ -1819,6 +2022,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     });
     var meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute("content", LOOK_BG[v]);
+    // 夜空的星空圖要算一下，先讓畫面出來再畫
+    setTimeout(function () { syncSky(document.documentElement.getAttribute("data-look") === "starry"); }, v === "starry" ? 30 : 0);
   }
   (function () {
     var v = "";
