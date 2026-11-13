@@ -500,6 +500,48 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .seal-cap { display: inline-flex; align-items: center; gap: 3px; font-size: 0.6875rem; color: var(--muted-2); white-space: nowrap; }
 .seal-item.has-rw .seal-cap::after { content: ""; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
 
+/* 雲端同步（網站版）：左上角的小按鈕、進度分頁最上面的卡片、第一次登入的詢問、LINE 裡的提示 */
+.sync-pill {
+  position: absolute; top: 70px; left: max(16px, env(safe-area-inset-left, 0px)); z-index: 6;
+  display: inline-flex; align-items: center; gap: 5px; height: 32px; padding: 0 11px 0 9px; border-radius: 99px;
+  border: 1px solid var(--line-2); background: var(--card); color: var(--accent); font: inherit; font-size: 0.75rem; white-space: nowrap; cursor: pointer;
+}
+.sync-pill svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sync-pill.ok { border-color: transparent; background: var(--soft-2); color: var(--ink-2); }
+.sync-pill.ok svg { fill: currentColor; stroke: none; }
+.sync-pill.busy svg { animation: syncPulse 1s ease-in-out infinite alternate; }
+.sync-pill.tap { border-color: var(--accent); }
+.sync-pill.fail { border-color: var(--warn); color: var(--warn); }
+.sync-pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@keyframes syncPulse { from { opacity: 1; } to { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .sync-pill.busy svg { animation: none; } }
+.sync-card { display: flex; flex-direction: column; gap: 10px; padding: 16px 18px; border-radius: 20px; background: var(--soft); border: 1px solid var(--line); }
+.sync-card h3 { margin: 0; display: flex; align-items: center; gap: 8px; font-size: 0.9375rem; font-weight: 600; }
+.sync-card h3 svg { width: 20px; height: 20px; fill: none; stroke: var(--accent); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.sync-row { display: flex; align-items: center; gap: 10px; }
+.sync-t { flex: 1; min-width: 0; margin: 0; font-size: 0.875rem; line-height: 1.6; color: var(--muted); overflow-wrap: anywhere; }
+.sync-t b { color: var(--ink); font-weight: 500; }
+.sync-btns { display: flex; flex-direction: column; gap: 6px; }
+.sync-in { min-height: 46px; border: none; border-radius: 14px; background: var(--sel); color: var(--selfg); font: inherit; font-size: 0.9375rem; font-weight: 500; cursor: pointer; }
+.sync-note { margin: 0; font-size: 0.75rem; line-height: 1.6; color: var(--muted-2); }
+.sa-icon { width: 64px; height: 64px; border-radius: 50%; background: var(--soft-2); display: flex; align-items: center; justify-content: center; }
+.sa-icon svg { width: 34px; height: 34px; fill: none; stroke: var(--accent); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.inapp-ban {
+  position: fixed; z-index: 40; top: calc(10px + env(safe-area-inset-top, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px)); right: max(12px, env(safe-area-inset-right, 0px));
+  max-width: 456px; margin: 0 auto; display: flex; align-items: flex-start; gap: 10px; padding: 12px 10px 12px 14px; border-radius: 14px;
+  background: #fff3c4; color: #4a3500; border: 1px solid #e8c95a; box-shadow: 0 6px 18px rgba(0,0,0,.14); font-size: 0.875rem; line-height: 1.6;
+}
+.inapp-ban b { display: block; }
+.inapp-go { display: inline-block; margin-top: 6px; padding: 4px 12px; border-radius: 99px; background: #4a3500; color: #fff3c4; font-size: 0.8125rem; text-decoration: none; }
+.inapp-x { flex: none; width: 32px; height: 32px; margin-left: auto; border: 0; background: none; color: #7a5c00; font: inherit; font-size: 1rem; cursor: pointer; }
+.gx-syncpill { display: inline-flex; align-items: center; gap: 4px; padding: 5px 10px 5px 8px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--card); color: var(--accent); font-size: 11px; white-space: nowrap; }
+.gx-syncpill svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.gx-devs { display: flex; align-items: flex-end; gap: 8px; }
+.gx-devs .ph { width: 22px; height: 38px; border: 2px solid var(--ink-2); border-radius: 5px; }
+.gx-devs .lt { position: relative; width: 50px; height: 32px; border: 2px solid var(--ink-2); border-radius: 4px; margin-bottom: 4px; }
+.gx-devs .lt::after { content: ""; position: absolute; left: -8px; right: -8px; bottom: -7px; height: 3px; border-radius: 2px; background: var(--ink-2); }
+
 /* 重聽排程：在首頁的進度卡裡選開始日期 */
 .plan {
   display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
@@ -859,6 +901,12 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 </head>
 <body>
 <main class="page home">
+  <button type="button" class="sync-pill" id="syncPill" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span id="syncPillT">登入同步</span></button>
+  <div class="inapp-ban" id="inappBan" role="alert" hidden>
+    <div><b>在這個 App 裡沒辦法登入同步</b><span id="inappMsg">請改用 Chrome 或 Safari 打開這個網址，就可以登入。</span>
+      <a class="inapp-go" id="inappGo" hidden>改用瀏覽器打開</a></div>
+    <button type="button" class="inapp-x" id="inappX" aria-label="關閉提示">✕</button>
+  </div>
   <div class="menu" id="menu">
     <button type="button" class="menu-btn" id="menuBtn" aria-label="選單" aria-expanded="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
     <div class="menu-pop" id="menuPop" hidden>
@@ -965,6 +1013,16 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   </div>
 </form>
 
+<div class="award-bg" id="syncAsk" hidden>
+  <div class="award" role="dialog" aria-modal="true" aria-labelledby="saTitle">
+    <span class="sa-icon" aria-hidden="true"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg></span>
+    <h2 class="aw-title" id="saTitle">已經登入</h2>
+    <p class="aw-sub" id="saText">這支手機上已經有進度。要一起搬到你的雲端硬碟嗎？</p>
+    <p class="aw-small">如果雲端已經有別的裝置的進度，會合在一起，不會蓋掉。之後在別的手機、電腦用同一個 Google 帳號登入，就會看到同一份進度。</p>
+    <div class="aw-btns" style="align-self:stretch"><button type="button" class="aw-alt" id="saNo">先不要</button><button type="button" class="aw-ok" id="saYes">搬上去</button></div>
+  </div>
+</div>
+
 <form class="award-bg" id="sessSheet" hidden>
   <div class="award sess-panel" role="dialog" aria-modal="true" aria-labelledby="ssTitle">
     <h2 class="aw-title" id="ssTitle">第01天・早上</h2>
@@ -1005,6 +1063,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span></span></div><h3>換主題</h3></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me">信</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
+      <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>登入同步</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>雲端同步</h3><p class="cap">用 Google 登入，換手機、用電腦都同步</p></section>
 
     </div>
   </div>
@@ -1014,6 +1073,18 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   <div class="screen-inner">
     <button type="button" class="back" id="bookBack">← 返回</button>
     <div class="book-head"><h2 id="progTitle">進度</h2></div>
+    <section class="sync-card" id="syncCard" aria-labelledby="syncTitle" hidden>
+      <h3 id="syncTitle"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>雲端同步</h3>
+      <div class="sync-row">
+        <p class="sync-t" id="syncText">用 Google 帳號登入，換手機、用電腦都看得到同一份進度。</p>
+        <div class="sync-btns">
+          <button type="button" class="mini-btn" id="syncNowBtn" hidden>立即同步</button>
+          <button type="button" class="mini-btn" id="syncOut" hidden>登出</button>
+        </div>
+      </div>
+      <button type="button" class="sync-in" id="syncIn">用 Google 登入同步</button>
+      <p class="sync-note">資料存在你自己的 Google 雲端硬碟裡一個隱藏的專用資料夾，只有這個網頁讀得到，別人（包括做這個網頁的人）都看不到。</p>
+    </section>
     <section class="summary" aria-label="整體進度">
       <div class="total">
         <span class="num" id="doneCount">0</span>
@@ -2233,10 +2304,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     });
   }
 
-  function saveLocal() {
+  function writeLocal() {
     try {
       localStorage.setItem(LS_STATE, JSON.stringify({ done: fullDone(), rewards: fullRewards(), start: state.start, pace: state.pace, notes: fullNotes(), tags: state.tags, marks: fullMarks() }));
     } catch (e) {}
+  }
+  function saveLocal() {
+    writeLocal();
+    stampChanges();       // 記下改了哪幾筆，雲端同步時用來合併
   }
 
   function onToggle(key, on) {
@@ -2344,6 +2419,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var data = {};
     try { data = JSON.parse(localStorage.getItem(LS_STATE) || "{}") || {}; } catch (e) { data = {}; }
     applyRemote(data);
+    lastFlat = flatState(state);
+    startSync();
     var standalone = !window.claude;   // opened as its own website, not inside Claude
     if (standalone) $("localNote").hidden = false;
     if (!canStoreLocal()) setStatus("這個瀏覽器不讓網頁存資料，關掉頁面後打勾會消失。", true);
@@ -2382,6 +2459,301 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       }
     }, function () {});
   }
+
+  /* ---------- 雲端同步（只有網站版）：存在每個人自己的 Google 雲端硬碟，應用程式專用的隱藏資料夾 ---------- */
+  // 在 Google Cloud 建好「網頁應用程式」用戶端後，把用戶端 ID 填在這裡；空的就完全不顯示同步
+  var GOOGLE_CLIENT_ID = "890024987381-574tckkbppf5fhcieorg9m83ugtkk8g0.apps.googleusercontent.com";
+  var SYNC_SCOPE = "https://www.googleapis.com/auth/drive.appdata";
+  var SYNC_FILE = "trust-relisten.json";
+  var LS_SYNC = "trust-relisten:sync";       // 這台裝置的登入狀態 { email, token, exp, fileId, at }
+  var LS_STAMPS = "trust-relisten:stamps";   // 每一筆資料最後一次修改的時間，兩台裝置合併時用
+  var DRIVE = "https://www.googleapis.com/drive/v3", UPLOAD = "https://www.googleapis.com/upload/drive/v3/files";
+  var syncOn = !window.claude && !!GOOGLE_CLIENT_ID;
+  var sync = null, stamps = {}, lastFlat = null;
+  var syncTimer = null, syncBusy = false, syncAgain = false, syncErr = "", tokenClient = null, gisP = null;
+
+  function loadJSON(k) { try { return JSON.parse(localStorage.getItem(k) || "null"); } catch (e) { return null; } }
+  function saveJSON(k, v) { try { if (v == null) localStorage.removeItem(k); else localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  function same(a, b) { return JSON.stringify(a) === JSON.stringify(b); }
+
+  // 把進度攤平成一筆一筆：d:d01m 打勾、n:d01m 心得、m:d01m 標籤和想再聽、r:w1 獎勵、start、pace、tags
+  function flatState(st) {
+    var f = {};
+    Object.keys(st.done || {}).forEach(function (k) { if (st.done[k]) f["d:" + k] = true; });
+    Object.keys(st.rewards || {}).forEach(function (k) { if (st.rewards[k]) f["r:" + k] = st.rewards[k]; });
+    Object.keys(st.notes || {}).forEach(function (k) { if (st.notes[k]) f["n:" + k] = st.notes[k]; });
+    Object.keys(st.marks || {}).forEach(function (k) { if (st.marks[k]) f["m:" + k] = st.marks[k]; });
+    if (st.start) f.start = st.start;
+    if (st.pace && st.pace !== 1) f.pace = st.pace;
+    if (st.tags) f.tags = st.tags;
+    return f;
+  }
+  function unflat(f) {
+    var o = { done: {}, rewards: {}, notes: {}, marks: {}, start: null, pace: 1, tags: null };
+    Object.keys(f).forEach(function (k) {
+      var v = f[k], p = k.slice(0, 2), id = k.slice(2);
+      if (p === "d:") o.done[id] = true;
+      else if (p === "r:") o.rewards[id] = v;
+      else if (p === "n:") o.notes[id] = v;
+      else if (p === "m:") o.marks[id] = v;
+      else if (k === "start") o.start = v;
+      else if (k === "pace") o.pace = v;
+      else if (k === "tags") o.tags = v;
+    });
+    return o;
+  }
+  // 每一筆各自比修改時間，新的贏；拿掉的（例如取消打勾）也有時間，所以不會被另一台裝置加回來
+  function mergeFlat(lf, ls, rf, rs) {
+    var out = {}, outS = {}, keys = {};
+    [lf, ls, rf, rs].forEach(function (o) { Object.keys(o).forEach(function (k) { keys[k] = 1; }); });
+    Object.keys(keys).forEach(function (k) {
+      var a = ls[k] || 0, b = rs[k] || 0;
+      var useR = b > a || (b === a && !(k in lf));
+      var v = useR ? rf[k] : lf[k];
+      if (v !== undefined) out[k] = v;
+      if (a || b) outS[k] = Math.max(a, b);
+    });
+    return { f: out, s: outS };
+  }
+  function stampChanges() {
+    if (!lastFlat) return;
+    var f = flatState(state), now = Date.now(), keys = {}, changed = false;
+    Object.keys(f).forEach(function (k) { keys[k] = 1; });
+    Object.keys(lastFlat).forEach(function (k) { keys[k] = 1; });
+    Object.keys(keys).forEach(function (k) { if (!same(f[k], lastFlat[k])) { stamps[k] = now; changed = true; } });
+    lastFlat = f;
+    if (!changed) return;
+    saveJSON(LS_STAMPS, stamps);
+    if (sync) { clearTimeout(syncTimer); syncTimer = setTimeout(function () { syncNow(); }, 1500); }
+    paintSync();
+  }
+  function dirty() {
+    var at = sync && sync.at || 0;
+    return Object.keys(stamps).some(function (k) { return stamps[k] > at; });
+  }
+  function tokenOk() { return !!(sync && sync.token && sync.exp > Date.now() + 60000); }
+
+  // 雲端硬碟：應用程式專用資料夾裡的一個檔案
+  function gfetch(url, opt) {
+    opt = opt || {};
+    opt.headers = opt.headers || {};
+    opt.headers.Authorization = "Bearer " + sync.token;
+    return fetch(url, opt).then(function (r) {
+      if (r.status === 401) { sync.token = null; sync.exp = 0; saveJSON(LS_SYNC, sync); throw { code: "auth" }; }
+      if (!r.ok) throw { code: "http", status: r.status };
+      return r;
+    });
+  }
+  function findFile() {
+    if (sync.fileId) return Promise.resolve(sync.fileId);
+    var q = encodeURIComponent("name='" + SYNC_FILE + "' and trashed=false");
+    return gfetch(DRIVE + "/files?spaces=appDataFolder&orderBy=modifiedTime%20desc&fields=files(id)&q=" + q)
+      .then(function (r) { return r.json(); })
+      .then(function (j) { return j.files && j.files[0] ? j.files[0].id : null; });
+  }
+  function readRemote(id) {
+    if (!id) return Promise.resolve(null);
+    return gfetch(DRIVE + "/files/" + id + "?alt=media").then(function (r) { return r.json(); })
+      .catch(function (e) {
+        if (e && e.status === 404) { sync.fileId = null; return findFile().then(function (id2) { return id2 && id2 !== id ? readRemote(id2) : null; }); }
+        throw e;
+      });
+  }
+  function writeRemote(id, body) {
+    var data = JSON.stringify(body);
+    if (id) return gfetch(UPLOAD + "/" + id + "?uploadType=media", { method: "PATCH", headers: { "Content-Type": "application/json" }, body: data }).then(function () { return id; });
+    var b = "trb" + Date.now();
+    var multi = "--" + b + "\r\nContent-Type: application/json; charset=UTF-8\r\n\r\n" + JSON.stringify({ name: SYNC_FILE, parents: ["appDataFolder"] }) +
+      "\r\n--" + b + "\r\nContent-Type: application/json\r\n\r\n" + data + "\r\n--" + b + "--";
+    return gfetch(UPLOAD + "?uploadType=multipart&fields=id", { method: "POST", headers: { "Content-Type": "multipart/related; boundary=" + b }, body: multi })
+      .then(function (r) { return r.json(); }).then(function (j) { return j.id; });
+  }
+  function applyMerged(f) {
+    applyRemote(unflat(f));      // 放進這台裝置，重畫畫面
+    lastFlat = flatState(state);
+    writeLocal();
+  }
+  function syncNow() {
+    if (!syncOn || !sync || !tokenOk()) { paintSync(); return Promise.resolve(); }
+    if (syncBusy) { syncAgain = true; return Promise.resolve(); }
+    syncBusy = true; syncErr = ""; paintSync();
+    var id = null;
+    return findFile().then(function (fid) { id = fid; return readRemote(fid); }).then(function (remote) {
+      var rf = remote && remote.values || {}, rs = remote && remote.stamps || {};
+      var lf = flatState(state);
+      var m = mergeFlat(lf, stamps, rf, rs);
+      if (!same(m.f, lf)) applyMerged(m.f);
+      stamps = m.s;
+      saveJSON(LS_STAMPS, stamps);
+      if (remote && same(m.f, rf) && same(m.s, rs)) return id;      // 雲端已經是最新的
+      return writeRemote(id, { app: "trust-relisten", v: 1, at: Date.now(), values: m.f, stamps: m.s });
+    }).then(function (fid) {
+      if (!sync) return;
+      sync.fileId = fid || sync.fileId;
+      sync.at = Date.now();
+      saveJSON(LS_SYNC, sync);
+    }).catch(function (e) {
+      syncErr = e && e.code === "auth" ? "auth" : "fail";
+    }).then(function () {
+      syncBusy = false;
+      paintSync();
+      if (syncAgain) { syncAgain = false; syncNow(); }
+    });
+  }
+
+  // Google 登入：拿一張一小時有效的通行證，只能讀寫這個網頁自己的資料夾
+  function loadGis() {
+    if (gisP) return gisP;
+    gisP = new Promise(function (res, rej) {
+      if (window.google && google.accounts && google.accounts.oauth2) { res(); return; }
+      var sc = document.createElement("script");
+      sc.src = "https://accounts.google.com/gsi/client";
+      sc.async = true;
+      sc.onload = function () { res(); };
+      sc.onerror = function () { gisP = null; rej({ code: "gis" }); };
+      document.head.appendChild(sc);
+    });
+    return gisP;
+  }
+  function gisReady() { return !!(window.google && google.accounts && google.accounts.oauth2); }
+  // 一定要在使用者點按鈕的當下呼叫，不然 Google 的視窗會被瀏覽器擋掉
+  function askToken(done) {
+    if (!gisReady()) { loadGis().catch(function () {}); syncErr = "loading"; paintSync(); return; }
+    if (!tokenClient) tokenClient = google.accounts.oauth2.initTokenClient({ client_id: GOOGLE_CLIENT_ID, scope: SYNC_SCOPE, callback: function () {} });
+    tokenClient.callback = function (r) {
+      if (r && r.access_token && google.accounts.oauth2.hasGrantedAllScopes(r, SYNC_SCOPE)) done(r);
+      else { syncErr = "denied"; paintSync(); }
+    };
+    tokenClient.error_callback = function () { syncErr = "closed"; paintSync(); };
+    var opt = { prompt: "" };
+    if (sync && sync.email) opt.login_hint = sync.email;
+    tokenClient.requestAccessToken(opt);
+  }
+  function takeToken(r) {
+    var first = !sync;
+    sync = sync || {};
+    sync.token = r.access_token;
+    sync.exp = Date.now() + (Number(r.expires_in) || 3600) * 1000;
+    syncErr = "";
+    saveJSON(LS_SYNC, sync);
+    paintSync();
+    return first;
+  }
+  function hasLocalData() {
+    return Object.keys(state.done).length > 0 || Object.keys(state.notes).length > 0 || Object.keys(state.marks).length > 0;
+  }
+  function signIn() {
+    if (inApp()) { showInApp(true); return; }
+    askToken(function (r) {
+      var first = takeToken(r);
+      gfetch(DRIVE + "/about?fields=user(emailAddress)").then(function (x) { return x.json(); }).then(function (j) {
+        if (sync && j.user && j.user.emailAddress) { sync.email = j.user.emailAddress; saveJSON(LS_SYNC, sync); paintSync(); }
+      }).catch(function () {}).then(function () {
+        if (first && hasLocalData()) {
+          var nd = Object.keys(state.done).length, nn = Object.keys(state.notes).length;
+          $("saText").textContent = "這支手機上已經有 " + nd + " 段打勾" + (nn ? "、" + nn + " 則心得" : "") + "。要一起搬到你的雲端硬碟嗎？";
+          $("syncAsk").hidden = false;
+          try { $("saYes").focus({ preventScroll: true }); } catch (e) {}
+        } else syncNow();
+      });
+    });
+  }
+  function signOut() {
+    sync = null;
+    saveJSON(LS_SYNC, null);
+    syncErr = "";
+    paintSync();
+  }
+  function tapSync() {               // 右上角／卡片上的按鈕：沒登入就登入，登入了就馬上同步
+    if (!sync) { signIn(); return; }
+    if (tokenOk()) { syncNow(); return; }
+    if (inApp()) { showInApp(true); return; }
+    askToken(function (r) { takeToken(r); syncNow(); });
+  }
+
+  // LINE、Facebook 這類 App 裡的瀏覽器，Google 不讓登入
+  function inApp() { return /\bLine\/|FBAN|FBAV|Instagram|MicroMessenger/i.test(navigator.userAgent || ""); }
+  function showInApp(force) {
+    var ban = $("inappBan"), line = /\bLine\//i.test(navigator.userAgent || "");
+    if (!force) { try { if (sessionStorage.getItem("trust-relisten:inapp-x")) return; } catch (e) {} }
+    $("inappMsg").textContent = line
+      ? "請點右上角的「⋮」，選「用預設瀏覽器開啟」，或按下面的按鈕，改用 Chrome 打開就可以登入。"
+      : "請點右上角的選單，選「用瀏覽器開啟」，改用 Chrome 或 Safari 打開就可以登入。";
+    var go = $("inappGo");
+    go.hidden = !line;
+    if (line) go.href = location.href.split("#")[0] + (location.search ? "&" : "?") + "openExternalBrowser=1";
+    ban.hidden = false;
+  }
+
+  function agoLabel(t) {
+    var s = Math.round((Date.now() - t) / 1000);
+    if (s < 60) return "剛剛";
+    if (s < 3600) return Math.floor(s / 60) + " 分鐘前";
+    if (s < 86400) return Math.floor(s / 3600) + " 小時前";
+    var d = new Date(t), two = function (n) { return (n < 10 ? "0" : "") + n; };
+    return (d.getMonth() + 1) + "/" + d.getDate() + " " + two(d.getHours()) + ":" + two(d.getMinutes()) + " ";
+  }
+  function paintSync() {
+    if (!syncOn) return;
+    var pill = $("syncPill"), pt = $("syncPillT"), card = $("syncCard"), txt = $("syncText");
+    var st = !sync ? "off" : syncBusy ? "busy" : syncErr === "fail" ? "fail" : (!tokenOk() || !sync.at || dirty()) ? "tap" : "ok";
+    pill.hidden = false;
+    card.hidden = false;
+    pill.className = "sync-pill " + st;
+    pt.textContent = { off: "登入同步", busy: "同步中", fail: "同步失敗", tap: "點我同步", ok: "已同步" }[st];
+    pill.setAttribute("aria-label", { off: "用 Google 登入同步", busy: "同步中", fail: "同步失敗，點一下再試", tap: "有變更還沒同步，點一下同步", ok: "已同步，點一下再同步一次" }[st]);
+    $("syncIn").hidden = !!sync;
+    $("syncNowBtn").hidden = !sync;
+    $("syncOut").hidden = !sync;
+    $("syncNowBtn").disabled = syncBusy;
+    if (!sync) {
+      txt.textContent = syncErr === "loading" ? "正在載入 Google 登入，請再按一次。"
+        : syncErr === "denied" ? "沒有拿到存取雲端硬碟的允許，所以還沒開始同步。可以再按一次登入。"
+        : "用 Google 帳號登入，換手機、用電腦都看得到同一份進度。";
+    } else {
+      txt.textContent = "";
+      txt.appendChild(document.createTextNode("用 "));
+      txt.appendChild(el("b", null, sync.email || "你的 Google 帳號"));
+      txt.appendChild(document.createTextNode(" 同步中"));
+      txt.appendChild(document.createElement("br"));
+      txt.appendChild(document.createTextNode(
+        st === "busy" ? "同步中…"
+        : st === "fail" ? "這次沒有同步成功，可能是網路不穩，按「立即同步」再試一次。"
+        : syncErr === "loading" ? "正在載入 Google 登入，請再按一次。"
+        : !tokenOk() ? "登入已經過了一段時間，按「立即同步」重新連上（不用再輸入密碼）。"
+        : dirty() ? "有新的變更，幾秒後會自動存上去。"
+        : sync.at ? agoLabel(sync.at) + "存好" : "準備中…"));
+    }
+    var ln = $("localNote");
+    if (ln) ln.textContent = sync
+      ? "打勾、印章、標籤和心得會同步到你的 Google 雲端硬碟（" + (sync.email || "已登入") + "），換手機、用電腦登入同一個帳號就看得到。"
+      : "打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以到「進度」分頁用 Google 登入同步，或用心得本的「匯出」另外存一份。";
+  }
+  function startSync() {
+    if (!syncOn) return;
+    sync = loadJSON(LS_SYNC);
+    stamps = loadJSON(LS_STAMPS) || {};
+    $("guideSync").hidden = false;
+    loadGis().catch(function () {});      // 先載入，按登入時才能馬上跳出 Google 的視窗
+    if (inApp() && !sync) showInApp(false);
+    paintSync();
+    if (tokenOk()) syncNow();
+    setInterval(paintSync, 30000);
+  }
+  $("syncPill").addEventListener("click", tapSync);
+  $("syncIn").addEventListener("click", signIn);
+  $("syncNowBtn").addEventListener("click", tapSync);
+  $("syncOut").addEventListener("click", signOut);
+  $("saYes").addEventListener("click", function () { $("syncAsk").hidden = true; syncNow(); });
+  $("saNo").addEventListener("click", function () { $("syncAsk").hidden = true; signOut(); });
+  $("inappX").addEventListener("click", function () {
+    $("inappBan").hidden = true;
+    try { sessionStorage.setItem("trust-relisten:inapp-x", "1"); } catch (e) {}
+  });
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState === "visible" && sync && tokenOk()) syncNow();   // 切回來時抓最新的
+    else paintSync();
+  });
 
   /* ---------- Wire up ---------- */
   build();
