@@ -2257,10 +2257,34 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       layout = v;
       try { localStorage.setItem(LS_LAYOUT, v); } catch (e) {}
       paintLayoutPick();
+      var at = topDay();               // 換版型時停在同一天：先記下現在看到哪一天
       build();
       paint();
+      keepDay(at);
     });
   });
+  // 現在畫面最上面（黏在上方的進度列底下）是哪一天，還有它被捲過去多少
+  function barEdge() { var bar = document.querySelector(".bar"); return bar ? bar.getBoundingClientRect().bottom : 0; }
+  function topDay() {
+    var edge = barEdge();
+    for (var i = 0; i < rows.length; i++) {
+      var li = rows[i] && rows[i].li;
+      if (!li || !li.offsetParent) continue;                 // 藏起來的天不算
+      var r = li.getBoundingClientRect();
+      if (r.bottom > edge + 1) return { i: i, off: r.top - edge, h: r.height };
+    }
+    return null;
+  }
+  // 重排後捲到同一天：那一天原本露出多少，現在也露出同樣的比例（簡化和詳細每一天的高度不一樣）
+  function keepDay(at) {
+    if (!at) return;
+    var li = null;
+    for (var i = at.i; i < rows.length && !li; i++) if (rows[i] && rows[i].li.offsetParent) li = rows[i].li;
+    if (!li) return;
+    var r = li.getBoundingClientRect();
+    var off = at.off < 0 && at.h ? at.off / at.h * r.height : at.off;
+    window.scrollBy(0, r.top - barEdge() - off);
+  }
   paintLayoutPick();
 
   var notesScreen = $("notesScreen");
