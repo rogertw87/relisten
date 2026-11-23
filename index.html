@@ -222,12 +222,16 @@ button { font: inherit; color: inherit; }
   cursor: pointer; user-select: none; -webkit-user-select: none;
   transition: background-color .12s ease, border-color .12s ease, color .12s ease;
 }
-.chk.x, .chk.y { border-style: dashed; }
+.chk.sup { border-style: dashed; }
+/* 一天有六段（例如下午分兩段的週六）：排成兩排，上面三格、下面三格；再多就四格一排往下排 */
+.checks { row-gap: 14px; }
+.day.c6 .chk:nth-child(4) { grid-column: 1; }
+.day.only-e .chk.e { grid-column: 3; }   /* 只有晚上一段的天（2022 第 1 天）：「晚」排在平常的位置 */
 /* 週六：早、10點、午、下午 四格加起來和週日的早、午、下午一樣寬；「晚」和其他天的「晚」對齊、一樣寬 */
 .day.sat .checks { grid-template-columns: repeat(4, calc((3 * var(--chipw) - var(--cg)) / 4)) var(--chipw); }
 .day.sat .chk { width: 100%; }
-.day.sat .chk.x, .day.sat .chk.y { border-radius: 10px; }
-.day.sat .chk.x .k, .chk.y .k { font-size: 0.75rem; letter-spacing: -.03em; white-space: nowrap; }
+.day.sat .chk.sup { border-radius: 10px; }
+.chk.wide .k { font-size: 0.75rem; letter-spacing: -.03em; white-space: nowrap; }   /* 兩個字以上的名稱（問答、下1…）字小一點 */
 .chk input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
 .chk .k { font-size: 0.875rem; line-height: 1; }
 .chk .mark { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--muted-2); }
@@ -309,7 +313,7 @@ li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-heig
 .day.rows .checks { display: flex; flex-direction: column; gap: 0; }
 .srow { display: flex; align-items: stretch; min-height: 46px; }
 .srow + .srow { border-top: 1px solid var(--line-3); }
-.srow.x, .srow.y { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--soft) 8px 9px); }
+.srow.sup { background: repeating-linear-gradient(135deg, transparent 0 8px, var(--soft) 8px 9px); }
 .srow.off { opacity: .5; }
 .ck { position: relative; flex: none; width: 48px; display: flex; justify-content: center; padding-top: 12px; cursor: pointer; }
 .ck input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
@@ -361,6 +365,19 @@ li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-heig
 .sbody .npill:disabled { cursor: default; opacity: .6; }
 .sbody .npill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sbody .msg { grid-row: 2; }
+/* 題目（官方課程頁上每一段的名稱）：詳細接在「早上」後面，太長就折到下一行；標籤、心得往下排 */
+.sbody .tt { grid-column: 2; grid-row: 1; min-width: 0; font-size: 0.9375rem; line-height: 24px; color: var(--ink); overflow-wrap: anywhere; text-wrap: pretty; }
+.srow.has-tt .sbody .k { min-width: 2.1em; color: var(--muted); }
+.srow.has-tt.on .sbody .k { color: var(--ink-2); }
+.day.rows .srow.has-tt .sbody .tn { grid-column: 1 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; padding-top: 4px; }
+.srow.has-tt .sbody .msg { grid-row: 3; }
+.ns-tt { margin: -2px 4px 0; font-size: 0.9375rem; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
+.ss-sub { margin: -6px 0 0; font-size: 0.9375rem; line-height: 1.5; color: var(--ink-2); text-align: center; text-wrap: balance; overflow-wrap: anywhere; }
+.star-tt { order: 1; flex: 1 1 100%; min-width: 0; font-size: 0.8125rem; line-height: 1.45; color: var(--muted); overflow-wrap: anywhere; }
+.tix-item { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: 8px; padding-block: 6px; text-align: left; }
+.tix-tt { color: var(--muted); overflow-wrap: anywhere; }
+.note-etop b { min-width: 0; overflow-wrap: anywhere; }
+.foot.src a { color: var(--muted-2); }
 /* 心得本：一天一張卡，裡面每一段的心得都可以點開 */
 div.note-card { cursor: default; gap: 0; padding: 14px 18px 6px; }
 div.note-card:hover { border-color: var(--line); }
@@ -933,10 +950,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   :root { --chipw: clamp(34px, calc(25vw - 54px), 37px); }
   .dates .orig { font-size: 1rem; }
   .checks { --cg: 4px; }
-  .day.sat .chk.x .k, .chk.y .k { font-size: 0.6875rem; }
+  .chk.wide .k { font-size: 0.6875rem; }
 }
 @media (max-width: 21.25rem) {   /* 很窄的手機（340 以下）：週六的「10點」「下午」字再小一點 */
-  .day.sat .chk.x .k, .chk.y .k { font-size: 0.625rem; letter-spacing: -.04em; }
+  .day.sat .chk.wide .k { font-size: 0.625rem; letter-spacing: -.04em; }
 }
 @media (prefers-reduced-motion: reduce) {
   .track > i, .chk, .seal { transition: none; }
@@ -1103,6 +1120,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   <div class="weeks" id="weeks"></div>
 
   <p class="foot" id="localNote" hidden>打勾、印章、標籤和心得都存在這台裝置的瀏覽器裡，不會同步到其他裝置；清除瀏覽資料時會一起清掉。可以用心得本的「匯出」另外存一份。</p>
+  <p class="foot src" id="srcNote" hidden>各段題目出自「全部生命」官方課程頁，經全部生命團隊同意列出；完整課程請到<a id="srcLink" href="https://store.totality-of-life.com/" target="_blank" rel="noopener">官方平台</a>收聽。</p>
   <p class="foot">本網站為個人製作的非官方工具，與共修主辦單位及「全部生命」App 無關。</p>
   <p class="foot legal" id="legalLinks"><a href="privacy.html">隱私權政策</a>・<a href="terms.html">使用條款</a></p>
 </main>
@@ -1196,6 +1214,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 <form class="award-bg" id="sessSheet" hidden>
   <div class="award sess-panel" role="dialog" aria-modal="true" aria-labelledby="ssTitle">
     <h2 class="aw-title" id="ssTitle">第01天・早上</h2>
+    <p class="ss-sub" id="ssSub" hidden></p>
     <label class="ss-done"><input type="checkbox" id="ssDone"><span class="mark" aria-hidden="true"></span><span>聽完了</span></label>
     <button type="button" class="star-btn wide" id="ssStar" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg><span>想再聽</span></button>
     <label class="ss-lab" for="ssMsg">心得</label>
@@ -1316,6 +1335,37 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     { id: "2021", px: "y21", title: "沒有路的路",     sub: "全球靜心",                  first: [2021, 6, 1], days: 62, seal: "靜心", rule: "std" },
     { id: "2020", px: "y20", title: "唯識的每日靜心", sub: "",                         first: [2020, 6, 1], days: 62, seal: "唯識", rule: "std" }
   ];
+  // 對照過官方課程頁的屆：satx 週六早上那一段的名稱；src 官方課程頁；
+  // sched 和「週六 早・問答・午・下・晚，週日 早・午・下・晚，平日 早・午・晚」不一樣的天，每個字母是一段（代號見下面）；lab 個別段落特別的名稱
+  /*OFFICIAL-BEGIN（由 titles/make_titles.py 依官方課程頁產生，不要手改）*/
+  var OFFICIAL = {
+    "2026": { satx: "問答", src: "https://store.totality-of-life.com/intro/S11_2026_Trust",
+      sched: { 15: "mnxe", 33: "mne", 56: "mnbe", 59: "mnxe", 60: "mxnyze", 61: "mnxze", 62: "mnxe" } },
+    "2025": { satx: "問答", src: "https://store.totality-of-life.com/intro/S10_2025_Forever_the_Middle_Way",
+      sched: { 1: "mane", 4: "mnxe", 6: "mnxze", 21: "mane", 29: "mane", 31: "mane", 36: "mane" } },
+    "2024": { satx: "補充", src: "https://store.totality-of-life.com/intro/S09_2024_Moving_Forward",
+      sched: { 38: "mnxe", 39: "mnxe", 40: "mnxze", 41: "mxnyzpqre", 42: "mnxzpe", 43: "mnxe", 44: "mnxe", 45: "mnxe", 46: "mnxe", 47: "manxze", 48: "mxnyzpe", 53: "manbe", 54: "mane", 59: "mane" } },
+    "2023": { satx: "補充", src: "https://store.totality-of-life.com/intro/S08_2023_Conscious_Breathing",
+      sched: { 1: "manye", 2: "manxe", 15: "maxnye", 34: "msne", 36: "mxnsye", 50: "mxnyze", 52: "mnxe", 53: "mnxe", 54: "mnxe", 55: "mnxe", 56: "mnxe" },
+      lab: { "36s": "提醒" } },
+    "2022": { satx: "", src: "https://store.totality-of-life.com/intro/S07_2022_Abiding_in_the_Heart",
+      sched: { 1: "e", 2: "manye", 3: "manxe", 4: "mane", 5: "mane", 7: "mane", 8: "mane", 9: "manye", 11: "mane", 12: "mane", 14: "mane", 16: "manye", 17: "manxe", 18: "mane", 23: "manye", 24: "manxe", 25: "mane", 27: "mane", 28: "mane", 30: "manye", 33: "mane", 34: "mane", 37: "manye", 38: "manxe", 39: "mane", 44: "mnye", 45: "manxe", 51: "mnye", 58: "mnye", 62: "mnxe" } },
+    "2021": { days: 92, satx: "", src: "https://store.totality-of-life.com/intro/S06_2021_No_Way_Back",
+      sched: { 1: "e", 3: "mne", 4: "mne", 10: "mnye", 11: "mnxse", 13: "mnxse", 17: "mnye", 18: "mnxse", 24: "mnes", 26: "mnxe", 31: "mnye", 37: "mnxe", 38: "mnye", 45: "mnye", 46: "mne", 52: "mnye", 59: "mne", 60: "mne", 63: "mn", 64: "n", 65: "n", 66: "mn", 67: "x", 68: "n", 69: "n", 70: "n", 71: "n", 72: "n", 73: "n", 74: "n", 75: "n", 76: "mn", 77: "n", 78: "m", 79: "n", 80: "n", 81: "m", 82: "n", 83: "n", 84: "mn", 85: "n", 86: "n", 87: "n", 88: "m", 89: "nx", 90: "nx", 91: "n", 92: "n" },
+      lab: { "11s": "傍晚", "13s": "傍晚", "18s": "傍晚", "24s": "夜" } },
+    "2020": { days: 37, first: [2020, 7, 1], nodate: true, satx: "", src: "https://store.totality-of-life.com/intro/S05_2020_Consciousness_Only",
+      sched: { 1: "me", 2: "mes", 3: "me", 4: "mes", 5: "me", 6: "me", 7: "mest", 8: "mes", 9: "me", 10: "mes", 11: "me", 12: "me", 13: "mes", 14: "mes", 15: "me", 16: "me", 17: "mes", 18: "mest", 19: "mec", 20: "me", 21: "mes", 22: "me", 23: "mes", 24: "mes", 25: "me", 26: "mset", 27: "me", 28: "mes", 29: "me", 30: "mes", 31: "me", 32: "me", 33: "mes", 34: "mes", 35: "mec", 36: "mecs", 37: "me" },
+      lab: { "7s": "睡前", "8s": "睡前", "14s": "睡前" } }
+  };
+  /*OFFICIAL-END*/
+  YEARS.forEach(function (y) {
+    var o = OFFICIAL[y.id];
+    if (!o) return;
+    y.titles = true; y.src = o.src; y.satx = o.satx; y.sched = o.sched || {}; y.lab = o.lab || {};
+    if (o.days) y.days = o.days;                     // 官方的天數（2021 是 92 天、2020 是 37 天）
+    if (o.first) y.first = o.first;
+    y.nodate = !!o.nodate;                           // 官方沒有固定日期（自己選一天開始）：只顯示星期
+  });
   var LS_YEAR = "trust-relisten:year";
   function yearById(id) { for (var k = 0; k < YEARS.length; k++) if (YEARS[k].id === id) return YEARS[k]; return null; }
   function yearFromHash() { var m = /^#(20\d\d)$/.exec(location.hash || ""); return m ? yearById(m[1]) : null; }
@@ -1326,28 +1376,90 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var FIRST = new Date(Y.first[0], Y.first[1], Y.first[2]);
   var WD = ["日", "一", "二", "三", "四", "五", "六"];
   var SESS = [["m", "早", "早上"], ["n", "午", "中午"], ["e", "晚", "晚上"]];
-  var CODES = SESS.concat([["x", "補", "週末補充"], ["y", "下午", "週六下午補充"]]);   // 可以標註的段落：早、午、晚，週末多補充（週六 10 點、下午兩段）
-  // 每一天的補充：週六有 10 點和下午兩段（x、y），週日下午一段（x），每一屆都一樣
-  function extras(d) {
-    if (d.y.rule === "basic") return d.weekend ? [["x", "補", "週末補充"]] : [];
-    if (d.dow === 6) return [["x", "10點", "週六 10 點補充"], ["y", "下午", "週六下午補充"]];
-    if (d.dow === 0) return [["x", "下午", "週日下午補充"]];
-    return [];
+  // 段落代號：m 早、n 午、e 晚是主要的段落（算進度）；其他是補充，不算進度：
+  //   x 週六是問答／補充（各屆名稱不同），其他天是下午；y 週六的下午；a、b、c 早、午、晚的第二段；
+  //   z、p、q、r 下午的第 2～5 段；s 其他（平日的補充、提醒…，名稱不是「補充」的寫在那一屆的 lab）
+  var CODES = SESS.concat(["x", "y", "a", "b", "c", "z", "p", "q", "r", "s", "t", "u", "v"].map(function (cd) { return [cd, cd, cd]; }));
+  var MAIN = "mne", SPECIAL = "stuv";               // s、t、u、v：其他段落（補充、睡前、傍晚、提醒…），名稱不是「補充」的寫在那一屆的 lab
+  function isMain(code) { return MAIN.indexOf(code) >= 0; }
+  // 沒有對照官方清單的天：照星期排。週六 早、問答、午、下、晚；週日 早、午、下、晚；平日 早、午、晚
+  function ruleCodes(d) {
+    if (d.y.rule === "basic") return d.weekend ? "mnex" : "mne";
+    return d.dow === 6 ? "mxnye" : d.dow === 0 ? "mnxe" : "mne";
   }
-  // 一天裡的順序照時間排：週六 早、10點、午、下午、晚；週日 早、午、下午、晚
+  // 這一天有哪幾段（照官方清單的順序）：官方清單有特別寫的天用清單的，其他照星期
+  function codeStr(d) { return (d.y.sched && d.y.sched[d.n]) || ruleCodes(d); }
+  // 這一天算進度的段落：早、午、晚；如果那一天沒有早午晚（例如只有下午一段），那一天有的段落就都算
+  function mainCodes(d) {
+    var all = codeStr(d).split(""), mc = all.filter(isMain);
+    return mc.length ? mc : all;
+  }
+  function isMainIn(d, code) { return mainCodes(d).indexOf(code) >= 0; }
+  function baseName(d, code, long) {
+    var lab = d.y.lab && d.y.lab[d.n + code];
+    if (lab) return lab;                            // 這一段特別的名稱（例如「提醒」「睡前」）
+    if (code === "m" || code === "a") return long ? "早上" : "早";
+    if (code === "n" || code === "b") return long ? "中午" : "午";
+    if (code === "e" || code === "c") return long ? "晚上" : "晚";
+    if (SPECIAL.indexOf(code) >= 0) return "補充";
+    if (code === "x" && d.y.rule === "basic") return long ? "補充" : "補";
+    if (code === "x" && d.dow === 6) return d.y.satx || "10點";      // 週六早上那一段：官方有的屆叫「問答」，有的叫「補充」
+    return long ? "下午" : "下";
+  }
+  function sessName(d, code, long) {                // 同一天有好幾段同名（早上分兩段、下午好幾段、兩段補充）：依順序編 1、2、3…
+    var base = baseName(d, code, long);
+    var same = codeStr(d).split("").filter(function (cd) { return baseName(d, cd, long) === base; });
+    return same.length > 1 ? base + (long ? " " : "") + (same.indexOf(code) + 1) : base;
+  }
+  function sessShort(d, code) { return sessName(d, code, false); }
+  function sessLabel(d, code) { return sessName(d, code, true); }
   function dayCodes(d) {
-    var ex = extras(d);
-    if (d.y.rule === "basic") return SESS.concat(ex);
-    if (d.dow === 6) return [SESS[0], ex[0], SESS[1], ex[1], SESS[2]];
-    if (d.dow === 0) return [SESS[0], SESS[1], ex[0], SESS[2]];
-    return SESS.slice();
+    return codeStr(d).split("").map(function (cd) { return [cd, sessShort(d, cd), sessLabel(d, cd)]; });
   }
-  function sessLabel(d, code) {
-    if (code === "x" && d.y.rule === "basic") return "補充";
-    if (code === "x") return d.dow === 6 ? "補充・10點" : "補充・下午";
-    if (code === "y") return "補充・下午";
-    for (var k = 0; k < SESS.length; k++) if (SESS[k][0] === code) return SESS[k][2];
-    return "";
+
+  /* ---------- 題目：官方課程頁上每一段的名稱。一屆一個資料檔（titles-2026.json），有檔案才顯示，拿掉檔案就不顯示 ---------- */
+  var TITLES = {}, titlesFor = "";
+  var LS_TITLES = "trust-relisten:titles:";
+  function sessTitle(d, code) { return titlesFor === d.y.id ? (TITLES[d.id + code] || "") : ""; }
+  function withTitle(d, code) { var t = sessTitle(d, code); return sessLabel(d, code) + (t ? "「" + t + "」" : ""); }
+  function setTitles(y, data) {
+    var t = data && data.t && typeof data.t === "object" ? data.t : {}, out = {};
+    Object.keys(t).forEach(function (k) { if (typeof t[k] === "string" && t[k]) out[k] = t[k].slice(0, 80); });
+    TITLES = out;
+    titlesFor = y.id;
+  }
+  function hasTitles() { return titlesFor === Y.id && Object.keys(TITLES).length > 0; }
+  function paintSrc() {                              // 頁尾的出處：有題目才顯示，連到這一屆的官方課程頁
+    var p = $("srcNote");
+    if (!p) return;
+    p.hidden = !hasTitles();
+    if (Y.src) $("srcLink").href = Y.src;
+  }
+  function titlesChanged() {                         // 題目到了（或撤下了）：清單重畫，停在原本看的那一天
+    var at = topDay();
+    build();
+    paint();
+    keepDay(at);
+    paintSrc();
+  }
+  function loadTitles() {
+    var y = Y, cached = "";
+    TITLES = {}; titlesFor = y.id;
+    if (!y.titles) { paintSrc(); return; }
+    try { cached = localStorage.getItem(LS_TITLES + y.id) || ""; if (cached) setTitles(y, JSON.parse(cached)); } catch (e) { cached = ""; }
+    paintSrc();
+    if (!window.fetch) return;
+    fetch("titles-" + y.id + ".json", { cache: "no-cache" }).then(function (r) {
+      if (r.status === 404 || r.status === 410) return "";       // 檔案拿掉了：不再顯示
+      if (!r.ok) throw new Error("titles " + r.status);
+      return r.text();
+    }).then(function (txt) {
+      if (y !== Y || txt === cached) return;                     // 中途換了一屆，或和手上的一樣
+      var data = txt ? JSON.parse(txt) : null;
+      try { if (txt) localStorage.setItem(LS_TITLES + y.id, txt); else localStorage.removeItem(LS_TITLES + y.id); } catch (e) {}
+      setTitles(y, data);
+      titlesChanged();
+    }).catch(function () {});                                    // 抓不到（離線等）：先用手上有的
   }
   // 標籤：預設這幾個，可以自己新增、改名、刪除；c 是顏色編號（0–5）
   var DEFAULT_TAGS = [{ id: "t1", n: "呼吸", c: 0 }, { id: "t2", n: "靜坐", c: 1 }, { id: "t3", n: "臣服", c: 2 },
@@ -1384,11 +1496,17 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     return out;
   }
   var EVERY_KEY = [];                                // 七屆全部的段落（讀資料時用來檢查）
-  YEARS.forEach(function (y) { yearDays(y).forEach(function (d) { dayCodes(d).forEach(function (c) { EVERY_KEY.push(d.id + c[0]); }); }); });
+  YEARS.forEach(function (y) {
+    var seen = {};
+    function add(k) { if (!seen[k]) { seen[k] = 1; EVERY_KEY.push(k); } }
+    yearDays(y).forEach(function (d) { codeStr(d).split("").forEach(function (cd) { add(d.id + cd); }); });
+    // 官方清單沒有、但以前有過的格子（以前每一屆都是 62 天，早、午、晚加週末補充）：打過的勾留著，不會被丟掉
+    for (var n = 1; n <= 62; n++) "mnexy".split("").forEach(function (cd) { add(y.px + "d" + pad(n) + cd); });
+  });
   var NOTE_MAX = 800;                                // 每天心得的字數上限
   var NUM = ["一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二", "十三", "十四"];
   // 印章：每聽完一週蓋一個，全部聽完再蓋「圓滿」；第九週那一顆是這一屆的主題
-  var STAMP_BASE = ["休息", "放鬆", "安靜", "中心", "本性", "臣服", "真實", "信仰"];
+  var STAMP_BASE = ["休息", "放鬆", "安靜", "中心", "本性", "臣服", "真實", "信仰", "感恩", "喜悅", "平安", "自在", "光明"];
   var ST_ROT = [-6, 4, -3, 7, -5, 3, -4, 6, -5, -7, 5, -3, 4, -6, 3];
   var days, ALL_KEYS, MAIN_TOTAL, WEEKS, WEEK_DAYS, STAMPS, ALL;
   function setupYear() {                             // 換一屆時，重算這一屆的天數、週數、印章
@@ -1397,7 +1515,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     days = yearDays(Y);
     ALL_KEYS = [];
     days.forEach(function (d) { dayCodes(d).forEach(function (c) { ALL_KEYS.push(d.id + c[0]); }); });
-    MAIN_TOTAL = TOTAL_DAYS * 3;
+    MAIN_TOTAL = 0;                                  // 算進度的段落總數（大多是天數 × 3）
+    days.forEach(function (d) { MAIN_TOTAL += mainCodes(d).length; });
     WEEKS = Math.ceil(TOTAL_DAYS / 7);
     WEEK_DAYS = [];
     days.forEach(function (d) { (WEEK_DAYS[d.week] = WEEK_DAYS[d.week] || []).push(d); });
@@ -1431,7 +1550,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
   function makeRow(day, code, long) {
     var key = day.id + code;
-    var row = el("div", "srow " + code + " off");
+    var title = sessTitle(day, code);
+    var row = el("div", "srow " + code + " off" + (isMainIn(day, code) ? "" : " sup") + (title ? " has-tt" : ""));
     var ck = el("label", "ck");
     var input = document.createElement("input");
     input.type = "checkbox";
@@ -1456,6 +1576,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     star.hidden = true;
     k.appendChild(star);
     body.appendChild(k);
+    if (title) body.appendChild(el("span", "tt", title));   // 這一段的題目，接在「早上」後面
     var names = el("span", "tn");          // 標籤名稱，排在這一列的右邊
     names.setAttribute("aria-hidden", "true");
     names.hidden = true;
@@ -1477,12 +1598,13 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function makeChk(day, code, short, long) {
     if (layout === "rows") return makeRow(day, code, long);
     var key = day.id + code;
-    var label = el("label", "chk " + code + " off");
+    var label = el("label", "chk " + code + " off" + (isMainIn(day, code) ? "" : " sup") + (Array.from(short).length > 1 ? " wide" : ""));
+    if (sessTitle(day, code)) label.title = sessTitle(day, code);   // 簡化放不下題目：滑鼠停在格子上會看到
     var input = document.createElement("input");
     input.type = "checkbox";
     input.id = key;
     input.disabled = true;
-    input.setAttribute("aria-label", "第 " + day.n + " 天（" + md(day.date) + "）" + long);
+    input.setAttribute("aria-label", "第 " + day.n + " 天" + (day.y.nodate ? "" : "（" + md(day.date) + "）") + long);
     input.addEventListener("change", function () { onToggle(key, input.checked); });
     input.addEventListener("click", function (ev) {
       if (!markTag) return;
@@ -1522,7 +1644,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       sec.appendChild(h);
       var ol = el("ol");
       list.forEach(function (d) {
-        var li = el("li", (layout === "rows" ? "day rows" : "day") + (dayCodes(d).length === 5 ? " sat" : ""));
+        var li = el("li", (layout === "rows" ? "day rows" : "day") + (dayCodes(d).length === 5 ? " sat" : dayCodes(d).length === 6 ? " c6" : codeStr(d) === "e" ? " only-e" : ""));
         li.id = "day-" + pad(d.n);
         var info = el("button", "info");
         info.type = "button";
@@ -1544,7 +1666,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var checks = el("div", "checks");
         var chks = {};
         dayCodes(d).forEach(function (s) {   // 早、午、晚，週末的補充照時間插在中間
-          var c = makeChk(d, s[0], s[1], s[2]);
+          var c = makeChk(d, s[0], s[1], withTitle(d, s[0]));
           chks[s[0]] = c; checks.appendChild(c.label);
         });
         li.appendChild(checks);
@@ -1573,8 +1695,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
   function nextIndex() {
     for (var i = 0; i < days.length; i++) {
-      for (var s = 0; s < SESS.length; s++) {
-        if (!isDone(days[i].id + SESS[s][0])) return { i: i, s: s };
+      var mc = mainCodes(days[i]);
+      for (var s = 0; s < mc.length; s++) {
+        if (!isDone(days[i].id + mc[s])) return { i: i, c: mc[s] };
       }
     }
     return null;
@@ -1585,7 +1708,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   function paint() {
     var editable = mode === "cloud" || mode === "local";
     var nx = nextIndex();
-    var cnt = { m: 0, n: 0, e: 0, x: 0, y: 0 }, fullDays = 0;
+    var mainDone = 0, fullDays = 0;
     var start = parseIso(curStart());
     var pace = curPace();                             // 幾天聽一天份
     var sinceStart = start ? dayDiff(new Date(), start) : null;
@@ -1602,7 +1725,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         c.label.classList.toggle("on", on);
         c.names.classList.toggle("on", on);
         c.label.classList.toggle("off", !editable);
-        if (on) { cnt[code]++; if (code !== "x" && code !== "y") main++; }
+        if (on && isMainIn(d, code)) { main++; mainDone++; }
         var tg = markTags(c.key), names = tg.map(function (id) { return tagById(id).n; });
         c.names.textContent = "";
         tg.forEach(function (id) { var t = tagById(id); c.names.appendChild(el("span", "tname tc" + tagColor(t), t.n)); });
@@ -1647,7 +1770,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       });
       r.li.classList.toggle("has-tn", named && layout === "rows");   // 簡化不顯示標籤   // 有標籤名稱的天：日期對齊格子那一排，不跟著名稱往下掉
       r.li.hidden = !!mt && markOnly && !hits;
-      var done = main === 3;
+      var done = main > 0 && main === mainCodes(d).length;
       r.li.classList.toggle("every", Object.keys(r.chks).every(function (code) { return isDone(r.chks[code].key); }));
       if (done) fullDays++;
       r.li.classList.toggle("done", done);
@@ -1658,7 +1781,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       r.info.setAttribute("aria-label", "第 " + d.n + " 天：" + (anyNote ? "看心得" : "寫心得"));
       if (r.np && r.np.tagName === "BUTTON") { r.np.setAttribute("aria-label", "第 " + d.n + " 天：" + (anyNote ? "看心得" : "寫心得")); r.np.disabled = !editable; }
       r.sub.textContent = "";
-      if (showDates) r.sub.appendChild(el("span", "od", md(d.date) + " 週" + WD[d.dow]));
+      if (showDates) r.sub.appendChild(el("span", "od", (Y.nodate ? "" : md(d.date) + " ") + "週" + WD[d.dow]));
       if (start) {
         var pd = addDays(start, d.i * pace);
         if (pace === 1) r.sub.appendChild(el("span", "re", "重聽 " + md(pd) + " 週" + WD[pd.getDay()]));
@@ -1670,7 +1793,6 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       }
     });
 
-    var mainDone = cnt.m + cnt.n + cnt.e;
     $("doneCount").textContent = mainDone;
     $("barCount").textContent = mainDone;
     $("dayCount").textContent = fullDays;
@@ -1684,10 +1806,9 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
     weekEls.forEach(function (w) {
       var got = 0;
-      w.list.forEach(function (d) { SESS.forEach(function (s) { if (isDone(d.id + s[0])) got++; }); });
-      var whole = w.list.length * 3;
+      w.list.forEach(function (d) { mainCodes(d).forEach(function (cd) { if (isDone(d.id + cd)) got++; }); });
       w.alldone.hidden = !(hideDone && w.list.every(function (d) { return rows[d.i].li.classList.contains("every"); })) || !!(mt && markOnly);
-      w.range.hidden = !showDates;
+      w.range.hidden = !showDates || !!Y.nodate;
       w.sec.hidden = !!mt && markOnly && w.list.every(function (d) { return rows[d.i].li.hidden; });
     });
     weeksEl.classList.toggle("hide-done", hideDone);
@@ -1746,17 +1867,17 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     nb.disabled = !nx;
     nb.textContent = nx ? "下一段" : "全部聽完";
     nb.setAttribute("aria-label", nx
-      ? "跳到下一段還沒聽的：第 " + days[nx.i].n + " 天" + SESS[nx.s][2]
+      ? "跳到下一段還沒聽的：第 " + days[nx.i].n + " 天" + sessLabel(days[nx.i], nx.c)
       : "全部聽完");
   }
 
   /* ---------- 印章冊 ---------- */
   function weekGot(w) {
     var got = 0;
-    WEEK_DAYS[w].forEach(function (d) { SESS.forEach(function (s) { if (isDone(d.id + s[0])) got++; }); });
+    WEEK_DAYS[w].forEach(function (d) { mainCodes(d).forEach(function (cd) { if (isDone(d.id + cd)) got++; }); });
     return got;
   }
-  function weekWhole(w) { return WEEK_DAYS[w].length * 3; }
+  function weekWhole(w) { var n = 0; WEEK_DAYS[w].forEach(function (d) { n += mainCodes(d).length; }); return n; }
   function sealOn(k) {
     if (k === ALL) { for (var w = 0; w < WEEKS; w++) if (weekGot(w) < weekWhole(w)) return false; return true; }
     return weekGot(k) === weekWhole(k);
@@ -2125,7 +2246,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     $("nsTitle").textContent = "第" + pad(d.n) + "天的心得";
     list.textContent = "";
     var parts = dayCodes(d).map(function (cd) {
-      return { key: d.id + cd[0], lab: sessLabel(d, cd[0]), tags: true };
+      return { key: d.id + cd[0], lab: sessLabel(d, cd[0]), tags: true, title: sessTitle(d, cd[0]) };
     });
     if (state.notes[d.id]) parts.push({ key: d.id, lab: "整天" });
     parts.forEach(function (p, k) {
@@ -2150,6 +2271,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       }
       top.appendChild(el("span", "note-at", n && n.at ? atLabel(n.at) + " 寫" : ""));
       box.appendChild(top);
+      if (p.title) box.appendChild(el("div", "ns-tt", p.title));
       var ta = document.createElement("textarea");
       ta.id = id;
       ta.rows = 3;
@@ -2206,6 +2328,8 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     sessKey = key;
     sessLast = document.activeElement;
     $("ssTitle").textContent = "第" + pad(d.n) + "天・" + sessLabel(d, code);
+    $("ssSub").textContent = sessTitle(d, code);
+    $("ssSub").hidden = !sessTitle(d, code);
     var sn = state.notes[key];
     ssMsg.value = sn ? sn.t : "";
     $("ssAt").textContent = sn && sn.at ? atLabel(sn.at) + " 寫" : "";
@@ -2295,7 +2419,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       var note = state.notes[d.id], ents = [];
       dayCodes(d).forEach(function (cd) {
         var sn = state.notes[d.id + cd[0]];
-        if (sn) ents.push({ lab: sessLabel(d, cd[0]), n: sn, open: function () { openSess(d.i, cd[0]); } });
+        if (sn) ents.push({ lab: sessLabel(d, cd[0]), title: sessTitle(d, cd[0]), n: sn, open: function () { openSess(d.i, cd[0]); } });
       });
       if (note) ents.push({ lab: ents.length ? "整天" : "", n: note, open: function () { openNote(d.i); } });
       if (!ents.length) return;
@@ -2309,7 +2433,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var b = el("button", "note-entry");
         b.type = "button";
         var top = el("span", "note-etop");
-        top.appendChild(el("b", null, e.lab));
+        top.appendChild(el("b", null, e.lab + (e.title ? "・" + e.title : "")));
         if (e.n.at) top.appendChild(el("span", "note-at", atLabel(e.n.at)));
         b.appendChild(top);
         b.appendChild(el("span", "note-text", e.n.t));
@@ -2334,7 +2458,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
         var sn = state.notes[d.id + cd[0]];
         if (!names.length && !sn && !isStar(d.id + cd[0])) return;
-        marks.push(sessLabel(d, cd[0]) + (isStar(d.id + cd[0]) ? "★" : "") + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
+        marks.push(sessLabel(d, cd[0]) + (sessTitle(d, cd[0]) ? "〈" + sessTitle(d, cd[0]) + "〉" : "") + (isStar(d.id + cd[0]) ? "★" : "") + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
         if (sn) marks.push(sn.t);
       });
       if (!note && !marks.length) return;
@@ -2580,7 +2704,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var notes = {};
     Object.keys(rn).forEach(function (k) {
       var v = rn[k];
-      if (/^(y\d\d)?d\d\d[mnexy]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
+      if (/^(y\d\d)?d\d\d[a-z]?$/.test(k) && v && typeof v.t === "string" && v.t) notes[k] = { t: v.t.slice(0, NOTE_MAX), at: typeof v.at === "string" ? v.at : "" };
     });
     Object.keys(rr).forEach(function (k) {
       if (/^(y\d\d)?(w\d\d?|all)$/.test(k) && typeof rr[k] === "string" && rr[k]) rewards[k] = rr[k].slice(0, 40);
@@ -2597,7 +2721,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var marks = {};
     Object.keys(rm).forEach(function (k) {
       var v = rm[k];
-      if (!/^(y\d\d)?d\d\d[mnexy]$/.test(k) || !v || typeof v !== "object") return;
+      if (!/^(y\d\d)?d\d\d[a-z]$/.test(k) || !v || typeof v !== "object") return;
       var tg = Array.isArray(v.tg) ? v.tg.filter(function (x) { return typeof x === "string"; }).slice(0, TAGS_MAX) : [];
       var ti = typeof v.ti === "string" ? v.ti.slice(0, TITLE_MAX) : "";
       var st = v.st === true;
@@ -2891,9 +3015,18 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   }
 
   /* ---------- 切換年份：2020～2026 的全球共修 ---------- */
+  var YEAR_MAIN = {};
+  function yearMain(y) {                             // 這一屆算進度的段落：{ set: 每一段的代號, n: 總數 }
+    if (!YEAR_MAIN[y.id]) {
+      var set = {}, n = 0;
+      yearDays(y).forEach(function (d) { mainCodes(d).forEach(function (cd) { set[d.id + cd] = 1; n++; }); });
+      YEAR_MAIN[y.id] = { set: set, n: n };
+    }
+    return YEAR_MAIN[y.id];
+  }
   function yearProgress(y) {
-    var re = new RegExp("^" + y.px + "d\\d\\d[mne]$"), n = 0;
-    Object.keys(state.done).forEach(function (k) { if (state.done[k] && re.test(k)) n++; });
+    var set = yearMain(y).set, n = 0;
+    Object.keys(state.done).forEach(function (k) { if (state.done[k] && set[k]) n++; });
     return n;
   }
   function paintYearHead() {
@@ -2908,7 +3041,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var box = $("yrList");
     box.textContent = "";
     YEARS.forEach(function (y) {
-      var got = yearProgress(y), whole = y.days * 3;
+      var got = yearProgress(y), whole = yearMain(y).n;
       var b = el("button", "yr-row" + (y === Y ? " on" : ""));
       b.type = "button";
       if (y === Y) b.setAttribute("aria-current", "true");
@@ -2944,6 +3077,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     closeNote(); closeSess();
     markTag = null; markOnly = false;
     setupYear();
+    loadTitles();
     paintYearHead();
     build();
     buildSeals();
@@ -3321,6 +3455,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   });
 
   /* ---------- Wire up ---------- */
+  loadTitles();
   build();
   buildSeals();
   try { hideDone = localStorage.getItem(LS_HIDE) === "1"; } catch (e) {}
@@ -3340,7 +3475,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     var r = rows[nx.i];
     var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     r.li.scrollIntoView({ behavior: calm ? "auto" : "smooth", block: "center" });
-    try { r.chks[SESS[nx.s][0]].input.focus({ preventScroll: true }); } catch (e) {}
+    try { r.chks[nx.c].input.focus({ preventScroll: true }); } catch (e) {}
   });
   /* ---------- 下方分頁：清單、標籤、心得、進度 ---------- */
   var tagScreen = $("tagScreen"), curTab = "list";
@@ -3378,6 +3513,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var go = el("button", "star-go");
         go.type = "button";
         go.appendChild(el("span", "star-day", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0])));
+        if (sessTitle(d, cd[0])) go.appendChild(el("span", "star-tt", sessTitle(d, cd[0])));
         var names = markTags(key).map(function (id) { return tagById(id).n; });
         if (names.length) go.appendChild(el("span", "star-tags", names.join("、")));
         if (isDone(key)) go.appendChild(el("span", "star-done", "聽過"));
@@ -3426,6 +3562,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       hits.forEach(function (x) {
         var d = x[0], cd = x[1];
         var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0]));
+        if (sessTitle(d, cd[0])) b.appendChild(el("span", "tix-tt", sessTitle(d, cd[0])));
         b.type = "button";
         b.addEventListener("click", function () {
           showTab("list");
