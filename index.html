@@ -406,7 +406,7 @@ div.note-card:hover { border-color: var(--line); }
   position: fixed; left: 0; right: 0; bottom: 0; z-index: 25; background: var(--page); border-top: 1px solid var(--line);
   padding: 4px max(8px, env(safe-area-inset-right, 0px)) calc(6px + env(safe-area-inset-bottom, 0px)) max(8px, env(safe-area-inset-left, 0px));
 }
-.tabbar-in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.tabbar-in { max-width: 480px; margin: 0 auto; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); }
 .tab {
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; min-height: 52px; padding: 4px 0;
   border: 0; background: none; color: var(--muted-2); font: inherit; font-size: 0.75rem; cursor: pointer;
@@ -476,7 +476,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .gx-box{display:inline-flex;align-items:center;gap:6px;font-size:12px;position:relative}
 .gx-box i{width:15px;height:15px;border-radius:3px;background:var(--sel);display:inline-flex;align-items:center;justify-content:center}
 .gx-box i::after{content:"";width:7px;height:4px;border-left:1.6px solid var(--selfg);border-bottom:1.6px solid var(--selfg);transform:translateY(-1px) rotate(-45deg)}
-.gx-tabs{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;width:100%;padding:8px 6px;border-top:1px solid var(--line);background:var(--page);border-radius:0 0 10px 10px}
+.gx-tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:100%;padding:8px 6px;border-top:1px solid var(--line);background:var(--page);border-radius:0 0 10px 10px}
 .gx-tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;color:var(--ink)}
 .gx-tab svg{width:20px;height:20px;fill:none;stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .gx-tab small{font-size:10px;color:var(--muted);text-align:center;line-height:1.35}
@@ -1056,6 +1056,48 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 :root[data-look="starry"] .screen { background: #000000 var(--sky, none) center / cover; }
 .sky-fx { position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 .home > .sky-fx { left: 50%; max-width: 480px; transform: translateX(-50%); }
+
+/* ---------- 搜尋 ---------- */
+.sq-in.screen-inner { gap: 12px; }
+.sq-bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 2; padding: 6px 0; background: var(--page); }
+.sq-bar::before { content: ""; position: absolute; left: 0; right: 0; bottom: 100%; height: env(safe-area-inset-top, 0px); background: var(--page); }   /* 黏在上面時，把瀏海那一條也蓋住 */
+.sq-field { min-width: 0; display: flex; align-items: center; gap: 8px; height: 46px; padding: 0 6px 0 14px; border: 1.5px solid var(--line-2); border-radius: 23px; background: var(--card); cursor: text; }
+.sq-field:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--soft-2); }
+.sq-field > svg { flex: none; width: 20px; height: 20px; fill: none; stroke: var(--muted-2); stroke-width: 2.2; stroke-linecap: round; }
+.sq-field input { flex: 1 1 auto; min-width: 0; height: 100%; padding: 0; border: none; outline: none; background: none; font: inherit; font-size: 1rem; color: var(--ink); -webkit-appearance: none; appearance: none; }
+.sq-field input::placeholder { color: var(--muted-2); opacity: .8; }
+.sq-field input::-webkit-search-cancel-button, .sq-field input::-webkit-search-decoration { -webkit-appearance: none; display: none; }
+.sq-clear { flex: none; width: 34px; height: 34px; padding: 0; border: none; border-radius: 50%; background: none; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+.sq-clear svg { width: 18px; height: 18px; fill: none; stroke: var(--muted-2); stroke-width: 2.2; stroke-linecap: round; }
+.sq-clear:hover { background: var(--soft); }
+.sq-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.sq-seg { display: inline-flex; padding: 3px; border-radius: 12px; background: var(--soft-2); }
+.sq-seg button { height: 32px; padding: 0 12px; border: none; border-radius: 9px; background: none; font: inherit; font-size: 0.8125rem; color: var(--muted); cursor: pointer; white-space: nowrap; }
+.sq-seg button[aria-pressed="true"] { background: var(--sel); color: var(--selfg); }
+.sq-count { margin: 0; min-height: 1.3em; font-size: 0.8125rem; line-height: 1.6; color: var(--muted-2); }
+.sq-empty p { margin: 0 0 10px; font-size: 0.9375rem; color: var(--muted); }
+.sq-words { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.sq-words button { height: 36px; padding: 0 14px; border: 1px solid var(--line); border-radius: 18px; background: var(--card); font: inherit; font-size: 0.9375rem; color: var(--ink-2); cursor: pointer; }
+.sq-empty .sq-small, .sq-more { margin: 0; font-size: 0.8125rem; line-height: 1.6; color: var(--muted-2); }
+.sq-list { display: flex; flex-direction: column; gap: 18px; }
+.sq-year { position: sticky; top: calc(58px + env(safe-area-inset-top, 0px)); z-index: 1; margin: 0; padding: 6px 0; display: flex; align-items: baseline; justify-content: space-between; gap: 8px; background: var(--page); border-bottom: 1px solid var(--line-3); font-family: var(--serif); font-size: 1.0625rem; font-weight: 600; color: var(--ink); }
+.sq-year .sq-n { flex: none; font-family: var(--mono); font-size: 0.75rem; font-weight: 400; color: var(--muted-2); }
+.sq-item { width: 100%; display: flex; flex-direction: column; gap: 3px; padding: 11px 2px; border: none; border-bottom: 1px solid var(--line-3); background: none; text-align: left; font: inherit; color: inherit; cursor: pointer; }
+.sq-item:hover { background: var(--soft); }
+.sq-top { display: flex; align-items: baseline; gap: 8px; font-size: 0.8125rem; color: var(--muted); }
+.sq-star { color: var(--star); }
+.sq-done { margin-left: auto; font-size: 0.75rem; color: var(--muted-2); }
+.sq-tt { font-size: 0.9375rem; line-height: 1.5; color: var(--ink); overflow-wrap: anywhere; }
+.sq-note { display: flex; gap: 8px; align-items: baseline; font-size: 0.875rem; line-height: 1.55; color: var(--ink-2); }
+.sq-pen { flex: none; padding: 0 6px; border-radius: 6px; background: var(--soft-2); font-size: 0.6875rem; line-height: 1.7; color: var(--muted); }
+.sq-nt { min-width: 0; overflow-wrap: anywhere; }
+.sq-screen mark, .gx-yrs mark { background: var(--soft-2); background: color-mix(in srgb, var(--star) 30%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+/* 從搜尋跳過來：那一段框起來一下子 */
+.srow.found, .chk.found, .chk.found:has(input:focus-visible), li.day.found { outline: 2.5px solid var(--star); outline-offset: 2px; border-radius: 12px; }
+.chk.found { box-shadow: 0 0 0 6px var(--soft-2); box-shadow: 0 0 0 6px color-mix(in srgb, var(--star) 22%, transparent); }
+.srow.found, li.day.found { background-color: var(--soft); background-color: color-mix(in srgb, var(--star) 10%, transparent); }
+.gx-sq { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 9px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink-2); font-size: 11px; white-space: nowrap; }
+.gx-sq svg { width: 12px; height: 12px; fill: none; stroke: var(--muted-2); stroke-width: 2.4; stroke-linecap: round; }
 </style>
 <script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean|starry)$/.test(l))document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
 </head>
@@ -1163,10 +1205,32 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
 <button type="button" class="sync-bar" id="syncBar" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg><span class="sync-bar-t" id="syncBarT">點一下載入最新的筆記</span><span class="sync-bar-go">同步</span></button>
 
+<section class="screen tab-screen sq-screen" id="searchScreen" aria-labelledby="sqTitle" hidden>
+  <div class="screen-inner sq-in">
+    <div class="book-head"><h2 id="sqTitle">搜尋</h2></div>
+    <div class="sq-bar">
+      <label class="sq-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg><input id="sqInput" type="search" aria-label="搜尋題目或自己的心得" placeholder="找題目或自己的心得" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" maxlength="60"><button type="button" class="sq-clear" id="sqClear" aria-label="清除" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"></path></svg></button></label>
+    </div>
+    <div class="sq-chips">
+      <span class="sq-seg" role="group" aria-label="範圍"><button type="button" data-sq-scope="all" aria-pressed="true">七屆全部</button><button type="button" data-sq-scope="this" aria-pressed="false">只找這一屆</button></span>
+      <span class="sq-seg" role="group" aria-label="找什麼"><button type="button" data-sq-kind="all" aria-pressed="true">全部</button><button type="button" data-sq-kind="title" aria-pressed="false">題目</button><button type="button" data-sq-kind="note" aria-pressed="false">我的心得</button></span>
+    </div>
+    <p class="sq-count" id="sqCount" aria-live="polite"></p>
+    <div class="sq-empty" id="sqEmpty">
+      <p>輸入幾個字就會開始找，例如：</p>
+      <div class="sq-words"><button type="button" data-sq-word>呼吸</button><button type="button" data-sq-word>臣服</button><button type="button" data-sq-word>白骨觀</button><button type="button" data-sq-word>火的典禮</button><button type="button" data-sq-word>問答</button></div>
+      <p class="sq-small">多個詞用空白隔開，例如「重生 呼吸」。點找到的那一段，會跳到清單裡那一天。搜尋只在這台裝置上進行，不會傳到任何地方。</p>
+    </div>
+    <div class="sq-list" id="sqList"></div>
+    <p class="sq-more" id="sqMore" hidden></p>
+  </div>
+</section>
+
 <nav class="tabbar" id="tabbar" aria-label="分頁">
   <div class="tabbar-in">
     <button type="button" class="tab on" data-tab="list" aria-current="page"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單</button>
     <button type="button" class="tab" data-tab="tags"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤</button>
+    <button type="button" class="tab" data-tab="search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg>搜尋</button>
     <button type="button" class="tab" data-tab="notes"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得</button>
     <button type="button" class="tab" data-tab="prog"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度</button>
   </div>
@@ -1236,6 +1300,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-tog"><span class="on">簡化</span><span>詳細</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-two"><span class="gx-mini"><span class="h">簡化</span><span class="gx-chips"><span class="d">第01天</span><span class="gx-c on">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></span><span class="gx-mini"><span class="h">詳細</span><span class="gx-r"><i class="on"></i>早上<b>心得</b></span><span class="gx-r"><i></i>中午<b>心得</b></span><span class="gx-r"><i></i>晚上<b>心得</b></span></span></span></div><h3>兩種看法</h3></section>
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-yr">2026 全球共修 ▾</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-yrs"><span class="on"><b>2026</b>信任</span><span><b>2025</b>中道，中道到底</span><span><b>2024</b>心，向前行</span></span></div><h3>換年份</h3><p class="cap">2020～2026 每一屆分開記</p></section>
+      <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-sq"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg>呼吸</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-yrs"><span><b>第05天</b><span>重生的<mark>呼吸</mark></span></span><span><b>第11天</b><span>諧振式<mark>呼吸</mark></span></span></span></div><h3>搜尋</h3><p class="cap">找題目和自己的心得，點了跳到那一天</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dayp"><span>第<b>01</b>天</span><span class="gx-np pen"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16v4Z"></path></svg><span class="g-tap"></span></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-pop"><span class="t">第01天的心得</span><span class="l"><span>早上</span><i></i></span><span class="l"><span>中午</span><i></i></span><span class="l"><span>晚上</span><i></i></span></span></div><h3>寫心得</h3><p class="cap">早、午、晚分開寫</p></section>
 
@@ -1244,7 +1309,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-box"><i></i>隱藏完成的練習</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-chips"><span class="d">第01天</span><span class="gx-c gone">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></div><h3>隱藏完成的練習</h3><p class="cap">聽完的先藏起來</p></section>
 
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-tabs"><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單<small>打勾</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤<small>看標過的</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得<small>全部心得<br>匯出</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度<small>重聽排程<br>印章冊</small></span></span></div><h3>下方分頁</h3></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-tabs"><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單<small>打勾</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤<small>看標過的</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg>搜尋<small>找題目<br>和心得</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得<small>全部心得<br>匯出</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度<small>重聽排程<br>印章冊</small></span></span></div><h3>下方分頁</h3></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-stamp">休息</span></div><h3>蓋印章</h3><p class="cap">聽完 7 天蓋一個</p></section>
 
@@ -1422,11 +1487,16 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   var LS_TITLES = "trust-relisten:titles:";
   function sessTitle(d, code) { return titlesFor === d.y.id ? (TITLES[d.id + code] || "") : ""; }
   function withTitle(d, code) { var t = sessTitle(d, code); return sessLabel(d, code) + (t ? "「" + t + "」" : ""); }
-  function setTitles(y, data) {
+  var TITLE_ALL = {};                                // 讀過的每一屆題目（搜尋要七屆一起找）：{ "2026": { d01m: "…" } }
+  function cleanTitles(data) {
     var t = data && data.t && typeof data.t === "object" ? data.t : {}, out = {};
     Object.keys(t).forEach(function (k) { if (typeof t[k] === "string" && t[k]) out[k] = t[k].slice(0, 80); });
-    TITLES = out;
+    return out;
+  }
+  function setTitles(y, data) {
+    TITLES = cleanTitles(data);
     titlesFor = y.id;
+    TITLE_ALL[y.id] = TITLES;
   }
   function hasTitles() { return titlesFor === Y.id && Object.keys(TITLES).length > 0; }
   function paintSrc() {                              // 頁尾的出處：有題目才顯示，連到這一屆的官方課程頁
@@ -3454,6 +3524,189 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     else paintSync();
   });
 
+  /* ---------- 搜尋：找題目和自己的心得（七屆一起找），點一筆跳到那一天 ---------- */
+  var SQ = { q: "", scope: "all", kind: "all", asked: {}, timer: 0, typing: false, found: null, foundT: 0, top: 0 };
+  var SQ_MAX = 300;                                  // 一次最多列幾段（再多就請多打幾個字）
+  var SQ_SKIP = /[\s\-－—–‧．·・、，,。.！!？?「」『』（）()《》〈〉：:；;~～…'’"“”\/／]/;   // 比對時不管空白和標點
+  var SQ_SAME = [["波羅密", "波羅蜜"], ["瑜珈", "瑜伽"]];   // 同一個詞的不同寫法，當成一樣（字數相同，位置才對得回去）
+  function sqNorm(s) {                               // 去掉空白標點、全形英數轉半形、英文轉小寫；map 記下每個字原本在第幾個位置
+    var t = "", map = [];
+    for (var i = 0; i < s.length; i++) {
+      var ch = s.charAt(i), cc = ch.charCodeAt(0);
+      if (cc >= 0xFF01 && cc <= 0xFF5E) ch = String.fromCharCode(cc - 0xFEE0);
+      if (SQ_SKIP.test(ch)) continue;
+      t += ch.toLowerCase(); map.push(i);
+    }
+    SQ_SAME.forEach(function (p) { t = t.split(p[0]).join(p[1]); });
+    return { t: t, map: map };
+  }
+  // 每個詞都要有才算找到：在內容（題目或心得）裡，或在「第幾天・哪一段」裡（所以打「問答」「下午 呼吸」「第41天」也找得到）。
+  // 回傳 { r: 內容裡要標色的範圍, own: 有幾個詞是在內容裡找到的 }
+  function sqHits(text, where, terms) {
+    var n = sqNorm(text), w = sqNorm(where).t, out = [], own = 0;
+    for (var k = 0; k < terms.length; k++) {
+      var at = n.t.indexOf(terms[k]);
+      if (at < 0) { if (w.indexOf(terms[k]) < 0) return null; continue; }
+      own++;
+      while (at >= 0) {
+        out.push([n.map[at], n.map[at + terms[k].length - 1] + 1]);
+        at = n.t.indexOf(terms[k], at + terms[k].length);
+      }
+    }
+    return { r: out.sort(function (a, b) { return a[0] - b[0]; }), own: own };
+  }
+  function sqWhere(d, cd) { return "第" + pad(d.n) + "天 第" + d.n + "天 " + (cd ? sessLabel(d, cd) : "整天"); }
+  function sqMarked(cls, text, ranges) {              // 把找到的字標色
+    var span = el("span", cls), pos = 0;
+    ranges.forEach(function (r) {
+      if (r[0] < pos) return;
+      if (r[0] > pos) span.appendChild(document.createTextNode(text.slice(pos, r[0])));
+      span.appendChild(el("mark", null, text.slice(r[0], r[1])));
+      pos = r[1];
+    });
+    if (pos < text.length) span.appendChild(document.createTextNode(text.slice(pos)));
+    return span;
+  }
+  function sqSnippet(text, ranges) {                  // 心得比較長：只留找到的字前後一小段
+    var a = Math.max(0, (ranges.length ? ranges[0][0] : 0) - 14), b = Math.min(text.length, a + 48), pre = a ? "…" : "";
+    var rs = ranges.filter(function (r) { return r[0] >= a && r[1] <= b; }).map(function (r) { return [r[0] - a + pre.length, r[1] - a + pre.length]; });
+    return { text: pre + text.slice(a, b).replace(/\s+/g, " ") + (b < text.length ? "…" : ""), ranges: rs };
+  }
+  function loadAllTitles(onChange) {                  // 第一次打開搜尋：把其他屆的題目也讀進來（先用這台裝置存的，再向網站要新的）
+    YEARS.forEach(function (y) {
+      if (!y.titles || y === Y || SQ.asked[y.id]) return;      // 目前這一屆 loadTitles 已經讀了
+      SQ.asked[y.id] = true;
+      var cached = "";
+      try { cached = localStorage.getItem(LS_TITLES + y.id) || ""; if (cached) TITLE_ALL[y.id] = cleanTitles(JSON.parse(cached)); } catch (e) { cached = ""; }
+      if (!window.fetch) return;
+      fetch("titles-" + y.id + ".json", { cache: "no-cache" }).then(function (r) {
+        if (r.status === 404 || r.status === 410) return "";     // 檔案拿掉了
+        if (!r.ok) throw new Error("titles " + r.status);
+        return r.text();
+      }).then(function (txt) {
+        if (txt === cached) return;
+        var data = txt ? JSON.parse(txt) : null;
+        try { if (txt) localStorage.setItem(LS_TITLES + y.id, txt); else localStorage.removeItem(LS_TITLES + y.id); } catch (e) {}
+        TITLE_ALL[y.id] = cleanTitles(data);
+        onChange();
+      }).catch(function () { SQ.asked[y.id] = false; });         // 沒連上：下次打開再試
+    });
+  }
+  function runSearch() {
+    var box = $("sqList"), more = $("sqMore");
+    box.textContent = ""; more.hidden = true;
+    var terms = SQ.q.split(/\s+/).map(function (w) { return sqNorm(w).t; }).filter(Boolean);
+    $("sqEmpty").hidden = terms.length > 0;
+    $("sqClear").hidden = !SQ.q;
+    $("sqCount").textContent = "";
+    if (!terms.length) { SQ.top = 0; return; }
+    var total = 0, shown = 0;
+    var order = SQ.scope === "this" ? [Y] : [Y].concat(YEARS.filter(function (y) { return y !== Y; }));   // 目前這一屆排最前面
+    order.forEach(function (y) {
+      var T = TITLE_ALL[y.id] || {}, list = [];
+      function tryNote(d, cd, key, title) {
+        var n = state.notes[key];
+        if (SQ.kind === "title" || !n || !n.t) return;
+        var r = sqHits(n.t, sqWhere(d, cd), terms);
+        if (r && r.own) list.push({ d: d, cd: cd, key: key, kind: "note", text: n.t, r: r.r, title: title });   // 心得：至少要有一個詞在心得裡
+      }
+      yearDays(y).forEach(function (d) {
+        codeStr(d).split("").forEach(function (cd) {
+          var key = d.id + cd, t = T[key];
+          if (SQ.kind !== "note" && t) { var r = sqHits(t, sqWhere(d, cd), terms); if (r) list.push({ d: d, cd: cd, key: key, kind: "title", text: t, r: r.r }); }
+          tryNote(d, cd, key, t);
+        });
+        tryNote(d, "", d.id, "");                     // 以前寫的整天心得
+      });
+      if (!list.length) return;
+      total += list.length;
+      if (shown >= SQ_MAX) return;
+      var g = el("section", "sq-group"), hd = el("h3", "sq-year");
+      hd.appendChild(el("span", null, y.id + " " + y.title));
+      hd.appendChild(el("span", "sq-n", list.length + " 段"));
+      g.appendChild(hd);
+      list.slice(0, SQ_MAX - shown).forEach(function (it) {
+        var b = el("button", "sq-item"), top = el("span", "sq-top");
+        b.type = "button";
+        top.appendChild(el("span", "sq-day", "第" + pad(it.d.n) + "天・" + (it.cd ? sessLabel(it.d, it.cd) : "整天")));
+        if (it.cd && isStar(it.key)) { var st = el("span", "sq-star", "★"); st.setAttribute("aria-label", "想再聽"); top.appendChild(st); }
+        if (it.cd && isDone(it.key)) top.appendChild(el("span", "sq-done", "已聽"));
+        b.appendChild(top);
+        if (it.kind === "title") b.appendChild(sqMarked("sq-tt", it.text, it.r));
+        else {
+          if (it.title) b.appendChild(el("span", "sq-tt", it.title));
+          var sn = sqSnippet(it.text, it.r), line = el("span", "sq-note");
+          line.appendChild(el("span", "sq-pen", "我的心得"));
+          line.appendChild(sqMarked("sq-nt", sn.text, sn.ranges));
+          b.appendChild(line);
+        }
+        b.addEventListener("click", function () { searchGo(y, it); });
+        g.appendChild(b);
+        shown++;
+      });
+      box.appendChild(g);
+    });
+    $("sqCount").textContent = total ? "找到 " + total + " 段" : "找不到「" + SQ.q.trim() + "」，換個詞或少打幾個字試試";
+    if (total > shown) { more.textContent = "只列出前 " + shown + " 段。多打幾個字，可以找得更準。"; more.hidden = false; }
+  }
+  function sqSoon() { clearTimeout(SQ.timer); SQ.timer = setTimeout(runSearch, 120); }
+  function enterSearch() {                            // 切到「搜尋」分頁
+    loadAllTitles(function () { if (curTab === "search") sqSoon(); });
+    runSearch();                                      // 心得、打勾可能變了：重新找一次
+    if (SQ.q) $("searchScreen").scrollTop = SQ.top || 0;      // 找過了：回到剛才看到的地方
+    else { try { $("sqInput").focus(); } catch (e) {} }       // 還沒打字：直接可以打
+  }
+  function markFound(node) {                          // 跳過去之後，把那一段框起來一下子
+    clearTimeout(SQ.foundT);
+    if (SQ.found) SQ.found.classList.remove("found");
+    SQ.found = node;
+    if (!node) return;
+    node.classList.add("found");
+    SQ.foundT = setTimeout(function () { node.classList.remove("found"); if (SQ.found === node) SQ.found = null; }, 3200);
+  }
+  function searchGo(y, it) {
+    if (markTag) setMarkTag(null);
+    if (y !== Y) setYear(y.id);                       // 別屆的：先換到那一屆
+    showTab("list");
+    var r = rows[it.d.i];
+    if (!r) return;
+    var inp = it.cd ? document.getElementById(it.key) : null, cell = inp ? inp.closest(".srow, .chk") : null;
+    if (hideDone && (r.li.classList.contains("every") || (it.cd && isDone(it.key)))) {   // 被「隱藏完成的練習」收起來了：先關掉才看得到
+      hideDone = false;
+      $("hideDone").checked = false;
+      try { localStorage.setItem(LS_HIDE, "0"); } catch (e) {}
+      paint();
+    }
+    (cell || r.li).scrollIntoView({ block: "center" });
+    markFound(cell || r.li);
+    if (it.kind === "note") { if (it.cd) openSess(it.d.i, it.cd); else openNote(it.d.i); }   // 心得：直接打開那一則
+    else if (inp) { try { inp.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  (function () {
+    var inp = $("sqInput");
+    $("sqClear").addEventListener("click", function () { inp.value = SQ.q = ""; runSearch(); inp.focus(); });
+    // 注音、倉頡等還在選字的時候先不找，選好了才找（不然會一直閃「找不到」）
+    inp.addEventListener("compositionstart", function () { SQ.typing = true; });
+    inp.addEventListener("compositionend", function () { SQ.typing = false; SQ.q = inp.value; sqSoon(); });
+    inp.addEventListener("input", function () { if (SQ.typing) return; SQ.q = inp.value; sqSoon(); });
+    inp.addEventListener("keydown", function (ev) { if (ev.key === "Enter" && !SQ.typing) { ev.preventDefault(); SQ.q = inp.value; clearTimeout(SQ.timer); runSearch(); inp.blur(); } });
+    function chips(attr, prop) {
+      var all = document.querySelectorAll("[" + attr + "]");
+      [].forEach.call(all, function (cb) {
+        cb.addEventListener("click", function () {
+          SQ[prop] = cb.getAttribute(attr);
+          [].forEach.call(all, function (o) { o.setAttribute("aria-pressed", o === cb ? "true" : "false"); });
+          runSearch();
+        });
+      });
+    }
+    chips("data-sq-scope", "scope");
+    chips("data-sq-kind", "kind");
+    [].forEach.call(document.querySelectorAll("[data-sq-word]"), function (wb) {
+      wb.addEventListener("click", function () { inp.value = SQ.q = wb.textContent; runSearch(); });
+    });
+  })();
+
   /* ---------- Wire up ---------- */
   loadTitles();
   build();
@@ -3479,9 +3732,10 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
   });
   /* ---------- 下方分頁：清單、標籤、心得、進度 ---------- */
   var tagScreen = $("tagScreen"), curTab = "list";
-  var TAB_SCREENS = { tags: tagScreen, notes: notesScreen, prog: bookScreen };
+  var TAB_SCREENS = { tags: tagScreen, notes: notesScreen, prog: bookScreen, search: $("searchScreen") };
   function showTab(t) {
     if (t !== "list" && !TAB_SCREENS[t]) t = "list";
+    if (curTab === "search" && t !== "search") SQ.top = TAB_SCREENS.search.scrollTop;   // 離開搜尋：記住看到哪裡，回來接著看
     curTab = t;
     $("menuPop").hidden = true;
     $("menuBtn").setAttribute("aria-expanded", "false");
@@ -3489,6 +3743,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
     if (t === "tags") renderTagIndex();
     Object.keys(TAB_SCREENS).forEach(function (k) { TAB_SCREENS[k].hidden = k !== t; });
     if (t !== "list") TAB_SCREENS[t].scrollTop = 0;
+    if (t === "search") enterSearch();
     document.documentElement.classList.toggle("noscroll", t !== "list");
     document.querySelectorAll("[data-tab]").forEach(function (b) {
       var on = b.getAttribute("data-tab") === t;
