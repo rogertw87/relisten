@@ -331,7 +331,7 @@ li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-heig
   flex: 1 1 auto; min-width: 0; display: grid; grid-template-columns: auto minmax(0, 1fr) auto; column-gap: 8px; align-items: start;
   padding: 11px 12px 11px 0;
 }
-.sbody .k { font-size: 0.9375rem; line-height: 24px; white-space: nowrap; color: var(--ink); }
+.sbody .k { font-size: 0.9375rem; line-height: 1.6; white-space: nowrap; color: var(--ink); }
 .srow.on .sbody .k { font-weight: 600; }
 .day.rows .sbody .tn { grid-row: auto; justify-self: end; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: flex-end; gap: 4px; padding-top: 2px; min-width: 0; }
 .sbody .tname { padding: 1px 7px; font-size: 0.71875rem; line-height: 1.6; }
@@ -366,7 +366,7 @@ li.day.rows .info { padding: 0 4px 8px; align-items: center; gap: 10px; min-heig
 .sbody .npill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .sbody .msg { grid-row: 2; }
 /* 題目（官方課程頁上每一段的名稱）：詳細接在「早上」後面，太長就折到下一行；標籤、心得往下排 */
-.sbody .tt { grid-column: 2; grid-row: 1; min-width: 0; font-size: 0.9375rem; line-height: 24px; color: var(--ink); overflow-wrap: anywhere; text-wrap: pretty; }
+.sbody .tt { grid-column: 2; grid-row: 1; min-width: 0; font-size: 0.9375rem; line-height: 1.6; color: var(--ink); overflow-wrap: anywhere; text-wrap: pretty; }
 .srow.has-tt .sbody .k { min-width: 2.1em; color: var(--muted); }
 .srow.has-tt.on .sbody .k { color: var(--ink-2); }
 .day.rows .srow.has-tt .sbody .tn { grid-column: 1 / -1; grid-row: 2; justify-self: start; justify-content: flex-start; padding-top: 4px; }
@@ -1098,8 +1098,18 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .srow.found, li.day.found { background-color: var(--soft); background-color: color-mix(in srgb, var(--star) 10%, transparent); }
 .gx-sq { display: inline-flex; align-items: center; gap: 6px; padding: 4px 12px 4px 9px; border-radius: 99px; border: 1px solid var(--line-2); background: var(--card); color: var(--ink-2); font-size: 11px; white-space: nowrap; }
 .gx-sq svg { width: 12px; height: 12px; fill: none; stroke: var(--muted-2); stroke-width: 2.4; stroke-linecap: round; }
+
+/* ---------- 字的大小（「⋯」選單）：放大整頁的基準字級，用 rem 寫的字都跟著變大 ---------- */
+html[data-size="l"] { font-size: 112.5%; }
+html[data-size="xl"] { font-size: 125%; }
+.menu-item + .menu-size, .menu-theme + .menu-size { border-top: 1px solid var(--line); }
+.menu-size-opts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px; }
+.menu-size .az { font-family: var(--serif); line-height: 1; height: 22px; display: flex; align-items: flex-end; }
+.az.az-a { font-size: 14px; } .az.az-b { font-size: 18px; } .az.az-c { font-size: 22px; }   /* 示意用，固定大小 */
+.gx-az { display: flex; align-items: flex-end; gap: 16px; font-family: var(--serif); color: var(--ink); line-height: 1; }
+.gx-az .a { font-size: 14px; } .gx-az .b { font-size: 20px; } .gx-az .c { font-size: 27px; }
 </style>
-<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean|starry)$/.test(l))document.documentElement.setAttribute("data-look",l);}catch(e){}</script>
+<script id="look-early">try{var l=localStorage.getItem("trust-relisten:look");if(/^(night|bw|sunrise|forest|lavender|ocean|starry)$/.test(l))document.documentElement.setAttribute("data-look",l);var z=localStorage.getItem("trust-relisten:size");if(z==="l"||z==="xl")document.documentElement.setAttribute("data-size",z);}catch(e){}</script>
 </head>
 <body>
 <main class="page home">
@@ -1122,6 +1132,14 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
           <button type="button" class="menu-theme-opt" data-look-pick="lavender" aria-pressed="false"><i class="sw sw-f" aria-hidden="true"></i>薰衣草</button>
           <button type="button" class="menu-theme-opt" data-look-pick="ocean" aria-pressed="false"><i class="sw sw-g" aria-hidden="true"></i>深海</button>
           <button type="button" class="menu-theme-opt" data-look-pick="starry" aria-pressed="false"><i class="sw sw-h" aria-hidden="true"></i>夜空</button>
+        </div>
+      </div>
+      <div class="menu-theme menu-size" role="group" aria-labelledby="sizeTitle">
+        <span class="menu-theme-title" id="sizeTitle">字的大小</span>
+        <div class="menu-size-opts">
+          <button type="button" class="menu-theme-opt" data-size-pick="" aria-pressed="true"><span class="az az-a" aria-hidden="true">字</span>標準</button>
+          <button type="button" class="menu-theme-opt" data-size-pick="l" aria-pressed="false"><span class="az az-b" aria-hidden="true">字</span>大</button>
+          <button type="button" class="menu-theme-opt" data-size-pick="xl" aria-pressed="false"><span class="az az-c" aria-hidden="true">字</span>特大</button>
         </div>
       </div>
     </div>
@@ -1316,6 +1334,7 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="g-field">開始重聽<span class="g-input">2026/11/26</span></span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-daybox"><span class="g-day">第<b>01</b>天</span><span class="g-sub">重聽 11/26 週四<span class="g-today">今天</span></span></span></div><h3>重聽排程</h3><p class="cap">可以不設，也可以放慢</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-dots"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg><span class="g-tap"></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-sw"><span><i style="background:#fff;border:3px solid #0a5468"></i>淺色</span><span><i style="background:radial-gradient(circle,#ffd447 0 38%,#000 41%)"></i>夜間</span><span><i style="background:linear-gradient(90deg,#000 50%,#fff 50%)"></i>黑白</span><span><i style="background:#fffaf3;border:3px solid #a8461d"></i>晨曦</span><span><i style="background:#fbfdfb;border:3px solid #2d6a43"></i>森林</span><span><i style="background:#fdfcff;border:3px solid #5b3fa0"></i>薰衣草</span><span><i style="background:radial-gradient(circle,#7cc4ff 0 38%,#0b1626 41%)"></i>深海</span><span><i style="background:radial-gradient(circle at 32% 34%,#fff 0 9%,transparent 12%),radial-gradient(circle at 64% 62%,#e6c36a 0 14%,transparent 17%),#0a0d24"></i>夜空</span></span></div><h3>換主題</h3><p class="cap">八種主題，記在各自的裝置</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-az"><span class="a">字</span><span class="b">字</span><span class="c">字</span></span></div><h3>字的大小</h3><p class="cap">在右上角「⋯」選單選：標準、大、特大，記在各自的裝置</p></section>
 
       <section class="gcard" id="guideInstall" hidden><div class="gpic" aria-hidden="true"><span class="g-phone"><i></i><i></i><i></i><i></i><i class="me two">復習</i><i></i><i></i><i></i><i></i></span></div><h3>加到手機桌面</h3><p class="cap">只在網站版</p></section>
       <section class="gcard" id="guideSync" hidden><div class="gpic" aria-hidden="true"><span class="gx-syncpill"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 18.5h10.5a4 4 0 0 0 .6-7.96A5.5 5.5 0 0 0 7.4 9.1 4.7 4.7 0 0 0 7 18.5Z"></path></svg>雲端同步</span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-devs"><i class="ph"></i><i class="lt"></i></span></div><h3>雲端同步</h3><p class="cap">在右上角「⋯」選單用 Google 登入，換手機、用電腦都同步；隔一陣子再打開，點一下畫面就會接著同步</p></section>
@@ -2255,6 +2274,30 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
         var pick = b.getAttribute("data-look-pick");
         try { if (pick) localStorage.setItem(LOOK_KEY, pick); else localStorage.removeItem(LOOK_KEY); } catch (e) {}
         applyLook(pick);
+        drawLead();
+      });
+    });
+  })();
+  /* ---------- 字的大小：標準、大、特大；選擇記在這台裝置 ---------- */
+  var SIZE_KEY = "trust-relisten:size", SIZES = { "": 1, l: 1, xl: 1 };
+  function applySize(v) {
+    if (!Object.prototype.hasOwnProperty.call(SIZES, v)) v = "";
+    var root = document.documentElement;
+    if (v) root.setAttribute("data-size", v); else root.removeAttribute("data-size");
+    document.querySelectorAll("[data-size-pick]").forEach(function (b) {
+      b.setAttribute("aria-pressed", b.getAttribute("data-size-pick") === v ? "true" : "false");
+    });
+  }
+  (function () {
+    var v = "";
+    try { v = localStorage.getItem(SIZE_KEY) || ""; } catch (e) {}
+    applySize(v);
+    document.querySelectorAll("[data-size-pick]").forEach(function (b) {
+      b.addEventListener("click", function () {
+        var pick = b.getAttribute("data-size-pick"), at = topDay();
+        try { if (pick) localStorage.setItem(SIZE_KEY, pick); else localStorage.removeItem(SIZE_KEY); } catch (e) {}
+        applySize(pick);
+        keepDay(at);                                 // 字變大、每一天變高：停在原本看的那一天
         drawLead();
       });
     });
