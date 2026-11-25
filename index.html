@@ -402,6 +402,30 @@ main.home { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
 .tab-screen .back { display: none; }
 #guideScreen { z-index: 26; }
 .book-head.sub-head { margin-top: 10px; }
+.contents { display: contents; }   /* 只是把幾個區塊包成一組（方便一起藏），排版上當作不存在 */
+/* 七屆一起看（首頁那一層的標籤、心得、進度）：每一屆前面的小標題，往下捲時停在最上面 */
+.yr-h {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 1; margin: 6px 0 -6px; padding: 8px 4px 6px;
+  display: flex; align-items: baseline; justify-content: space-between; gap: 8px; background: var(--page); border-bottom: 1px solid var(--line-3);
+  font-family: var(--serif); font-size: 1.0625rem; font-weight: 600; line-height: 1.4; color: var(--ink);
+}
+.yr-h .yr-n { flex: none; font-family: var(--mono); font-size: 0.75rem; font-weight: 400; color: var(--muted-2); }
+.notes-yr { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 1; }
+.notes-yr .yr-h { position: static; margin: 6px 0 0; }
+.star-list .yr-h { margin: 6px 0 0; }
+/* 進度（七屆）：一屆一列，點一下看那一屆的進度 */
+.yp-list { display: flex; flex-direction: column; border-top: 1px solid var(--line); }
+.yp {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 8px 12px; width: 100%; padding: 14px 4px;
+  border: 0; border-bottom: 1px solid var(--line); background: none; color: var(--ink); font: inherit; text-align: left; cursor: pointer;
+}
+.yp:hover { background: color-mix(in srgb, var(--soft) 50%, transparent); }
+.yp:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.yp-name { min-width: 0; font-size: 1rem; overflow-wrap: anywhere; }
+.yp-n { font: 400 0.8125rem var(--mono); color: var(--muted); white-space: nowrap; }
+.yp-n b { font-size: 0.9375rem; font-weight: 600; color: var(--ink); }
+.yp.done .yp-n { font-family: var(--sans); color: var(--seal); }
+.yp .track { grid-column: 1 / -1; display: block; }
 .scr-yr { margin: 0 4px -12px; font-size: 0.8125rem; letter-spacing: .06em; color: var(--muted-2); }   /* 標籤、心得、進度最上面：現在看的是哪一屆 */
 .book-head.sub-head h2 { font-size: 1.0625rem; font-weight: 600; }
 .bar .row2 { justify-content: flex-start; }
@@ -1252,7 +1276,7 @@ html.home-on { overflow: hidden; }
       <label class="sq-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg><input id="sqInput" type="search" aria-label="搜尋題目或自己的心得" placeholder="找題目或自己的心得" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="search" maxlength="60"><button type="button" class="sq-clear" id="sqClear" aria-label="清除" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"></path></svg></button></label>
     </div>
     <div class="sq-chips">
-      <span class="sq-seg" role="group" aria-label="範圍"><button type="button" data-sq-scope="all" aria-pressed="true">七屆全部</button><button type="button" data-sq-scope="this" aria-pressed="false">只找這一屆</button></span>
+      <span class="sq-seg" id="sqScope" role="group" aria-label="範圍"><button type="button" data-sq-scope="all" aria-pressed="true">七屆全部</button><button type="button" data-sq-scope="this" aria-pressed="false">只找這一屆</button></span>
       <span class="sq-seg" role="group" aria-label="找什麼"><button type="button" data-sq-kind="all" aria-pressed="true">全部</button><button type="button" data-sq-kind="title" aria-pressed="false">題目</button><button type="button" data-sq-kind="note" aria-pressed="false">我的心得</button></span>
     </div>
     <p class="sq-count" id="sqCount" aria-live="polite"></p>
@@ -1342,7 +1366,7 @@ html.home-on { overflow: hidden; }
 
       <section class="gcard"><div class="gpic g-col" aria-hidden="true"><span class="gx-box"><i></i>隱藏完成的練習</span><svg class="g-arrow down" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="gx-chips"><span class="d">第01天</span><span class="gx-c gone">早</span><span class="gx-c">午</span><span class="gx-c">晚</span></span></div><h3>隱藏完成的練習</h3><p class="cap">聽完的先藏起來</p></section>
 
-      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-tabs"><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單<small>打勾</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤<small>看標過的</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg>搜尋<small>找題目<br>和心得</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得<small>全部心得<br>匯出</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度<small>重聽排程<br>印章冊</small></span></span></div><h3>下方分頁</h3><p class="cap">首頁也有這一列，第一顆會變成「首頁」；在首頁按其他四顆，會打開上次看的那一屆</p></section>
+      <section class="gcard"><div class="gpic" aria-hidden="true"><span class="gx-tabs"><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"></path></svg>清單<small>打勾</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M3 12V4h8l10 10-8 8L3 12ZM7.5 7.5h.01"></path></svg>標籤<small>看標過的</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"></circle><path d="M15.5 15.5 20.5 20.5"></path></svg>搜尋<small>找題目<br>和心得</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M6 3.5h10.5a2 2 0 0 1 2 2V20.5H8a2 2 0 0 1-2-2V3.5ZM9.5 8h5.5M9.5 11.5h5.5M9.5 15h3"></path></svg>心得<small>全部心得<br>匯出</small></span><span class="gx-tab"><svg viewBox="0 0 24 24"><path d="M8.5 3l2.6 6.4M15.5 3l-2.6 6.4M12 9.5a5.5 5.5 0 1 0 0 11a5.5 5.5 0 1 0 0-11"></path></svg>進度<small>重聽排程<br>印章冊</small></span></span></div><h3>下方分頁</h3><p class="cap">首頁也有這一列，第一顆會變成「首頁」；在首頁按標籤、搜尋、心得、進度，看的是七屆全部</p></section>
 
       <section class="gcard"><div class="gpic" aria-hidden="true"><span class="g-week"><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span><span><i></i><i></i><i></i></span></span><svg class="g-arrow" viewBox="0 0 24 12"><path d="M1 6h20M16 1.5 21 6l-5 4.5"></path></svg><span class="g-stamp">休息</span></div><h3>蓋印章</h3><p class="cap">聽完 7 天蓋一個</p></section>
 
@@ -1363,6 +1387,7 @@ html.home-on { overflow: hidden; }
     <button type="button" class="back" id="bookBack">← 返回</button>
     <p class="scr-yr"></p>
     <div class="book-head"><h2 id="progTitle">進度</h2></div>
+    <div class="contents" id="progYear">
     <section class="summary" aria-label="整體進度">
       <div class="total">
         <span class="num" id="doneCount">0</span>
@@ -1384,6 +1409,22 @@ html.home-on { overflow: hidden; }
     <p class="notes-empty" id="starEmpty">在心得視窗裡點「☆ 想再聽」，那一段就會列在這裡，有空再回來聽。</p>
     <div class="book-head sub-head"><h2 id="bookTitle">印章冊</h2><span class="book-n" id="sealCount">0 / 10</span></div>
     <div class="book"><div class="seals" id="seals"></div></div>
+    </div>
+    <div class="contents" id="progAll" hidden>
+    <section class="summary" aria-label="七屆合計">
+      <div class="total">
+        <span class="num" id="allDone">0</span>
+        <span class="of" id="allTotal">/ 0 段</span>
+        <span class="days">聽完 <b id="allYears">0</b> / 7 屆</span>
+      </div>
+      <div class="track" id="allTrack" role="progressbar" aria-label="七屆已聽段數" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0"><i id="allFill"></i></div>
+    </section>
+    <div class="book-head sub-head"><h2 id="allYearTitle">各屆進度</h2></div>
+    <div class="yp-list" id="allYearList" role="group" aria-labelledby="allYearTitle"></div>
+    <div class="book-head sub-head"><h2 id="allStarTitle">想再聽</h2><span class="book-n" id="allStarCount">0 段</span></div>
+    <div class="star-list" id="allStarList"></div>
+    <p class="notes-empty" id="allStarEmpty">在心得視窗裡點「☆ 想再聽」，那一段就會列在這裡，有空再回來聽。</p>
+    </div>
     <p class="sync-line" id="progSync" hidden><span id="progSyncT"></span><button type="button" class="sync-link" id="progSyncGo" hidden>開啟雲端同步</button></p>
   </div>
 </section>
@@ -1468,6 +1509,7 @@ html.home-on { overflow: hidden; }
   });
   var LS_YEAR = "trust-relisten:year";
   var homeScreen = document.getElementById("homeScreen");   // 首頁（七屆的總覽）
+  var SEVEN = false;                                   // 在首頁那一層：首頁本身，和從首頁打開的標籤、搜尋、心得、進度（七屆一起看）
   function yearById(id) { for (var k = 0; k < YEARS.length; k++) if (YEARS[k].id === id) return YEARS[k]; return null; }
   function yearFromHash() { var m = /^#(20\d\d)$/.exec(location.hash || ""); return m ? yearById(m[1]) : null; }
   var Y = yearFromHash();
@@ -1521,7 +1563,9 @@ html.home-on { overflow: hidden; }
   /* ---------- 題目：官方課程頁上每一段的名稱。一屆一個資料檔（titles-2026.json），有檔案才顯示，拿掉檔案就不顯示 ---------- */
   var TITLES = {}, titlesFor = "";
   var LS_TITLES = "trust-relisten:titles:";
-  function sessTitle(d, code) { return titlesFor === d.y.id ? (TITLES[d.id + code] || "") : ""; }
+  function sessTitle(d, code) {                     // 這一段的題目；別屆的從讀過的題目裡找（七屆一起看時用得到）
+    return titlesFor === d.y.id ? (TITLES[d.id + code] || "") : ((TITLE_ALL[d.y.id] || {})[d.id + code] || "");
+  }
   function withTitle(d, code) { var t = sessTitle(d, code); return sessLabel(d, code) + (t ? "「" + t + "」" : ""); }
   var TITLE_ALL = {};                                // 讀過的每一屆題目（搜尋要七屆一起找）：{ "2026": { d01m: "…" } }
   function cleanTitles(data) {
@@ -1948,6 +1992,7 @@ html.home-on { overflow: hidden; }
     if (!notesScreen.hidden) renderNotes();
     if (tagScreen && !tagScreen.hidden) renderTagIndex();
     renderStars();
+    if (SEVEN && !bookScreen.hidden) renderAllProg();   // 首頁那一層的進度開著：跟著更新
 
     // 重聽排程：說明、選單旁的狀態、設定視窗裡的欄位
     var plan = "";
@@ -2349,7 +2394,7 @@ html.home-on { overflow: hidden; }
   }
 
   function openBook() { showTab("prog"); }
-  function closeBook() { showTab("list"); }
+  function closeBook() { closeTab(); }
 
   /* ---------- 心得 ---------- */
   function nowStamp() {
@@ -2542,62 +2587,79 @@ html.home-on { overflow: hidden; }
   paintLayoutPick();
 
   var notesScreen = $("notesScreen");
-  function renderNotes() {
+  function renderNotes() {                           // 在首頁那一層是七屆一起列，一屆一組
     var list = $("notesList"), n = 0;
     list.textContent = "";
-    days.forEach(function (d) {
-      var note = state.notes[d.id], ents = [];
-      dayCodes(d).forEach(function (cd) {
-        var sn = state.notes[d.id + cd[0]];
-        if (sn) ents.push({ lab: sessLabel(d, cd[0]), title: sessTitle(d, cd[0]), n: sn, open: function () { openSess(d.i, cd[0]); } });
+    scopeYears().forEach(function (y) {
+      var cards = [];
+      daysOf(y).forEach(function (d) {
+        var note = state.notes[d.id], ents = [];
+        dayCodes(d).forEach(function (cd) {
+          var sn = state.notes[d.id + cd[0]];
+          if (sn) ents.push({ lab: sessLabel(d, cd[0]), title: sessTitle(d, cd[0]), n: sn, open: function () {
+            if (SEVEN) jumpTo(y, { d: d, cd: cd[0], key: d.id + cd[0], kind: "note" }); else openSess(d.i, cd[0]);
+          } });
+        });
+        if (note) ents.push({ lab: ents.length ? "整天" : "", n: note, open: function () {
+          if (SEVEN) jumpTo(y, { d: d, cd: "", key: d.id, kind: "note" }); else openNote(d.i);
+        } });
+        if (!ents.length) return;
+        var li = el("li");
+        var card = el("div", "note-card");
+        var head = el("span", "note-head");
+        head.appendChild(dayLabel(d, el("span", "note-day")));
+        card.appendChild(head);
+        ents.forEach(function (e) {
+          var b = el("button", "note-entry");
+          b.type = "button";
+          var top = el("span", "note-etop");
+          top.appendChild(el("b", null, e.lab + (e.title ? "・" + e.title : "")));
+          if (e.n.at) top.appendChild(el("span", "note-at", atLabel(e.n.at)));
+          b.appendChild(top);
+          b.appendChild(el("span", "note-text", e.n.t));
+          b.addEventListener("click", e.open);
+          card.appendChild(b);
+        });
+        li.appendChild(card);
+        cards.push(li);
       });
-      if (note) ents.push({ lab: ents.length ? "整天" : "", n: note, open: function () { openNote(d.i); } });
-      if (!ents.length) return;
-      n++;
-      var li = el("li");
-      var card = el("div", "note-card");
-      var head = el("span", "note-head");
-      head.appendChild(dayLabel(d, el("span", "note-day")));
-      card.appendChild(head);
-      ents.forEach(function (e) {
-        var b = el("button", "note-entry");
-        b.type = "button";
-        var top = el("span", "note-etop");
-        top.appendChild(el("b", null, e.lab + (e.title ? "・" + e.title : "")));
-        if (e.n.at) top.appendChild(el("span", "note-at", atLabel(e.n.at)));
-        b.appendChild(top);
-        b.appendChild(el("span", "note-text", e.n.t));
-        b.addEventListener("click", e.open);
-        card.appendChild(b);
-      });
-      li.appendChild(card);
-      list.appendChild(li);
+      if (!cards.length) return;
+      n += cards.length;
+      if (SEVEN) { var hd = el("li", "notes-yr"); hd.appendChild(yrHead("h3", y, cards.length + " 則")); list.appendChild(hd); }
+      cards.forEach(function (li) { list.appendChild(li); });
     });
     $("notesCount").textContent = n + " 則";
     $("notesEmpty").hidden = n > 0;
     $("notesExport").disabled = n === 0 && !Object.keys(state.marks).length;   // 有心得或標籤就能匯出
   }
   function openNotes() { showTab("notes"); }
-  function closeNotes() { showTab("list"); }
+  function closeNotes() { closeTab(); }
   // 網站版：把全部心得存成一個文字檔
   function exportNotes() {
-    var t = new Date(), lines = [Y.id + " 全球共修「" + Y.title + "」・重聽心得", "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate(), ""];
-    days.forEach(function (d) {
-      var note = state.notes[d.id], marks = [];
-      dayCodes(d).forEach(function (cd) {
-        var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
-        var sn = state.notes[d.id + cd[0]];
-        if (!names.length && !sn && !isStar(d.id + cd[0])) return;
-        marks.push(sessLabel(d, cd[0]) + (sessTitle(d, cd[0]) ? "〈" + sessTitle(d, cd[0]) + "〉" : "") + (isStar(d.id + cd[0]) ? "★" : "") + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
-        if (sn) marks.push(sn.t);
+    var t = new Date(), stamp = "匯出於 " + t.getFullYear() + "/" + (t.getMonth() + 1) + "/" + t.getDate();
+    var lines = [SEVEN ? "全球共修重聽・七屆的心得" : Y.id + " 全球共修「" + Y.title + "」・重聽心得", stamp, ""];
+    scopeYears().forEach(function (y) {
+      var out = [];
+      daysOf(y).forEach(function (d) {
+        var note = state.notes[d.id], marks = [];
+        dayCodes(d).forEach(function (cd) {
+          var names = markTags(d.id + cd[0]).map(function (id) { return tagById(id).n; });
+          var sn = state.notes[d.id + cd[0]];
+          if (!names.length && !sn && !isStar(d.id + cd[0])) return;
+          marks.push(sessLabel(d, cd[0]) + (sessTitle(d, cd[0]) ? "〈" + sessTitle(d, cd[0]) + "〉" : "") + (isStar(d.id + cd[0]) ? "★" : "") + (names.length ? "｜" + names.join("、") : "") + (sn && sn.at ? "（心得 " + atLabel(sn.at) + " 寫）" : ""));
+          if (sn) marks.push(sn.t);
+        });
+        if (!note && !marks.length) return;
+        out.push("第" + pad(d.n) + "天" + (note && note.at ? "（心得 " + atLabel(note.at) + " 寫）" : ""));
+        marks.forEach(function (x) { out.push(x); });
+        if (note) out.push(note.t);
+        out.push("");
       });
-      if (!note && !marks.length) return;
-      lines.push("第" + pad(d.n) + "天" + (note && note.at ? "（心得 " + atLabel(note.at) + " 寫）" : ""));
-      marks.forEach(function (x) { lines.push(x); });
-      if (note) lines.push(note.t);
-      lines.push("");
+      if (!out.length) return;
+      if (SEVEN) lines.push("【" + y.id + " 全球共修「" + y.title + "」】", "");   // 七屆一起匯出：一屆一段
+      lines = lines.concat(out);
     });
-    saveTextFile(Y.id + Y.title.replace(/[，,\s]/g, "") + "心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt", "\ufeff" + lines.join("\n"));
+    saveTextFile((SEVEN ? "全球共修重聽" : Y.id + Y.title.replace(/[，,\s]/g, "")) + "心得-" + t.getFullYear() + pad(t.getMonth() + 1) + pad(t.getDate()) + ".txt", "\ufeff" + lines.join("\n"));
   }
   // 存成檔案：在 Claude 裡用 Claude 的下載（會先問要不要存），網站版直接下載
   var downloadsP = window.claude && window.claude.use ? window.claude.use("downloads").catch(function () { return null; }) : Promise.resolve(null);
@@ -2680,9 +2742,11 @@ html.home-on { overflow: hidden; }
     var m = state.marks[key];
     return m ? m.tg.filter(function (id) { return !!tagById(id); }) : [];
   }
-  function tagCounts() {
+  function tagCounts(years) {                        // 每個標籤標了幾段；years：只算這幾屆（不給就全部都算）
     var counts = {};
-    Object.keys(state.marks).forEach(function (k) { markTags(k).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; }); });
+    function add(k) { markTags(k).forEach(function (id) { counts[id] = (counts[id] || 0) + 1; }); }
+    if (!years) Object.keys(state.marks).forEach(add);
+    else years.forEach(function (y) { daysOf(y).forEach(function (d) { codeStr(d).split("").forEach(function (cd) { add(d.id + cd); }); }); });
     return counts;
   }
   function setMarkTag(id) {
@@ -2692,7 +2756,7 @@ html.home-on { overflow: hidden; }
   }
   var tagFilter = null;   // 標籤分頁：目前只看哪一個標籤
   function renderTagBar() {
-    var bar = $("tagBar"), counts = tagCounts(), editable = canEdit();
+    var bar = $("tagBar"), counts = tagCounts(scopeYears()), editable = canEdit();   // 數字和下面列出來的範圍一致
     if (tagFilter && !tagById(tagFilter)) tagFilter = null;
     if (markTag && (!tagById(markTag) || !editable)) { markTag = null; markOnly = false; }
     bar.textContent = "";
@@ -3145,13 +3209,35 @@ html.home-on { overflow: hidden; }
   }
 
   /* ---------- 切換年份：2020～2026 的全球共修 ---------- */
+  var YEAR_MAIN = {};
+  function yearMain(y) {                             // 這一屆算進度的段落：{ set: 每一段的代號, n: 總數 }
+    if (!YEAR_MAIN[y.id]) {
+      var set = {}, n = 0;
+      yearDays(y).forEach(function (d) { mainCodes(d).forEach(function (cd) { set[d.id + cd] = 1; n++; }); });
+      YEAR_MAIN[y.id] = { set: set, n: n };
+    }
+    return YEAR_MAIN[y.id];
+  }
+  function yearProgress(y) {
+    var set = yearMain(y).set, n = 0;
+    Object.keys(state.done).forEach(function (k) { if (state.done[k] === true && set[k]) n++; });
+    return n;
+  }
+  function scopeYears() { return SEVEN ? YEARS : [Y]; }   // 現在看的範圍
+  function daysOf(y) { return y === Y ? days : yearDays(y); }
+  function yrHead(tag, y, count) {                   // 七屆一起看時，每一屆前面的小標題
+    var hd = el(tag, "yr-h");
+    hd.appendChild(el("span", null, y.id + " " + y.title));
+    if (count) hd.appendChild(el("span", "yr-n", count));
+    return hd;
+  }
   function paintYearHead() {
     var t = $("yrTitle");
     t.textContent = Y.title;
     t.classList.toggle("long", Array.from(Y.title).length > 5);
     $("yrBtnT").textContent = Y.id + " 全球共修";
-    document.querySelectorAll(".scr-yr").forEach(function (p) { p.textContent = Y.id + " 全球共修・" + Y.title; });
-    document.title = homeScreen.hidden ? Y.title + "・全球共修重聽" : "全球共修重聽";
+    document.querySelectorAll(".scr-yr").forEach(function (p) { p.textContent = SEVEN ? "七屆全部" : Y.id + " 全球共修・" + Y.title; });
+    document.title = SEVEN ? "全球共修重聽" : Y.title + "・全球共修重聽";
   }
   function setYear(id) {
     var y = yearById(id);
@@ -3612,7 +3698,8 @@ html.home-on { overflow: hidden; }
     $("sqCount").textContent = "";
     if (!terms.length) { SQ.top = 0; return; }
     var total = 0, shown = 0;
-    var order = SQ.scope === "this" ? [Y] : [Y].concat(YEARS.filter(function (y) { return y !== Y; }));   // 目前這一屆排最前面
+    var order = SEVEN ? YEARS.slice()                   // 首頁那一層：七屆照年份排
+      : SQ.scope === "this" ? [Y] : [Y].concat(YEARS.filter(function (y) { return y !== Y; }));   // 在某一屆裡：目前這一屆排最前面
     order.forEach(function (y) {
       var T = TITLE_ALL[y.id] || {}, list = [];
       function tryNote(d, cd, key, title) {
@@ -3651,7 +3738,7 @@ html.home-on { overflow: hidden; }
           line.appendChild(sqMarked("sq-nt", sn.text, sn.ranges));
           b.appendChild(line);
         }
-        b.addEventListener("click", function () { searchGo(y, it); });
+        b.addEventListener("click", function () { jumpTo(y, it); });
         g.appendChild(b);
         shown++;
       });
@@ -3662,7 +3749,8 @@ html.home-on { overflow: hidden; }
   }
   function sqSoon() { clearTimeout(SQ.timer); SQ.timer = setTimeout(runSearch, 120); }
   function enterSearch() {                            // 切到「搜尋」分頁
-    loadAllTitles(function () { if (curTab === "search") sqSoon(); });
+    $("sqScope").hidden = SEVEN;                        // 首頁那一層一定是七屆一起找，不用選範圍
+    loadAllTitles(titlesIn);
     runSearch();                                      // 心得、打勾可能變了：重新找一次
     if (SQ.q) $("searchScreen").scrollTop = SQ.top || 0;      // 找過了：回到剛才看到的地方
     else { try { $("sqInput").focus(); } catch (e) {} }       // 還沒打字：直接可以打
@@ -3751,7 +3839,8 @@ html.home-on { overflow: hidden; }
     $("menuPop").hidden = true;
     $("menuBtn").setAttribute("aria-expanded", "false");
     if (t === "notes") renderNotes();
-    if (t === "tags") renderTagIndex();
+    if (t === "tags") { renderTagBar(); renderTagIndex(); }
+    if (t === "prog") { $("progYear").hidden = SEVEN; $("progAll").hidden = !SEVEN; if (SEVEN) renderAllProg(); }   // 進度：某一屆的，或七屆的
     Object.keys(TAB_SCREENS).forEach(function (k) { TAB_SCREENS[k].hidden = k !== t; });
     if (t !== "list") TAB_SCREENS[t].scrollTop = 0;
     if (t === "search") enterSearch();
@@ -3768,87 +3857,145 @@ html.home-on { overflow: hidden; }
   document.querySelectorAll("[data-tab]").forEach(function (b) {
     b.addEventListener("click", function () {
       var t = b.getAttribute("data-tab");
-      if (homeScreen.hidden) showTab(t);
-      else if (t === "list") { try { homeScreen.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { homeScreen.scrollTop = 0; } }   // 在首頁，第一顆就是「首頁」：回到最上面
-      else openFromHome(t);
+      if (!SEVEN) showTab(t);
+      else if (t === "list") {                       // 首頁那一層，第一顆是「首頁」：回首頁；已經在首頁就回到最上面
+        if (homeScreen.hidden) goHome();
+        else { try { homeScreen.scrollTo({ top: 0, behavior: "smooth" }); } catch (e) { homeScreen.scrollTop = 0; } }
+      }
+      else if (t === curTab) TAB_SCREENS[t].scrollTop = 0;
+      else openAll(t);
     });
   });
   // 進度分頁：想再聽的段落，點一下跳到清單裡那一天；右邊的星星可以取消
+  function starItem(y, d, cd, editable) {
+    var key = d.id + cd[0];
+    var item = el("div", "star-item");
+    item.setAttribute("role", "listitem");
+    var go = el("button", "star-go");
+    go.type = "button";
+    go.appendChild(el("span", "star-day", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0])));
+    if (sessTitle(d, cd[0])) go.appendChild(el("span", "star-tt", sessTitle(d, cd[0])));
+    var names = markTags(key).map(function (id) { return tagById(id).n; });
+    if (names.length) go.appendChild(el("span", "star-tags", names.join("、")));
+    if (isDone(key)) go.appendChild(el("span", "star-done", "聽過"));
+    go.addEventListener("click", function () {
+      if (SEVEN) { jumpTo(y, { d: d, cd: cd[0], key: key, kind: "title" }); return; }   // 七屆一起看：先進那一屆
+      showTab("list");
+      var r = rows[d.i];
+      if (!r) return;
+      r.li.scrollIntoView({ block: "center" });
+      try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
+    });
+    item.appendChild(go);
+    var off = el("button", "star-btn icon");
+    off.type = "button";
+    off.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg>';
+    off.setAttribute("aria-pressed", "true");
+    off.setAttribute("aria-label", (SEVEN ? y.id + " " : "") + "第" + pad(d.n) + "天" + sessLabel(d, cd[0]) + "：從想再聽拿掉");
+    off.disabled = !editable;
+    off.addEventListener("click", function () { toggleStar(key); });
+    item.appendChild(off);
+    return item;
+  }
   function renderStars() {
     var box = $("starList"), n = 0, editable = canEdit();
     box.textContent = "";
     days.forEach(function (d) {
       dayCodes(d).forEach(function (cd) {
-        var key = d.id + cd[0];
-        if (!isStar(key)) return;
+        if (!isStar(d.id + cd[0])) return;
         n++;
-        var item = el("div", "star-item");
-        item.setAttribute("role", "listitem");
-        var go = el("button", "star-go");
-        go.type = "button";
-        go.appendChild(el("span", "star-day", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0])));
-        if (sessTitle(d, cd[0])) go.appendChild(el("span", "star-tt", sessTitle(d, cd[0])));
-        var names = markTags(key).map(function (id) { return tagById(id).n; });
-        if (names.length) go.appendChild(el("span", "star-tags", names.join("、")));
-        if (isDone(key)) go.appendChild(el("span", "star-done", "聽過"));
-        go.addEventListener("click", function () {
-          showTab("list");
-          var r = rows[d.i];
-          if (!r) return;
-          r.li.scrollIntoView({ block: "center" });
-          try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
-        });
-        item.appendChild(go);
-        var off = el("button", "star-btn icon");
-        off.type = "button";
-        off.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9l-5.2 2.7 1-5.8-4.3-4.1 5.9-.9Z"></path></svg>';
-        off.setAttribute("aria-pressed", "true");
-        off.setAttribute("aria-label", "第" + pad(d.n) + "天" + sessLabel(d, cd[0]) + "：從想再聽拿掉");
-        off.disabled = !editable;
-        off.addEventListener("click", function () { toggleStar(key); });
-        item.appendChild(off);
-        box.appendChild(item);
+        box.appendChild(starItem(Y, d, cd, editable));
       });
     });
     $("starCount").textContent = n + " 段";
     $("starEmpty").hidden = n > 0;
   }
+  // 首頁那一層的「進度」：七屆合計、每一屆聽了多少（點一下看那一屆的進度）、七屆的想再聽
+  function renderAllProg() {
+    var got = 0, whole = 0, full = 0, box = $("allYearList"), editable = canEdit();
+    box.textContent = "";
+    YEARS.forEach(function (y) {
+      var g = yearProgress(y), w = yearMain(y).n, done = g >= w;
+      got += g; whole += w;
+      if (done) full++;
+      var b = el("button", "yp" + (done ? " done" : ""));
+      b.type = "button";
+      b.appendChild(el("span", "yp-name", y.id + " " + y.title));
+      var p = el("span", "yp-n");
+      if (done) p.textContent = "聽完了";
+      else { p.appendChild(el("b", null, String(g))); p.appendChild(document.createTextNode(" / " + w + " 段")); }
+      b.appendChild(p);
+      var tr = el("span", "track"), fill = el("i");
+      fill.style.width = (w ? 100 * g / w : 0) + "%";
+      tr.appendChild(fill);
+      b.appendChild(tr);
+      b.setAttribute("aria-label", y.id + " " + y.title + "：" + (done ? "聽完了" : "已聽 " + g + " / " + w + " 段") + "。看這一屆的進度");
+      b.addEventListener("click", function () { goYear(y, "prog"); });
+      box.appendChild(b);
+    });
+    $("allDone").textContent = got;
+    $("allTotal").textContent = "/ " + whole + " 段";
+    $("allYears").textContent = full;
+    $("allFill").style.width = (whole ? 100 * got / whole : 0) + "%";
+    $("allTrack").setAttribute("aria-valuemax", whole);
+    $("allTrack").setAttribute("aria-valuenow", got);
+    var sl = $("allStarList"), n = 0;
+    sl.textContent = "";
+    YEARS.forEach(function (y) {
+      var items = [];
+      daysOf(y).forEach(function (d) { dayCodes(d).forEach(function (cd) { if (isStar(d.id + cd[0])) items.push(starItem(y, d, cd, editable)); }); });
+      if (!items.length) return;
+      n += items.length;
+      sl.appendChild(yrHead("h3", y, items.length + " 段"));
+      items.forEach(function (it) { sl.appendChild(it); });
+    });
+    $("allStarCount").textContent = n + " 段";
+    $("allStarEmpty").hidden = n > 0;
+  }
 
-  // 標籤分頁下半：每個標籤標在哪幾段，點一下跳到清單裡那一天
+  // 標籤分頁下半：每個標籤標在哪幾段，點一下跳到清單裡那一天。在首頁那一層是七屆一起列，一屆一組
   function renderTagIndex() {
     var box = $("tagIndex"), any = false;
     box.textContent = "";
-    tagList().forEach(function (t) {
-      if (tagFilter && t.id !== tagFilter) return;
-      var hits = [];
-      days.forEach(function (d) {
-        dayCodes(d).forEach(function (cd) { if (markTags(d.id + cd[0]).indexOf(t.id) >= 0) hits.push([d, cd]); });
-      });
-      if (!hits.length) return;
-      any = true;
-      var sec = el("section", "tix tc" + tagColor(t));
-      var h = el("h3", "tix-h");
-      h.appendChild(el("span", "tix-dot"));
-      h.appendChild(el("span", null, t.n));
-      h.appendChild(el("span", "tix-n", hits.length + " 段"));
-      sec.appendChild(h);
-      var list = el("div", "tix-list");
-      hits.forEach(function (x) {
-        var d = x[0], cd = x[1];
-        var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0]));
-        if (sessTitle(d, cd[0])) b.appendChild(el("span", "tix-tt", sessTitle(d, cd[0])));
-        b.type = "button";
-        b.addEventListener("click", function () {
-          showTab("list");
-          var r = rows[d.i];
-          if (!r) return;
-          r.li.scrollIntoView({ block: "center" });
-          try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
+    scopeYears().forEach(function (y) {
+      var secs = [], seen = {}, total = 0;
+      tagList().forEach(function (t) {
+        if (tagFilter && t.id !== tagFilter) return;
+        var hits = [];
+        daysOf(y).forEach(function (d) {
+          dayCodes(d).forEach(function (cd) { if (markTags(d.id + cd[0]).indexOf(t.id) >= 0) hits.push([d, cd]); });
         });
-        list.appendChild(b);
+        if (!hits.length) return;
+        var sec = el("section", "tix tc" + tagColor(t));
+        var hd = el(SEVEN ? "h4" : "h3", "tix-h");
+        hd.appendChild(el("span", "tix-dot"));
+        hd.appendChild(el("span", null, t.n));
+        hd.appendChild(el("span", "tix-n", hits.length + " 段"));
+        sec.appendChild(hd);
+        var list = el("div", "tix-list");
+        hits.forEach(function (x) {
+          var d = x[0], cd = x[1], key = d.id + cd[0];
+          if (!seen[key]) { seen[key] = 1; total++; }
+          var b = el("button", "tix-item", "第" + pad(d.n) + "天 " + sessLabel(d, cd[0]));
+          if (sessTitle(d, cd[0])) b.appendChild(el("span", "tix-tt", sessTitle(d, cd[0])));
+          b.type = "button";
+          b.addEventListener("click", function () {
+            if (SEVEN) { jumpTo(y, { d: d, cd: cd[0], key: key, kind: "title" }); return; }   // 七屆一起看：先進那一屆
+            showTab("list");
+            var r = rows[d.i];
+            if (!r) return;
+            r.li.scrollIntoView({ block: "center" });
+            try { r.chks[cd[0]].input.focus({ preventScroll: true }); } catch (e) {}
+          });
+          list.appendChild(b);
+        });
+        sec.appendChild(list);
+        secs.push(sec);
       });
-      sec.appendChild(list);
-      box.appendChild(sec);
+      if (!secs.length) return;
+      any = true;
+      if (SEVEN) box.appendChild(yrHead("h3", y, total + " 段"));
+      secs.forEach(function (sec) { box.appendChild(sec); });
     });
     $("tagIndexEmpty").hidden = any;
   }
@@ -3923,7 +4070,7 @@ html.home-on { overflow: hidden; }
     else if (!sessSheet.hidden) closeSess();
     else if (!notesScreen.hidden) closeNotes();
     else if (!bookScreen.hidden) closeBook();
-    else if (!tagScreen.hidden) showTab("list");
+    else if (!tagScreen.hidden) closeTab();
     else if (!guideScreen.hidden) closeGuide();
     else if (markTag) setMarkTag(null);
   });
@@ -3947,49 +4094,76 @@ html.home-on { overflow: hidden; }
     });
   }
   function closeMenu() { $("menuPop").hidden = true; $("menuBtn").setAttribute("aria-expanded", "false"); }
-  function showHome() {
+  // 首頁那一層（SEVEN：七屆一起看）：首頁本身，和從首頁打開的標籤、搜尋、心得、進度（七屆一起看）。
+  // 網址：沒有 # 是首頁；#tags、#search、#notes、#progress 是那四頁；#2026 是某一屆
+  var ALL_HASH = { tags: "#tags", search: "#search", notes: "#notes", prog: "#progress" };
+  function allTabFromHash() {
+    var hs = location.hash || "";
+    for (var k in ALL_HASH) if (ALL_HASH[k] === hs) return k;
+    return "list";
+  }
+  function titlesIn() {                              // 其他屆的題目讀進來了：正在看的那一頁重畫
+    if (curTab === "search") sqSoon();
+    else if (SEVEN && curTab === "tags") renderTagIndex();
+    else if (SEVEN && curTab === "notes") renderNotes();
+    else if (SEVEN && curTab === "prog") renderAllProg();
+  }
+  function enterAll(t) {                             // t："list" 是首頁，其他是七屆一起看的那一頁
+    if (SEVEN && curTab === t) return;
     closeNote(); closeSess();
     if (markTag) setMarkTag(null);
-    if (curTab !== "list") showTab("list");
     closeMenu();
-    $("homeIn").appendChild($("menu"));               // 「⋯」選單搬到首頁右上角：主題、字的大小、同步、說明在首頁也用得到
-    renderHome();
-    homeScreen.hidden = false;
+    SEVEN = true;
     document.documentElement.classList.add("home-on");
     try { mainPage.inert = true; } catch (e) {}       // 後面那一屆的清單先不能點、報讀器也不唸
-    homeScreen.scrollTop = 0;
-    document.title = "全球共修重聽";
-    markTab("list");
+    $("homeIn").appendChild($("menu"));               // 「⋯」選單搬到首頁右上角：主題、字的大小、同步、說明在首頁也用得到
+    if (t === "list") renderHome();
+    homeScreen.hidden = t !== "list";
+    if (t === "list") homeScreen.scrollTop = 0;
+    paintYearHead();                                  // 網頁標題、分頁最上面那行寫的範圍
+    if (t !== "list" && t !== "search") loadAllTitles(titlesIn);   // 別屆的題目（搜尋自己會讀）
+    showTab(t);
   }
-  function hideHome() {
-    if (homeScreen.hidden) return;
+  function leaveAll() {                              // 離開首頁那一層，進到某一屆（先看清單）
+    if (!SEVEN) return;
     closeMenu();
     mainPage.insertBefore($("menu"), mainPage.querySelector(".head"));
+    SEVEN = false;
     homeScreen.hidden = true;
     document.documentElement.classList.remove("home-on");
     try { mainPage.inert = false; } catch (e) {}
-    document.title = Y.title + "・全球共修重聽";
-    markTab(curTab);
+    paintYearHead();
+    showTab("list");
   }
-  function openFromHome(t) {                         // 在首頁按標籤、搜尋、心得、進度：進上次看的那一屆（還沒看過就是最新一屆），再開那個分頁
-    try { location.hash = "#" + Y.id; } catch (e) {}   // 網址跟著變，瀏覽器的「上一頁」才回得到首頁
-    setYear(Y.id);
-    hideHome();
-    window.scrollTo(0, 0);
-    showTab(t);
+  function openAll(t) {                              // 在首頁那一層按標籤、搜尋、心得、進度
+    try { location.hash = ALL_HASH[t]; } catch (e) {}   // 網址跟著變，瀏覽器的「上一頁」才回得來
+    enterAll(t);
   }
-  function route() {                                 // 看網址決定顯示首頁還是某一屆
-    var y = yearFromHash();
-    if (!y) { if (homeScreen.hidden) showHome(); return; }
-    var was = !homeScreen.hidden, same = y === Y;
+  function goYear(y, t) {                            // 從首頁那一層進某一屆（t：進去後要開的分頁，不給就是清單）
+    try { location.hash = "#" + y.id; } catch (e) {}
     setYear(y.id);
-    hideHome();
-    if (was && same) window.scrollTo(0, 0);      // 從首頁點進來：從最上面開始看
+    leaveAll();
+    window.scrollTo(0, 0);
+    if (t && t !== "list") showTab(t);
   }
-  $("homeBack").addEventListener("click", function () {
+  function jumpTo(y, it) {                           // 點某一段（搜尋、標籤、心得、想再聽）：在首頁那一層要先進那一屆
+    if (SEVEN) { try { location.hash = "#" + y.id; } catch (e) {} setYear(y.id); leaveAll(); }
+    searchGo(y, it);
+  }
+  function goHome() {
     try { history.pushState(null, "", location.pathname + location.search); } catch (e) { try { location.hash = ""; } catch (e2) {} }
     route();
-  });
+  }
+  function closeTab() { if (SEVEN) goHome(); else showTab("list"); }   // 關掉標籤、心得、進度：在某一屆裡回清單，在首頁那一層回首頁
+  function route() {                                 // 看網址決定顯示首頁那一層還是某一屆
+    var y = yearFromHash();
+    if (!y) { enterAll(allTabFromHash()); return; }
+    var was = SEVEN, same = y === Y;
+    setYear(y.id);
+    leaveAll();
+    if (was && same) window.scrollTo(0, 0);          // 從首頁點進來：從最上面開始看
+  }
+  $("homeBack").addEventListener("click", goHome);
   window.addEventListener("hashchange", route);
   window.addEventListener("popstate", route);
   route();
